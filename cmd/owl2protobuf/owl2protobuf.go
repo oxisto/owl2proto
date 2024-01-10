@@ -78,14 +78,29 @@ func prepareOntology(o owl.Ontology) owl.OntologyPrepared {
 		} else if sc.DataSomeValuesFrom != nil {
 			for _, v := range sc.DataSomeValuesFrom {
 				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &owl.Relationship{
-					Typ:   v.DataType,
-					Value: getDataPropertyName(v.DataProperty),
+					Typ:   getGoType(v.Datatype.AbbreviatedIRI),
+					Value: getDataPropertyName(v.DataProperty.AbbreviatedIRI),
 				})
 			}
 		}
 	}
 
 	return preparedOntology
+}
+
+func getGoType(s string) string {
+	switch s {
+	case "xsd:string":
+		return "string"
+	case "xsd:boolean":
+		return "boolean"
+	case "xsd:java.time.Duration":
+		return "time.duration"
+	case "xsd:java.util.Map&lt;String, String&gt;":
+		return "map[string]string"
+	default:
+		return s
+	}
 }
 
 // getNameFromIri gets the last part of the IRI
@@ -196,7 +211,7 @@ option go_package = "api/discovery";
 		// Add properties
 		for _, r := range v.Relationship {
 			if r.Typ != "" && r.Value != "" {
-				output += fmt.Sprintf("\n\t%s %s"+r.Value, r.Typ)
+				output += fmt.Sprintf("\n\t%s %s", r.Value, r.Typ)
 			}
 		}
 

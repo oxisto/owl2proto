@@ -35,125 +35,26 @@ import "validate/validate.proto";
 
 option go_package = "api/discovery";
 
-message KeyValueDatabaseService {
-}
-
-message OSLogging {
-}
-
-message NoAuthentication {
-}
-
-message ActivityLogging {
-}
-
-message CertificateBasedAuthentication {
-}
-
-message EncryptionInUse {
-}
-
-message KeyVault {
-}
-
-message ABAC {
-}
-
-// This represents the cloud account as a whole, e.g., an Azure subscription.
-message Account {
-}
-
-message Redundancy {
-}
-
-message HttpClientLibrary {
-}
-
-message AccessRestriction {
-	oneof type {
-		Firewall firewall = 101;
-	}
-}
-
-message Firewall {
-	oneof type {
-		L3Firewall l3_firewall = 101;
-		WebApplicationFirewall web_application_firewall = 102;
-	}
+message DDoSProtection {
 }
 
 message DocumentDatabaseService {
 }
 
-message FileStorage {
-}
-
-message Identifiable {
-	oneof type {
-		Identity identity = 101;
-		RoleAssignment role_assignment = 102;
-	}
-}
-
 message Identity {
 }
 
-message ContainerImage {
+message TokenBasedAuthentication {
+	enabled boolean
+	enforced boolean
 }
 
-// An file storage service represents the network service that is used to access a list of file storage shares. The storage itself is modelled as a FileStorage. The service has an http endpoint.
-message FileStorageService {
+message OSLogging {
 }
 
-message Function {
-}
-
-message RBAC {
-}
-
-message Operation {
-	oneof type {
-		DatabaseOperation database_operation = 101;
-		HttpRequest http_request = 102;
-		LogOperation log_operation = 103;
-		ObjectStorageRequest object_storage_request = 104;
-	}
-}
-
-message VirtualNetwork {
-}
-
-message CustomerKeyEncryption {
-}
-
-// describes the actual database or a table in a database
-message DatabaseStorage {
-}
-
-message PasswordBasedAuthentication {
-}
-
-message Resource {
-	oneof type {
-		Application application = 101;
-		CloudResource cloud_resource = 102;
-		Document document = 103;
-	}
-}
-
-message CICDService {
-	oneof type {
-		Job job = 101;
-		Workflow workflow = 102;
-	}
-}
-
-message Auditing {
-	oneof type {
-		AnomalyDetection anomaly_detection = 101;
-		Logging logging = 102;
-		MalwareProtection malware_protection = 103;
-	}
+// This feature is, e.g., available on some VM services to automatically update their software. It ensures that a resource is protected from tampering with its state.
+message AutomaticSecurityUpdates {
+	enabled boolean
 }
 
 message Availability {
@@ -165,56 +66,41 @@ message Availability {
 	}
 }
 
-message HttpRequest {
+message Container {
 }
 
-message ResourceGroup {
+message RoleAssignment {
 }
 
-message DatabaseConnect {
-}
-
-message DeviceProvisioningService {
-}
-
-// Analyzes the activity of a NetworkService (which includes DatabaseServices).
-// Scope contains the resource ID of the protected resource.
-message AnomalyDetection {
-}
-
-message BlockStorage {
-}
-
-// This entity represents a network-based service that can be used to access a particular storage backend. It has multiple subclasses, e.g., for databases or object stores. It has a list of storage resources associated to it.
-message StorageService {
+message SecurityFeature {
 	oneof type {
-		DatabaseService database_service = 101;
-		FileStorageService file_storage_service = 102;
-		ObjectStorageService object_storage_service = 103;
+		Auditing auditing = 101;
+		Authenticity authenticity = 102;
+		Authorization authorization = 103;
+		Availability availability = 104;
+		Confidentiality confidentiality = 105;
+		Integrity integrity = 106;
 	}
 }
 
-message Image {
+message Functionality {
 	oneof type {
-		ContainerImage container_image = 101;
-		VMImage v_m_image = 102;
+		HttpEndpoint http_endpoint = 101;
+		HttpRequestHandler http_request_handler = 102;
+		Operation operation = 103;
 	}
 }
 
-message Storage {
+message Operation {
 	oneof type {
-		BlockStorage block_storage = 101;
-		DatabaseStorage database_storage = 102;
-		FileStorage file_storage = 103;
-		ObjectStorage object_storage = 104;
+		DatabaseOperation database_operation = 101;
+		HttpRequest http_request = 102;
+		LogOperation log_operation = 103;
+		ObjectStorageRequest object_storage_request = 104;
 	}
 }
 
-message Document {
-}
-
-// enabled means the resource _can_ be reached via https, while enforced means it _can only_ be reached via https (or http traffic is redirected)
-message TransportEncryption {
+message ABAC {
 }
 
 message DatabaseOperation {
@@ -224,23 +110,25 @@ message DatabaseOperation {
 	}
 }
 
-message Workflow {
+// An file storage service represents the network service that is used to access a list of file storage shares. The storage itself is modelled as a FileStorage. The service has an http endpoint.
+message FileStorageService {
 }
 
-message NetworkInterface {
+message Logger {
 }
 
-message Container {
+message PasswordBasedAuthentication {
+	activated boolean
 }
 
-message Logging {
-	oneof type {
-		ActivityLogging activity_logging = 101;
-		ApplicationLogging application_logging = 102;
-		BootLogging boot_logging = 103;
-		OSLogging o_s_logging = 104;
-		ResourceLogging resource_logging = 105;
-	}
+message CertificateBasedAuthentication {
+	enabled boolean
+}
+
+message ManagedKeyEncryption {
+}
+
+message Redundancy {
 }
 
 message CloudResource {
@@ -261,192 +149,100 @@ message CloudResource {
 	}
 }
 
-message Framework {
+// This entity represents a network-based service that can be used to access a particular storage backend. It has multiple subclasses, e.g., for databases or object stores. It has a list of storage resources associated to it.
+message StorageService {
 	oneof type {
-		CloudSDK cloud_s_d_k = 101;
-		HttpClientLibrary http_client_library = 102;
-		HttpServer http_server = 103;
-		Logger logger = 104;
+		DatabaseService database_service = 101;
+		FileStorageService file_storage_service = 102;
+		ObjectStorageService object_storage_service = 103;
 	}
 }
 
-message GeoLocation {
+message PasswordPolicy {
 }
 
-// analyzes the activity within a Compute resource
-message MalwareProtection {
+message SingleSignOn {
+	enabled boolean
 }
 
-message ResourceLogging {
+message VirtualSubNetwork {
 }
 
-message Logger {
+// This encapsulates the whole (source) code of an application.
+message Application {
+	programmingLanguage string
+}
+
+// describes the actual database or a table in a database
+message DatabaseStorage {
 }
 
 // A logging-as-a-service offering, e.g. for analyzing logs; has a Storage resource that stores the logs
 message LoggingService {
 }
 
-// An object storage service represents the network service that is used to access a list of object storage containers. The storage itself is modelled as a ObjectStorage. The service has an http endpoint.
-message ObjectStorageService {
-}
-
-// A WAF is a L7 firewall that includes L3 capabilities
-message WebApplicationFirewall {
-}
-
-// This encapsulates the whole (source) code of an application.
-message Application {
-}
-
-// A LogOperation is used by an application
-message LogOperation {
-}
-
-message HttpRequestHandler {
-}
-
-message Immutability {
-}
-
-message ContainerOrchestration {
-}
-
-message L3Firewall {
-}
-
-message RoleAssignment {
-}
-
-message Functionality {
-	oneof type {
-		HttpEndpoint http_endpoint = 101;
-		HttpRequestHandler http_request_handler = 102;
-		Operation operation = 103;
-	}
-}
-
-message ObjectStorage {
-}
-
-message ApplicationLogging {
-}
-
-message DDoSProtection {
-}
-
-message DatabaseQuery {
-}
-
-message TokenBasedAuthentication {
+message ObjectStorageRequest {
+	type string
 }
 
 // A Load Balancer may have multiple access restriction features, e.g. a L3 firewall and a WAF
 message LoadBalancer {
-}
-
-message OTPBasedAuthentication {
-}
-
-message AtRestEncryption {
-	oneof type {
-		CustomerKeyEncryption customer_key_encryption = 101;
-		ManagedKeyEncryption managed_key_encryption = 102;
-	}
-}
-
-message Compute {
-	oneof type {
-		Container container = 101;
-		Function function = 102;
-		VirtualMachine virtual_machine = 103;
-		WebApp web_app = 104;
-	}
-}
-
-message ManagedKeyEncryption {
-}
-
-message NetworkSecurityGroup {
-}
-
-message VirtualSubNetwork {
-}
-
-// This class represents a database service. For example, a postgres SQL server would be modelled as a database service (with a host and IP) and the individual tables or collections would be modelled as a DatabaseStorage entity.
-message DatabaseService {
-	oneof type {
-		DocumentDatabaseService document_database_service = 101;
-		KeyValueDatabaseService key_value_database_service = 102;
-		RelationalDatabaseService relational_database_service = 103;
-	}
-}
-
-message Job {
-}
-
-message MessagingHub {
-}
-
-message VMImage {
-}
-
-// Via the Authenticity relationship, the access type can be specified, e.g. public access (no authentication), password-based, etc.
-message HttpEndpoint {
-	oneof type {
-		ProxiedEndpoint proxied_endpoint = 101;
-	}
-}
-
-message Integrity {
-	oneof type {
-		AutomaticSecurityUpdates automatic_security_updates = 101;
-		Immutability immutability = 102;
-	}
-}
-
-message BootLogging {
-}
-
-// An HTTP endpoint, that is routed through a (reverse) proxy, e.g. a load balancer.
-message ProxiedEndpoint {
-}
-
-message ObjectStorageRequest {
-}
-
-message RelationalDatabaseService {
-}
-
-message ContainerRegistry {
+	url string
 }
 
 message HttpServer {
 }
 
-message Key {
+// enabled means the resource _can_ be reached via https, while enforced means it _can only_ be reached via https (or http traffic is redirected)
+message TransportEncryption {
+	algorithm string
+	enabled boolean
+	enforced boolean
+	tlsVersion string
 }
 
-// A NetworkService is an application (on the network layer) running on a Compute resource. It provides access to a resource
-message NetworkService {
+// This represents the cloud account as a whole, e.g., an Azure subscription.
+message Account {
+}
+
+message ApplicationLogging {
+}
+
+message WebApp {
+}
+
+message BlockStorage {
+}
+
+message RBAC {
+}
+
+message ResourceGroup {
+}
+
+message Resource {
 	oneof type {
-		LoadBalancer load_balancer = 101;
-		LoggingService logging_service = 102;
-		StorageService storage_service = 103;
+		Application application = 101;
+		CloudResource cloud_resource = 102;
+		Document document = 103;
 	}
 }
 
-message Networking {
-	oneof type {
-		NetworkInterface network_interface = 101;
-		NetworkSecurityGroup network_security_group = 102;
-		NetworkService network_service = 103;
-		VirtualNetwork virtual_network = 104;
-		VirtualSubNetwork virtual_sub_network = 105;
-	}
+message HttpClientLibrary {
 }
 
-message VirtualMachine {
+message Job {
+}
+
+message Logging {
+	enabled boolean
+	oneof type {
+		ActivityLogging activity_logging = 101;
+		ApplicationLogging application_logging = 102;
+		BootLogging boot_logging = 103;
+		OSLogging o_s_logging = 104;
+		ResourceLogging resource_logging = 105;
+	}
 }
 
 message Authenticity {
@@ -460,18 +256,260 @@ message Authenticity {
 	}
 }
 
-message IoT {
+message CICDService {
 	oneof type {
-		DeviceProvisioningService device_provisioning_service = 101;
-		MessagingHub messaging_hub = 102;
+		Job job = 101;
+		Workflow workflow = 102;
 	}
 }
 
-message SingleSignOn {
+message Document {
 }
 
-// This feature is, e.g., available on some VM services to automatically update their software. It ensures that a resource is protected from tampering with its state.
-message AutomaticSecurityUpdates {
+message Integrity {
+	oneof type {
+		AutomaticSecurityUpdates automatic_security_updates = 101;
+		Immutability immutability = 102;
+	}
+}
+
+message Networking {
+	oneof type {
+		NetworkInterface network_interface = 101;
+		NetworkSecurityGroup network_security_group = 102;
+		NetworkService network_service = 103;
+		VirtualNetwork virtual_network = 104;
+		VirtualSubNetwork virtual_sub_network = 105;
+	}
+}
+
+message Framework {
+	oneof type {
+		CloudSDK cloud_s_d_k = 101;
+		HttpClientLibrary http_client_library = 102;
+		HttpServer http_server = 103;
+		Logger logger = 104;
+	}
+}
+
+// Via the Authenticity relationship, the access type can be specified, e.g. public access (no authentication), password-based, etc.
+message HttpEndpoint {
+	method string
+	path string
+	url string
+	oneof type {
+		ProxiedEndpoint proxied_endpoint = 101;
+	}
+}
+
+message Authorization {
+	oneof type {
+		ABAC a_b_a_c = 101;
+		AccessRestriction access_restriction = 102;
+		RBAC r_b_a_c = 103;
+	}
+}
+
+message ContainerOrchestration {
+	managementUrl string
+}
+
+message CustomerKeyEncryption {
+	keyUrl string
+}
+
+message Compute {
+	oneof type {
+		Container container = 101;
+		Function function = 102;
+		VirtualMachine virtual_machine = 103;
+		WebApp web_app = 104;
+	}
+}
+
+message DatabaseConnect {
+}
+
+message DeviceProvisioningService {
+}
+
+// An HTTP endpoint, that is routed through a (reverse) proxy, e.g. a load balancer.
+message ProxiedEndpoint {
+}
+
+// Analyzes the activity of a NetworkService (which includes DatabaseServices).
+// Scope contains the resource ID of the protected resource.
+message AnomalyDetection {
+	enabled boolean
+}
+
+message AtRestEncryption {
+	algorithm string
+	enabled boolean
+	keyUrl string
+	oneof type {
+		CustomerKeyEncryption customer_key_encryption = 101;
+		ManagedKeyEncryption managed_key_encryption = 102;
+	}
+}
+
+// A LogOperation is used by an application
+message LogOperation {
+}
+
+message KeyVault {
+}
+
+message NetworkInterface {
+}
+
+message ObjectStorage {
+}
+
+message VirtualMachine {
+}
+
+message FileStorage {
+}
+
+message HttpRequestHandler {
+	path string
+}
+
+message Immutability {
+	enabled boolean
+}
+
+// A WAF is a L7 firewall that includes L3 capabilities
+message WebApplicationFirewall {
+	enabled boolean
+}
+
+// RetentionPeriod in hours
+message Backup {
+	enabled boolean
+}
+
+message CloudSDK {
+}
+
+message NoAuthentication {
+}
+
+message L3Firewall {
+	enabled boolean
+	inbound boolean
+	restrictedPorts string
+}
+
+// analyzes the activity within a Compute resource
+message MalwareProtection {
+	enabled boolean
+}
+
+message MessagingHub {
+}
+
+// An object storage service represents the network service that is used to access a list of object storage containers. The storage itself is modelled as a ObjectStorage. The service has an http endpoint.
+message ObjectStorageService {
+}
+
+message EncryptionInUse {
+	enabled boolean
+}
+
+message Function {
+}
+
+message BootLogging {
+}
+
+message ContainerRegistry {
+}
+
+message KeyValueDatabaseService {
+}
+
+// A NetworkService is an application (on the network layer) running on a Compute resource. It provides access to a resource
+message NetworkService {
+	oneof type {
+		LoadBalancer load_balancer = 101;
+		LoggingService logging_service = 102;
+		StorageService storage_service = 103;
+	}
+}
+
+message AccessRestriction {
+	oneof type {
+		Firewall firewall = 101;
+	}
+}
+
+message NetworkSecurityGroup {
+}
+
+message VMImage {
+}
+
+message ActivityLogging {
+}
+
+message Image {
+	oneof type {
+		ContainerImage container_image = 101;
+		VMImage v_m_image = 102;
+	}
+}
+
+message Workflow {
+}
+
+message HttpRequest {
+}
+
+message VirtualNetwork {
+}
+
+message Identifiable {
+	activated boolean
+	oneof type {
+		Identity identity = 101;
+		RoleAssignment role_assignment = 102;
+	}
+}
+
+message OTPBasedAuthentication {
+	activated boolean
+}
+
+message RelationalDatabaseService {
+}
+
+message Firewall {
+	oneof type {
+		L3Firewall l3_firewall = 101;
+		WebApplicationFirewall web_application_firewall = 102;
+	}
+}
+
+message Auditing {
+	oneof type {
+		AnomalyDetection anomaly_detection = 101;
+		Logging logging = 102;
+		MalwareProtection malware_protection = 103;
+	}
+}
+
+message ContainerImage {
+}
+
+message Storage {
+	oneof type {
+		BlockStorage block_storage = 101;
+		DatabaseStorage database_storage = 102;
+		FileStorage file_storage = 103;
+		ObjectStorage object_storage = 104;
+	}
 }
 
 message Confidentiality {
@@ -483,34 +521,33 @@ message Confidentiality {
 	}
 }
 
-message PasswordPolicy {
+message DatabaseQuery {
+	modify boolean
 }
 
-message SecurityFeature {
+// This class represents a database service. For example, a postgres SQL server would be modelled as a database service (with a host and IP) and the individual tables or collections would be modelled as a DatabaseStorage entity.
+message DatabaseService {
 	oneof type {
-		Auditing auditing = 101;
-		Authenticity authenticity = 102;
-		Authorization authorization = 103;
-		Availability availability = 104;
-		Confidentiality confidentiality = 105;
-		Integrity integrity = 106;
+		DocumentDatabaseService document_database_service = 101;
+		KeyValueDatabaseService key_value_database_service = 102;
+		RelationalDatabaseService relational_database_service = 103;
 	}
 }
 
-message WebApp {
+message ResourceLogging {
 }
 
-message Authorization {
+message GeoLocation {
+	region string
+}
+
+message IoT {
 	oneof type {
-		ABAC a_b_a_c = 101;
-		AccessRestriction access_restriction = 102;
-		RBAC r_b_a_c = 103;
+		DeviceProvisioningService device_provisioning_service = 101;
+		MessagingHub messaging_hub = 102;
 	}
 }
 
-message CloudSDK {
-}
-
-// RetentionPeriod in hours
-message Backup {
+message Key {
+	enabled boolean
 }

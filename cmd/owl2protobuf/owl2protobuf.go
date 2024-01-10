@@ -12,47 +12,83 @@ import (
 	"github.com/lmittmann/tint"
 )
 
+// TODOs
+// - get label instead of iri for the name fields
+// - add comments
+// - add relationsships
+
 var (
-	file     string
-	resource map[string][]*Resource
+	file string
 )
 
-type Resource struct {
-	iri          string
-	name         string
-	parent       string
-	comment      []string
-	relationship []*Relationship
-}
+func prepareOntology(o owl.Ontology) owl.OntologyPrepared {
+	preparedOntology := owl.OntologyPrepared{
+		Resources:           make(map[string]*owl.Resource),
+		SubClasses:          make(map[string]owl.SubClassOf),
+		AnnotationAssertion: make(map[string]owl.AnnotationAssertion),
+	}
 
-type Relationship struct {
-	property string
-	value    string
-}
+	// Add classes
+	// We set the name extracted from the IRI and the IRI and if a name label exists we will change the name later
+	for _, c := range o.Declarations {
+		if c.Class.IRI != "" {
+			preparedOntology.Resources[c.Class.IRI] = &owl.Resource{
+				Iri:  c.Class.IRI,
+				Name: getNameFromIri(c.Class.IRI),
+			}
+		}
+	}
 
-func parseOntology(o owl.Ontology) map[string][]*Resource {
-	resource = make(map[string][]*Resource)
+	// prepare resources map with  and name
+	for _, aa := range o.AnnotationAssertion {
+		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
+			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
+				preparedOntology.Resources[aa.IRI].Name = cleanString(aa.Literal)
 
+			}
+		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
+			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
+				c := preparedOntology.Resources[aa.IRI].Comment
+				c = append(c, aa.Literal)
+				preparedOntology.Resources[aa.IRI].Comment = c
+
+			}
+		}
+	}
+
+	// Prepare SubClasses
 	for _, sc := range o.SubClasses {
 		if len(sc.Class) == 2 {
-			if sc.Class[1].IRI == "owl.Thing" {
-				resource["Thing"] = append(resource["owl.Thing"], &Resource{
-					iri:  sc.Class[0].IRI,
-					name: getNameFromIri(sc.Class[0].IRI),
-				})
-			} else {
-				resource[sc.Class[1].IRI] = append(resource[sc.Class[1].IRI], &Resource{
-					iri:    sc.Class[0].IRI,
-					name:   getNameFromIri(sc.Class[0].IRI),
-					parent: sc.Class[1].IRI,
+
+			if sc.Class[1].IRI != "owl.Thing" {
+				r := &owl.Resource{
+					Iri:     sc.Class[0].IRI,
+					Name:    preparedOntology.Resources[sc.Class[0].IRI].Name,
+					Parent:  sc.Class[1].IRI,
+					Comment: preparedOntology.Resources[sc.Class[0].IRI].Comment,
+				}
+
+				if val, ok := preparedOntology.Resources[sc.Class[1].IRI]; ok {
+					if val.SubResources == nil {
+						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*owl.Resource, 0)
+					}
+					preparedOntology.Resources[sc.Class[1].IRI].SubResources = append(preparedOntology.Resources[sc.Class[1].IRI].SubResources, r)
+				}
+			}
+		} else if sc.DataSomeValuesFrom != nil {
+			for _, v := range sc.DataSomeValuesFrom {
+				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &owl.Relationship{
+					Typ:   v.DataType,
+					Value: getDataPropertyName(v.DataProperty),
 				})
 			}
 		}
 	}
 
-	return resource
+	return preparedOntology
 }
 
+// getNameFromIri gets the last part of the IRI
 func getNameFromIri(s string) string {
 	if s == "" {
 		return ""
@@ -62,8 +98,31 @@ func getNameFromIri(s string) string {
 	return split[4]
 }
 
+func getDataPropertyName(s string) string {
+	if s == "" {
+		return ""
+	}
+
+	split := strings.Split(s, ":")
+
+	return split[1]
+}
+
+// cleanString deletes spaces and /.
+func cleanString(s string) string {
+	s = strings.ReplaceAll(s, " ", "")
+	s = strings.ReplaceAll(s, "/", "")
+	s = strings.ReplaceAll(s, "-", "")
+
+	return s
+}
+
+// toSnakeCase converts camel case to snake case and deletes spaces
+// TODO(all): FIx "CI/CD Service" to CICDService and cicd_service
 func toSnakeCase(s string) string {
 	var result string
+
+	s = cleanString(s)
 
 	for i, char := range s {
 		if i > 0 && char >= 'A' && char <= 'Z' {
@@ -76,7 +135,7 @@ func toSnakeCase(s string) string {
 	return strings.ToLower(result)
 }
 
-func createProtoFile(input map[string][]*Resource) string {
+func createProtoFile(preparedOntology owl.OntologyPrepared) string {
 	output := ""
 
 	//Add header and imports
@@ -116,27 +175,45 @@ import "tagger/tagger.proto";
 import "validate/validate.proto";
 
 option go_package = "api/discovery";
-
 `
 
 	// Add proto messages
-	for k, v := range resource {
-		output += fmt.Sprintf("message %s {", getNameFromIri(k))
+	for k, v := range preparedOntology.Resources {
+		// The resources with owl:Thing as parent can be skipped
+		// We decided to let the key empty instead of adding "owl:Thing"
+		if k == "" {
+			continue
+		}
 
-		// Check if the resource has additional subresources
+		// Add comment
+		for _, v := range v.Comment {
+			output += "\n// " + v
+		}
+
+		// Create message
+		output += fmt.Sprintf("\nmessage %s {", v.Name)
+
+		// Add properties
+		for _, r := range v.Relationship {
+			if r.Typ != "" && r.Value != "" {
+				output += fmt.Sprintf("\n\t%s %s"+r.Value, r.Typ)
+			}
+		}
+
+		// Add subresources to proto resource message if present
 		i := 100
-		if len(v) > 0 {
+		if len(v.SubResources) > 0 {
 			output += "\n\toneof type {"
-			for _, v2 := range v {
+			for _, v2 := range v.SubResources {
 				i += 1
 
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.name, toSnakeCase(v2.name), i)
+				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, toSnakeCase(v2.Name), i)
 
 			}
 			output += "\n\t}"
 		}
 
-		output += "\n}\n\n"
+		output += "\n}\n"
 	}
 
 	return output
@@ -173,11 +250,11 @@ func main() {
 	}
 	// fmt.Printf("%+v", o)
 
-	// Parse Ontology
-	resource := parseOntology(o)
+	// prepareOntology
+	preparedOntology := prepareOntology(o)
 
 	// Generate protobuf file
-	output := createProtoFile(resource)
+	output := createProtoFile(preparedOntology)
 
 	// Write protobuf file
 	f, err := os.Create("output/ontology.proto")

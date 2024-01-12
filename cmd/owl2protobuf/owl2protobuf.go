@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/oxisto/owl2protobuf/internal/fileHeaders"
 	"github.com/oxisto/owl2protobuf/internal/util"
 	"github.com/oxisto/owl2protobuf/pkg/owl"
 	"github.com/oxisto/owl2protobuf/pkg/protobuf"
@@ -22,12 +21,13 @@ import (
 // - add ObjectHasValue
 
 var (
-	file string
+	owlFile          string
+	headerFile       string
+	rootResourceName string
 )
 
 const (
-	DefaultRootResourceName = "http://graph.clouditor.io/classes/CloudResource"
-	DefaultOutputFile       = "api/ontology.proto"
+	DefaultOutputFile = "api/ontology.proto"
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
@@ -119,15 +119,15 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 }
 
 // createProtoFile creates the protobuf file
-func createProtoFile(preparedOntology protobuf.OntologyPrepared) string {
+func createProtoFile(preparedOntology protobuf.OntologyPrepared, header string) string {
 	output := ""
 
 	//Add header
-	// TODO(all): Another header for other tools?
-	output += fileHeaders.GetClouditorProtobufFileDetails()
+	output += header
 
 	// Create proto message for ResourceID
 	output += `
+
 message ResourceID {
 	repeated string resource_id = 1;
 }
@@ -158,7 +158,7 @@ message ResourceID {
 		for _, o := range v.ObjectRelationship {
 			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
-				value, typ := util.GetObjectDetail(o.ObjectProperty, DefaultRootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
+				value, typ := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, o.Name, i)
 			}
 		}
@@ -223,7 +223,14 @@ func main() {
 		o   owl.Ontology
 	)
 
-	file = os.Args[1]
+	if len(os.Args) != 4 {
+		slog.Error("not enough command line arguments given", slog.String("arguments needed", "owl file location, header file location and root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource)"))
+
+		return
+	}
+	owlFile = os.Args[1]
+	headerFile = os.Args[2]
+	rootResourceName = os.Args[3]
 
 	// Set up logging
 	slog.SetDefault(slog.New(
@@ -232,30 +239,36 @@ func main() {
 		}),
 	))
 
-	// Read XML
-	b, err = os.ReadFile(file)
+	// Read Ontology XML
+	b, err = os.ReadFile(owlFile)
 	if err != nil {
-		slog.Error("error reading file", tint.Err(err))
+		slog.Error("error reading ontology file", "location", owlFile, tint.Err(err))
 		return
 	}
-
 	err = xml.Unmarshal(b, &o)
 	if err != nil {
 		slog.Error("error while unmarshalling XML", tint.Err(err))
 		return
 	}
-	// fmt.Printf("%+v", o)
+
+	// Read header content from file
+	b, err = os.ReadFile(headerFile)
+	if err != nil {
+		slog.Error("error reading header file", "location", headerFile, tint.Err(err))
+		return
+	}
 
 	// prepareOntology
 	preparedOntology := prepareOntology(o)
 
-	// Generate protobuf file
-	output := createProtoFile(preparedOntology)
+	// Generate proto content
+	output := createProtoFile(preparedOntology, string(b))
 
+	// Write proto content to file
 	err = writeProtofileToStorage(output)
 	if err != nil {
-		slog.Error("error writing protobuf file to storage", tint.Err(err))
+		slog.Error("error writing proto file to storage", tint.Err(err))
 	}
 
-	slog.Info("protobuf file written to storage", slog.String("output folder", DefaultOutputFile))
+	slog.Info("proto file written to storage", slog.String("output folder", DefaultOutputFile))
 }

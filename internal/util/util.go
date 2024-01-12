@@ -10,12 +10,11 @@ const (
 	Repeated = "repeated "
 )
 
+// GetObjectDetail returns the object type
 func GetObjectDetail(s, rootResourceName string, resource *protobuf.Resource, preparedOntology protobuf.OntologyPrepared) (string, string) {
 	var (
 		value string
 	)
-
-	//TODO(all): What should we do witch prop:proxyTarget and prop.parent
 
 	switch s {
 	case "prop:hasMultiple", "prop:offersMultiple":
@@ -40,7 +39,7 @@ func GetObjectDetail(s, rootResourceName string, resource *protobuf.Resource, pr
 
 }
 
-// isResourceAboveX checks if a resource above the given resource has the name of DefaultRootResourceName
+// isResourceAboveX checks if a resource above the given resource has the name of rootResourceName
 func isResourceAboveX(resource *protobuf.Resource, preparedOntology protobuf.OntologyPrepared, rootResourceName string) bool {
 	if resource == nil {
 		return false

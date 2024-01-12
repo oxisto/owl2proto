@@ -1,8 +1,5 @@
 package owl
 
-// TODOs
-// Add annotationAssertion, e.g. label, comment,...
-
 // Ontology holds all information of one ontology
 type Ontology struct {
 	Declarations        []Declaration         `xml:"Declaration"`

@@ -22,8 +22,7 @@ func GetClouditorProtobufFileDetails() string {
 }
 
 func getClouditorHeader() string {
-	return `
-// Copyright 2024 Fraunhofer AISEC
+	return `// Copyright 2024 Fraunhofer AISEC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

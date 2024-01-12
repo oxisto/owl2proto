@@ -52,12 +52,12 @@ func getClouditorHeader() string {
 
 func getClouditorPackage() string {
 	return `
-package clouditor.discovery.v1;
+package owl2protobuf.owl2protobuf;
 `
 }
 
 func getOptionGoPackage() string {
 	return `
-option go_package = "api/discovery";
+option go_package = "api/owl2protobuf";
 `
 }

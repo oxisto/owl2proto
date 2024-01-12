@@ -16,7 +16,7 @@ import (
 
 // TODOs
 // - get label instead of iri for the name fields
-// - add comments
+// - add data/object property comments
 // - add relationsships
 // - add ObjectSomeValuesFrom
 // - add ObjectHasValue
@@ -27,7 +27,7 @@ var (
 
 const (
 	DefaultRootResourceName = "http://graph.clouditor.io/classes/CloudResource"
-	DefaultOutputFile       = "output/ontology.proto"
+	DefaultOutputFile       = "api/ontology.proto"
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
@@ -126,6 +126,13 @@ func createProtoFile(preparedOntology protobuf.OntologyPrepared) string {
 	// TODO(all): Another header for other tools?
 	output += fileHeaders.GetClouditorProtobufFileDetails()
 
+	// Create proto message for ResourceID
+	output += `
+message ResourceID {
+	repeated string resource_id = 1;
+}
+`
+
 	// Create proto messages with comments
 	for _, v := range preparedOntology.Resources {
 		// is the counter for the message field numbers
@@ -143,7 +150,7 @@ func createProtoFile(preparedOntology protobuf.OntologyPrepared) string {
 		for _, r := range v.Relationship {
 			if r.Typ != "" && r.Value != "" {
 				i += 1
-				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Value, r.Typ, i)
+				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, r.Value, i)
 			}
 		}
 
@@ -152,7 +159,7 @@ func createProtoFile(preparedOntology protobuf.OntologyPrepared) string {
 			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
 				value, typ := util.GetObjectDetail(o.ObjectProperty, DefaultRootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
-				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, o.Name, typ, i)
+				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, o.Name, i)
 			}
 		}
 
@@ -160,7 +167,7 @@ func createProtoFile(preparedOntology protobuf.OntologyPrepared) string {
 		// Important
 		if len(v.SubResources) > 0 {
 			// j is the counter for the oneof field numbers
-			j := 0
+			j := 100
 			output += "\n\n\toneof type {"
 			for _, v2 := range v.SubResources {
 				j += 1

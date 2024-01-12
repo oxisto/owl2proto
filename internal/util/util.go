@@ -26,6 +26,8 @@ func GetObjectDetail(s, rootResourceName string, resource *protobuf.Resource, pr
 		value = Repeated
 	case "prop:offersInterface":
 		value = ""
+	case "prop:proxyTarget", "prop:parent":
+		return "string", ""
 	default:
 		return s, ""
 	}

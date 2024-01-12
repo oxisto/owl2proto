@@ -29,7 +29,7 @@
 // 	protoc        (unknown)
 // source: api/ontology.proto
 
-package owl2protobuf
+package ontology
 
 import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
@@ -96,6 +96,149 @@ func (x *ResourceID) GetResourceId() []string {
 	return nil
 }
 
+type ResourceGroup struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ResourceGroup) Reset() {
+	*x = ResourceGroup{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ResourceGroup) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResourceGroup) ProtoMessage() {}
+
+func (x *ResourceGroup) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResourceGroup.ProtoReflect.Descriptor instead.
+func (*ResourceGroup) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{1}
+}
+
+type Identifiable struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Activated     bool           `protobuf:"varint,1,opt,name=activated,proto3" json:"activated,omitempty"`
+	Authenticity  *Authenticity  `protobuf:"bytes,2,opt,name=Authenticity,proto3" json:"Authenticity,omitempty"`
+	Authorization *Authorization `protobuf:"bytes,3,opt,name=Authorization,proto3" json:"Authorization,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*Identifiable_Identity
+	//	*Identifiable_RoleAssignment
+	Type isIdentifiable_Type `protobuf_oneof:"type"`
+}
+
+func (x *Identifiable) Reset() {
+	*x = Identifiable{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Identifiable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Identifiable) ProtoMessage() {}
+
+func (x *Identifiable) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Identifiable.ProtoReflect.Descriptor instead.
+func (*Identifiable) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Identifiable) GetActivated() bool {
+	if x != nil {
+		return x.Activated
+	}
+	return false
+}
+
+func (x *Identifiable) GetAuthenticity() *Authenticity {
+	if x != nil {
+		return x.Authenticity
+	}
+	return nil
+}
+
+func (x *Identifiable) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (m *Identifiable) GetType() isIdentifiable_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Identifiable) GetIdentity() *Identity {
+	if x, ok := x.GetType().(*Identifiable_Identity); ok {
+		return x.Identity
+	}
+	return nil
+}
+
+func (x *Identifiable) GetRoleAssignment() *RoleAssignment {
+	if x, ok := x.GetType().(*Identifiable_RoleAssignment); ok {
+		return x.RoleAssignment
+	}
+	return nil
+}
+
+type isIdentifiable_Type interface {
+	isIdentifiable_Type()
+}
+
+type Identifiable_Identity struct {
+	Identity *Identity `protobuf:"bytes,101,opt,name=identity,proto3,oneof"`
+}
+
+type Identifiable_RoleAssignment struct {
+	RoleAssignment *RoleAssignment `protobuf:"bytes,102,opt,name=role_assignment,json=roleAssignment,proto3,oneof"`
+}
+
+func (*Identifiable_Identity) isIdentifiable_Type() {}
+
+func (*Identifiable_RoleAssignment) isIdentifiable_Type() {}
+
 type NetworkSecurityGroup struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -105,7 +248,7 @@ type NetworkSecurityGroup struct {
 func (x *NetworkSecurityGroup) Reset() {
 	*x = NetworkSecurityGroup{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[1]
+		mi := &file_api_ontology_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -118,7 +261,7 @@ func (x *NetworkSecurityGroup) String() string {
 func (*NetworkSecurityGroup) ProtoMessage() {}
 
 func (x *NetworkSecurityGroup) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[1]
+	mi := &file_api_ontology_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -131,33 +274,41 @@ func (x *NetworkSecurityGroup) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NetworkSecurityGroup.ProtoReflect.Descriptor instead.
 func (*NetworkSecurityGroup) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{1}
+	return file_api_ontology_proto_rawDescGZIP(), []int{3}
 }
 
-// This represents the cloud account as a whole, e.g., an Azure subscription.
-type Account struct {
+type Networking struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Networking_NetworkInterface
+	//	*Networking_NetworkSecurityGroup
+	//	*Networking_NetworkService
+	//	*Networking_VirtualNetwork
+	//	*Networking_VirtualSubNetwork
+	Type isNetworking_Type `protobuf_oneof:"type"`
 }
 
-func (x *Account) Reset() {
-	*x = Account{}
+func (x *Networking) Reset() {
+	*x = Networking{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[2]
+		mi := &file_api_ontology_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *Account) String() string {
+func (x *Networking) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Account) ProtoMessage() {}
+func (*Networking) ProtoMessage() {}
 
-func (x *Account) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[2]
+func (x *Networking) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,10 +319,956 @@ func (x *Account) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Account.ProtoReflect.Descriptor instead.
-func (*Account) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use Networking.ProtoReflect.Descriptor instead.
+func (*Networking) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{4}
 }
+
+func (m *Networking) GetType() isNetworking_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Networking) GetNetworkInterface() *NetworkInterface {
+	if x, ok := x.GetType().(*Networking_NetworkInterface); ok {
+		return x.NetworkInterface
+	}
+	return nil
+}
+
+func (x *Networking) GetNetworkSecurityGroup() *NetworkSecurityGroup {
+	if x, ok := x.GetType().(*Networking_NetworkSecurityGroup); ok {
+		return x.NetworkSecurityGroup
+	}
+	return nil
+}
+
+func (x *Networking) GetNetworkService() *NetworkService {
+	if x, ok := x.GetType().(*Networking_NetworkService); ok {
+		return x.NetworkService
+	}
+	return nil
+}
+
+func (x *Networking) GetVirtualNetwork() *VirtualNetwork {
+	if x, ok := x.GetType().(*Networking_VirtualNetwork); ok {
+		return x.VirtualNetwork
+	}
+	return nil
+}
+
+func (x *Networking) GetVirtualSubNetwork() *VirtualSubNetwork {
+	if x, ok := x.GetType().(*Networking_VirtualSubNetwork); ok {
+		return x.VirtualSubNetwork
+	}
+	return nil
+}
+
+type isNetworking_Type interface {
+	isNetworking_Type()
+}
+
+type Networking_NetworkInterface struct {
+	NetworkInterface *NetworkInterface `protobuf:"bytes,101,opt,name=network_interface,json=networkInterface,proto3,oneof"`
+}
+
+type Networking_NetworkSecurityGroup struct {
+	NetworkSecurityGroup *NetworkSecurityGroup `protobuf:"bytes,102,opt,name=network_security_group,json=networkSecurityGroup,proto3,oneof"`
+}
+
+type Networking_NetworkService struct {
+	NetworkService *NetworkService `protobuf:"bytes,103,opt,name=network_service,json=networkService,proto3,oneof"`
+}
+
+type Networking_VirtualNetwork struct {
+	VirtualNetwork *VirtualNetwork `protobuf:"bytes,104,opt,name=virtual_network,json=virtualNetwork,proto3,oneof"`
+}
+
+type Networking_VirtualSubNetwork struct {
+	VirtualSubNetwork *VirtualSubNetwork `protobuf:"bytes,105,opt,name=virtual_sub_network,json=virtualSubNetwork,proto3,oneof"`
+}
+
+func (*Networking_NetworkInterface) isNetworking_Type() {}
+
+func (*Networking_NetworkSecurityGroup) isNetworking_Type() {}
+
+func (*Networking_NetworkService) isNetworking_Type() {}
+
+func (*Networking_VirtualNetwork) isNetworking_Type() {}
+
+func (*Networking_VirtualSubNetwork) isNetworking_Type() {}
+
+// This entity represents a network-based service that can be used to access a particular storage backend. It has multiple subclasses, e.g., for databases or object stores. It has a list of storage resources associated to it.
+type StorageService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Storage []*ResourceID `protobuf:"bytes,1,rep,name=Storage,proto3" json:"Storage,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*StorageService_DatabaseService
+	//	*StorageService_FileStorageService
+	//	*StorageService_ObjectStorageService
+	Type isStorageService_Type `protobuf_oneof:"type"`
+}
+
+func (x *StorageService) Reset() {
+	*x = StorageService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageService) ProtoMessage() {}
+
+func (x *StorageService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageService.ProtoReflect.Descriptor instead.
+func (*StorageService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *StorageService) GetStorage() []*ResourceID {
+	if x != nil {
+		return x.Storage
+	}
+	return nil
+}
+
+func (m *StorageService) GetType() isStorageService_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *StorageService) GetDatabaseService() *DatabaseService {
+	if x, ok := x.GetType().(*StorageService_DatabaseService); ok {
+		return x.DatabaseService
+	}
+	return nil
+}
+
+func (x *StorageService) GetFileStorageService() *FileStorageService {
+	if x, ok := x.GetType().(*StorageService_FileStorageService); ok {
+		return x.FileStorageService
+	}
+	return nil
+}
+
+func (x *StorageService) GetObjectStorageService() *ObjectStorageService {
+	if x, ok := x.GetType().(*StorageService_ObjectStorageService); ok {
+		return x.ObjectStorageService
+	}
+	return nil
+}
+
+type isStorageService_Type interface {
+	isStorageService_Type()
+}
+
+type StorageService_DatabaseService struct {
+	DatabaseService *DatabaseService `protobuf:"bytes,101,opt,name=database_service,json=databaseService,proto3,oneof"`
+}
+
+type StorageService_FileStorageService struct {
+	FileStorageService *FileStorageService `protobuf:"bytes,102,opt,name=file_storage_service,json=fileStorageService,proto3,oneof"`
+}
+
+type StorageService_ObjectStorageService struct {
+	ObjectStorageService *ObjectStorageService `protobuf:"bytes,103,opt,name=object_storage_service,json=objectStorageService,proto3,oneof"`
+}
+
+func (*StorageService_DatabaseService) isStorageService_Type() {}
+
+func (*StorageService_FileStorageService) isStorageService_Type() {}
+
+func (*StorageService_ObjectStorageService) isStorageService_Type() {}
+
+type HttpRequestHandler struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Path         string          `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	Application  *Application    `protobuf:"bytes,2,opt,name=Application,proto3" json:"Application,omitempty"`
+	HttpEndpoint []*HttpEndpoint `protobuf:"bytes,3,rep,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+}
+
+func (x *HttpRequestHandler) Reset() {
+	*x = HttpRequestHandler{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HttpRequestHandler) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HttpRequestHandler) ProtoMessage() {}
+
+func (x *HttpRequestHandler) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HttpRequestHandler.ProtoReflect.Descriptor instead.
+func (*HttpRequestHandler) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *HttpRequestHandler) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *HttpRequestHandler) GetApplication() *Application {
+	if x != nil {
+		return x.Application
+	}
+	return nil
+}
+
+func (x *HttpRequestHandler) GetHttpEndpoint() []*HttpEndpoint {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+type Job struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Job) Reset() {
+	*x = Job{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Job) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Job) ProtoMessage() {}
+
+func (x *Job) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Job.ProtoReflect.Descriptor instead.
+func (*Job) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{7}
+}
+
+type Logger struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Logger) Reset() {
+	*x = Logger{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Logger) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Logger) ProtoMessage() {}
+
+func (x *Logger) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Logger.ProtoReflect.Descriptor instead.
+func (*Logger) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{8}
+}
+
+// An object storage service represents the network service that is used to access a list of object storage containers. The storage itself is modelled as a ObjectStorage. The service has an http endpoint.
+type ObjectStorageService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HttpEndpoint *HttpEndpoint `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+}
+
+func (x *ObjectStorageService) Reset() {
+	*x = ObjectStorageService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ObjectStorageService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ObjectStorageService) ProtoMessage() {}
+
+func (x *ObjectStorageService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ObjectStorageService.ProtoReflect.Descriptor instead.
+func (*ObjectStorageService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ObjectStorageService) GetHttpEndpoint() *HttpEndpoint {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+// enabled means the resource _can_ be reached via https, while enforced means it _can only_ be reached via https (or http traffic is redirected)
+type TransportEncryption struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Algorithm  string `protobuf:"bytes,1,opt,name=algorithm,proto3" json:"algorithm,omitempty"`
+	Enabled    bool   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Enforced   bool   `protobuf:"varint,3,opt,name=enforced,proto3" json:"enforced,omitempty"`
+	TlsVersion string `protobuf:"bytes,4,opt,name=tlsVersion,proto3" json:"tlsVersion,omitempty"`
+}
+
+func (x *TransportEncryption) Reset() {
+	*x = TransportEncryption{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TransportEncryption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TransportEncryption) ProtoMessage() {}
+
+func (x *TransportEncryption) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TransportEncryption.ProtoReflect.Descriptor instead.
+func (*TransportEncryption) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *TransportEncryption) GetAlgorithm() string {
+	if x != nil {
+		return x.Algorithm
+	}
+	return ""
+}
+
+func (x *TransportEncryption) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *TransportEncryption) GetEnforced() bool {
+	if x != nil {
+		return x.Enforced
+	}
+	return false
+}
+
+func (x *TransportEncryption) GetTlsVersion() string {
+	if x != nil {
+		return x.TlsVersion
+	}
+	return ""
+}
+
+type Authenticity struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Authenticity_CertificateBasedAuthentication
+	//	*Authenticity_TokenBasedAuthentication
+	//	*Authenticity_NoAuthentication
+	//	*Authenticity_OTPBasedAuthentication
+	//	*Authenticity_PasswordBasedAuthentication
+	//	*Authenticity_SingleSignOn
+	Type isAuthenticity_Type `protobuf_oneof:"type"`
+}
+
+func (x *Authenticity) Reset() {
+	*x = Authenticity{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Authenticity) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Authenticity) ProtoMessage() {}
+
+func (x *Authenticity) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Authenticity.ProtoReflect.Descriptor instead.
+func (*Authenticity) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{11}
+}
+
+func (m *Authenticity) GetType() isAuthenticity_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Authenticity) GetCertificateBasedAuthentication() *CertificateBasedAuthentication {
+	if x, ok := x.GetType().(*Authenticity_CertificateBasedAuthentication); ok {
+		return x.CertificateBasedAuthentication
+	}
+	return nil
+}
+
+func (x *Authenticity) GetTokenBasedAuthentication() *TokenBasedAuthentication {
+	if x, ok := x.GetType().(*Authenticity_TokenBasedAuthentication); ok {
+		return x.TokenBasedAuthentication
+	}
+	return nil
+}
+
+func (x *Authenticity) GetNoAuthentication() *NoAuthentication {
+	if x, ok := x.GetType().(*Authenticity_NoAuthentication); ok {
+		return x.NoAuthentication
+	}
+	return nil
+}
+
+func (x *Authenticity) GetOTPBasedAuthentication() *OTPBasedAuthentication {
+	if x, ok := x.GetType().(*Authenticity_OTPBasedAuthentication); ok {
+		return x.OTPBasedAuthentication
+	}
+	return nil
+}
+
+func (x *Authenticity) GetPasswordBasedAuthentication() *PasswordBasedAuthentication {
+	if x, ok := x.GetType().(*Authenticity_PasswordBasedAuthentication); ok {
+		return x.PasswordBasedAuthentication
+	}
+	return nil
+}
+
+func (x *Authenticity) GetSingleSignOn() *SingleSignOn {
+	if x, ok := x.GetType().(*Authenticity_SingleSignOn); ok {
+		return x.SingleSignOn
+	}
+	return nil
+}
+
+type isAuthenticity_Type interface {
+	isAuthenticity_Type()
+}
+
+type Authenticity_CertificateBasedAuthentication struct {
+	CertificateBasedAuthentication *CertificateBasedAuthentication `protobuf:"bytes,101,opt,name=certificate_based_authentication,json=certificateBasedAuthentication,proto3,oneof"`
+}
+
+type Authenticity_TokenBasedAuthentication struct {
+	TokenBasedAuthentication *TokenBasedAuthentication `protobuf:"bytes,102,opt,name=token_based_authentication,json=tokenBasedAuthentication,proto3,oneof"`
+}
+
+type Authenticity_NoAuthentication struct {
+	NoAuthentication *NoAuthentication `protobuf:"bytes,103,opt,name=no_authentication,json=noAuthentication,proto3,oneof"`
+}
+
+type Authenticity_OTPBasedAuthentication struct {
+	OTPBasedAuthentication *OTPBasedAuthentication `protobuf:"bytes,104,opt,name=o_t_p_based_authentication,json=oTPBasedAuthentication,proto3,oneof"`
+}
+
+type Authenticity_PasswordBasedAuthentication struct {
+	PasswordBasedAuthentication *PasswordBasedAuthentication `protobuf:"bytes,105,opt,name=password_based_authentication,json=passwordBasedAuthentication,proto3,oneof"`
+}
+
+type Authenticity_SingleSignOn struct {
+	SingleSignOn *SingleSignOn `protobuf:"bytes,106,opt,name=single_sign_on,json=singleSignOn,proto3,oneof"`
+}
+
+func (*Authenticity_CertificateBasedAuthentication) isAuthenticity_Type() {}
+
+func (*Authenticity_TokenBasedAuthentication) isAuthenticity_Type() {}
+
+func (*Authenticity_NoAuthentication) isAuthenticity_Type() {}
+
+func (*Authenticity_OTPBasedAuthentication) isAuthenticity_Type() {}
+
+func (*Authenticity_PasswordBasedAuthentication) isAuthenticity_Type() {}
+
+func (*Authenticity_SingleSignOn) isAuthenticity_Type() {}
+
+type DatabaseConnect struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DatabaseConnect) Reset() {
+	*x = DatabaseConnect{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DatabaseConnect) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseConnect) ProtoMessage() {}
+
+func (x *DatabaseConnect) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseConnect.ProtoReflect.Descriptor instead.
+func (*DatabaseConnect) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{12}
+}
+
+type CloudSDK struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *CloudSDK) Reset() {
+	*x = CloudSDK{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CloudSDK) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CloudSDK) ProtoMessage() {}
+
+func (x *CloudSDK) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CloudSDK.ProtoReflect.Descriptor instead.
+func (*CloudSDK) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{13}
+}
+
+type ContainerImage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ContainerImage) Reset() {
+	*x = ContainerImage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ContainerImage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContainerImage) ProtoMessage() {}
+
+func (x *ContainerImage) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContainerImage.ProtoReflect.Descriptor instead.
+func (*ContainerImage) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{14}
+}
+
+type IoT struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*IoT_DeviceProvisioningService
+	//	*IoT_MessagingHub
+	Type isIoT_Type `protobuf_oneof:"type"`
+}
+
+func (x *IoT) Reset() {
+	*x = IoT{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *IoT) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IoT) ProtoMessage() {}
+
+func (x *IoT) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IoT.ProtoReflect.Descriptor instead.
+func (*IoT) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{15}
+}
+
+func (m *IoT) GetType() isIoT_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *IoT) GetDeviceProvisioningService() *DeviceProvisioningService {
+	if x, ok := x.GetType().(*IoT_DeviceProvisioningService); ok {
+		return x.DeviceProvisioningService
+	}
+	return nil
+}
+
+func (x *IoT) GetMessagingHub() *MessagingHub {
+	if x, ok := x.GetType().(*IoT_MessagingHub); ok {
+		return x.MessagingHub
+	}
+	return nil
+}
+
+type isIoT_Type interface {
+	isIoT_Type()
+}
+
+type IoT_DeviceProvisioningService struct {
+	DeviceProvisioningService *DeviceProvisioningService `protobuf:"bytes,101,opt,name=device_provisioning_service,json=deviceProvisioningService,proto3,oneof"`
+}
+
+type IoT_MessagingHub struct {
+	MessagingHub *MessagingHub `protobuf:"bytes,102,opt,name=messaging_hub,json=messagingHub,proto3,oneof"`
+}
+
+func (*IoT_DeviceProvisioningService) isIoT_Type() {}
+
+func (*IoT_MessagingHub) isIoT_Type() {}
+
+type ResourceLogging struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ResourceLogging) Reset() {
+	*x = ResourceLogging{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ResourceLogging) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResourceLogging) ProtoMessage() {}
+
+func (x *ResourceLogging) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResourceLogging.ProtoReflect.Descriptor instead.
+func (*ResourceLogging) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{16}
+}
+
+type SecurityFeature struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*SecurityFeature_Auditing
+	//	*SecurityFeature_Authenticity
+	//	*SecurityFeature_Authorization
+	//	*SecurityFeature_Availability
+	//	*SecurityFeature_Confidentiality
+	//	*SecurityFeature_Integrity
+	Type isSecurityFeature_Type `protobuf_oneof:"type"`
+}
+
+func (x *SecurityFeature) Reset() {
+	*x = SecurityFeature{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SecurityFeature) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SecurityFeature) ProtoMessage() {}
+
+func (x *SecurityFeature) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SecurityFeature.ProtoReflect.Descriptor instead.
+func (*SecurityFeature) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{17}
+}
+
+func (m *SecurityFeature) GetType() isSecurityFeature_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *SecurityFeature) GetAuditing() *Auditing {
+	if x, ok := x.GetType().(*SecurityFeature_Auditing); ok {
+		return x.Auditing
+	}
+	return nil
+}
+
+func (x *SecurityFeature) GetAuthenticity() *Authenticity {
+	if x, ok := x.GetType().(*SecurityFeature_Authenticity); ok {
+		return x.Authenticity
+	}
+	return nil
+}
+
+func (x *SecurityFeature) GetAuthorization() *Authorization {
+	if x, ok := x.GetType().(*SecurityFeature_Authorization); ok {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *SecurityFeature) GetAvailability() *Availability {
+	if x, ok := x.GetType().(*SecurityFeature_Availability); ok {
+		return x.Availability
+	}
+	return nil
+}
+
+func (x *SecurityFeature) GetConfidentiality() *Confidentiality {
+	if x, ok := x.GetType().(*SecurityFeature_Confidentiality); ok {
+		return x.Confidentiality
+	}
+	return nil
+}
+
+func (x *SecurityFeature) GetIntegrity() *Integrity {
+	if x, ok := x.GetType().(*SecurityFeature_Integrity); ok {
+		return x.Integrity
+	}
+	return nil
+}
+
+type isSecurityFeature_Type interface {
+	isSecurityFeature_Type()
+}
+
+type SecurityFeature_Auditing struct {
+	Auditing *Auditing `protobuf:"bytes,101,opt,name=auditing,proto3,oneof"`
+}
+
+type SecurityFeature_Authenticity struct {
+	Authenticity *Authenticity `protobuf:"bytes,102,opt,name=authenticity,proto3,oneof"`
+}
+
+type SecurityFeature_Authorization struct {
+	Authorization *Authorization `protobuf:"bytes,103,opt,name=authorization,proto3,oneof"`
+}
+
+type SecurityFeature_Availability struct {
+	Availability *Availability `protobuf:"bytes,104,opt,name=availability,proto3,oneof"`
+}
+
+type SecurityFeature_Confidentiality struct {
+	Confidentiality *Confidentiality `protobuf:"bytes,105,opt,name=confidentiality,proto3,oneof"`
+}
+
+type SecurityFeature_Integrity struct {
+	Integrity *Integrity `protobuf:"bytes,106,opt,name=integrity,proto3,oneof"`
+}
+
+func (*SecurityFeature_Auditing) isSecurityFeature_Type() {}
+
+func (*SecurityFeature_Authenticity) isSecurityFeature_Type() {}
+
+func (*SecurityFeature_Authorization) isSecurityFeature_Type() {}
+
+func (*SecurityFeature_Availability) isSecurityFeature_Type() {}
+
+func (*SecurityFeature_Confidentiality) isSecurityFeature_Type() {}
+
+func (*SecurityFeature_Integrity) isSecurityFeature_Type() {}
 
 type CloudResource struct {
 	state         protoimpl.MessageState
@@ -200,7 +1297,7 @@ type CloudResource struct {
 func (x *CloudResource) Reset() {
 	*x = CloudResource{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[3]
+		mi := &file_api_ontology_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -213,7 +1310,7 @@ func (x *CloudResource) String() string {
 func (*CloudResource) ProtoMessage() {}
 
 func (x *CloudResource) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[3]
+	mi := &file_api_ontology_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -226,7 +1323,7 @@ func (x *CloudResource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloudResource.ProtoReflect.Descriptor instead.
 func (*CloudResource) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{3}
+	return file_api_ontology_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CloudResource) GetGeoLocation() *GeoLocation {
@@ -416,37 +1513,31 @@ func (*CloudResource_ResourceGroup) isCloudResource_Type() {}
 
 func (*CloudResource_Storage) isCloudResource_Type() {}
 
-type Framework struct {
+type NetworkInterface struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Types that are assignable to Type:
-	//
-	//	*Framework_CloudSDK
-	//	*Framework_HttpClientLibrary
-	//	*Framework_HttpServer
-	//	*Framework_Logger
-	Type isFramework_Type `protobuf_oneof:"type"`
+	NetworkService *ResourceID `protobuf:"bytes,1,opt,name=NetworkService,proto3" json:"NetworkService,omitempty"`
 }
 
-func (x *Framework) Reset() {
-	*x = Framework{}
+func (x *NetworkInterface) Reset() {
+	*x = NetworkInterface{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[4]
+		mi := &file_api_ontology_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *Framework) String() string {
+func (x *NetworkInterface) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Framework) ProtoMessage() {}
+func (*NetworkInterface) ProtoMessage() {}
 
-func (x *Framework) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[4]
+func (x *NetworkInterface) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -457,339 +1548,47 @@ func (x *Framework) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Framework.ProtoReflect.Descriptor instead.
-func (*Framework) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{4}
+// Deprecated: Use NetworkInterface.ProtoReflect.Descriptor instead.
+func (*NetworkInterface) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{19}
 }
 
-func (m *Framework) GetType() isFramework_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Framework) GetCloudSDK() *CloudSDK {
-	if x, ok := x.GetType().(*Framework_CloudSDK); ok {
-		return x.CloudSDK
-	}
-	return nil
-}
-
-func (x *Framework) GetHttpClientLibrary() *HttpClientLibrary {
-	if x, ok := x.GetType().(*Framework_HttpClientLibrary); ok {
-		return x.HttpClientLibrary
-	}
-	return nil
-}
-
-func (x *Framework) GetHttpServer() *HttpServer {
-	if x, ok := x.GetType().(*Framework_HttpServer); ok {
-		return x.HttpServer
-	}
-	return nil
-}
-
-func (x *Framework) GetLogger() *Logger {
-	if x, ok := x.GetType().(*Framework_Logger); ok {
-		return x.Logger
-	}
-	return nil
-}
-
-type isFramework_Type interface {
-	isFramework_Type()
-}
-
-type Framework_CloudSDK struct {
-	CloudSDK *CloudSDK `protobuf:"bytes,101,opt,name=cloud_s_d_k,json=cloudSDK,proto3,oneof"`
-}
-
-type Framework_HttpClientLibrary struct {
-	HttpClientLibrary *HttpClientLibrary `protobuf:"bytes,102,opt,name=http_client_library,json=httpClientLibrary,proto3,oneof"`
-}
-
-type Framework_HttpServer struct {
-	HttpServer *HttpServer `protobuf:"bytes,103,opt,name=http_server,json=httpServer,proto3,oneof"`
-}
-
-type Framework_Logger struct {
-	Logger *Logger `protobuf:"bytes,104,opt,name=logger,proto3,oneof"`
-}
-
-func (*Framework_CloudSDK) isFramework_Type() {}
-
-func (*Framework_HttpClientLibrary) isFramework_Type() {}
-
-func (*Framework_HttpServer) isFramework_Type() {}
-
-func (*Framework_Logger) isFramework_Type() {}
-
-type Image struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Application *Application `protobuf:"bytes,1,opt,name=Application,proto3" json:"Application,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*Image_ContainerImage
-	//	*Image_VMImage
-	Type isImage_Type `protobuf_oneof:"type"`
-}
-
-func (x *Image) Reset() {
-	*x = Image{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Image) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Image) ProtoMessage() {}
-
-func (x *Image) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Image.ProtoReflect.Descriptor instead.
-func (*Image) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *Image) GetApplication() *Application {
-	if x != nil {
-		return x.Application
-	}
-	return nil
-}
-
-func (m *Image) GetType() isImage_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Image) GetContainerImage() *ContainerImage {
-	if x, ok := x.GetType().(*Image_ContainerImage); ok {
-		return x.ContainerImage
-	}
-	return nil
-}
-
-func (x *Image) GetVMImage() *VMImage {
-	if x, ok := x.GetType().(*Image_VMImage); ok {
-		return x.VMImage
-	}
-	return nil
-}
-
-type isImage_Type interface {
-	isImage_Type()
-}
-
-type Image_ContainerImage struct {
-	ContainerImage *ContainerImage `protobuf:"bytes,101,opt,name=container_image,json=containerImage,proto3,oneof"`
-}
-
-type Image_VMImage struct {
-	VMImage *VMImage `protobuf:"bytes,102,opt,name=v_m_image,json=vMImage,proto3,oneof"`
-}
-
-func (*Image_ContainerImage) isImage_Type() {}
-
-func (*Image_VMImage) isImage_Type() {}
-
-type KeyValueDatabaseService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *KeyValueDatabaseService) Reset() {
-	*x = KeyValueDatabaseService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *KeyValueDatabaseService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*KeyValueDatabaseService) ProtoMessage() {}
-
-func (x *KeyValueDatabaseService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use KeyValueDatabaseService.ProtoReflect.Descriptor instead.
-func (*KeyValueDatabaseService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{6}
-}
-
-// describes the actual database or a table in a database
-type DatabaseStorage struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Storage string `protobuf:"bytes,1,opt,name=Storage,proto3" json:"Storage,omitempty"`
-}
-
-func (x *DatabaseStorage) Reset() {
-	*x = DatabaseStorage{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DatabaseStorage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DatabaseStorage) ProtoMessage() {}
-
-func (x *DatabaseStorage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DatabaseStorage.ProtoReflect.Descriptor instead.
-func (*DatabaseStorage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *DatabaseStorage) GetStorage() string {
-	if x != nil {
-		return x.Storage
-	}
-	return ""
-}
-
-// A Load Balancer may have multiple access restriction features, e.g. a L3 firewall and a WAF
-type LoadBalancer struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Url            string          `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
-	HttpEndpoint   []*HttpEndpoint `protobuf:"bytes,2,rep,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
-	NetworkService []*ResourceID   `protobuf:"bytes,3,rep,name=NetworkService,proto3" json:"NetworkService,omitempty"`
-}
-
-func (x *LoadBalancer) Reset() {
-	*x = LoadBalancer{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *LoadBalancer) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LoadBalancer) ProtoMessage() {}
-
-func (x *LoadBalancer) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LoadBalancer.ProtoReflect.Descriptor instead.
-func (*LoadBalancer) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *LoadBalancer) GetUrl() string {
-	if x != nil {
-		return x.Url
-	}
-	return ""
-}
-
-func (x *LoadBalancer) GetHttpEndpoint() []*HttpEndpoint {
-	if x != nil {
-		return x.HttpEndpoint
-	}
-	return nil
-}
-
-func (x *LoadBalancer) GetNetworkService() []*ResourceID {
+func (x *NetworkInterface) GetNetworkService() *ResourceID {
 	if x != nil {
 		return x.NetworkService
 	}
 	return nil
 }
 
-// A WAF is a L7 firewall that includes L3 capabilities
-type WebApplicationFirewall struct {
+type Integrity struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*Integrity_AutomaticSecurityUpdates
+	//	*Integrity_Immutability
+	Type isIntegrity_Type `protobuf_oneof:"type"`
 }
 
-func (x *WebApplicationFirewall) Reset() {
-	*x = WebApplicationFirewall{}
+func (x *Integrity) Reset() {
+	*x = Integrity{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[9]
+		mi := &file_api_ontology_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *WebApplicationFirewall) String() string {
+func (x *Integrity) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*WebApplicationFirewall) ProtoMessage() {}
+func (*Integrity) ProtoMessage() {}
 
-func (x *WebApplicationFirewall) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[9]
+func (x *Integrity) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,74 +1599,47 @@ func (x *WebApplicationFirewall) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use WebApplicationFirewall.ProtoReflect.Descriptor instead.
-func (*WebApplicationFirewall) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{9}
+// Deprecated: Use Integrity.ProtoReflect.Descriptor instead.
+func (*Integrity) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{20}
 }
 
-func (x *WebApplicationFirewall) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-// Analyzes the activity of a NetworkService (which includes DatabaseServices).
-// Scope contains the resource ID of the protected resource.
-type AnomalyDetection struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled            bool                `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ApplicationLogging *ApplicationLogging `protobuf:"bytes,2,opt,name=ApplicationLogging,proto3" json:"ApplicationLogging,omitempty"`
-}
-
-func (x *AnomalyDetection) Reset() {
-	*x = AnomalyDetection{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *AnomalyDetection) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AnomalyDetection) ProtoMessage() {}
-
-func (x *AnomalyDetection) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AnomalyDetection.ProtoReflect.Descriptor instead.
-func (*AnomalyDetection) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *AnomalyDetection) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *AnomalyDetection) GetApplicationLogging() *ApplicationLogging {
-	if x != nil {
-		return x.ApplicationLogging
+func (m *Integrity) GetType() isIntegrity_Type {
+	if m != nil {
+		return m.Type
 	}
 	return nil
 }
+
+func (x *Integrity) GetAutomaticSecurityUpdates() *AutomaticSecurityUpdates {
+	if x, ok := x.GetType().(*Integrity_AutomaticSecurityUpdates); ok {
+		return x.AutomaticSecurityUpdates
+	}
+	return nil
+}
+
+func (x *Integrity) GetImmutability() *Immutability {
+	if x, ok := x.GetType().(*Integrity_Immutability); ok {
+		return x.Immutability
+	}
+	return nil
+}
+
+type isIntegrity_Type interface {
+	isIntegrity_Type()
+}
+
+type Integrity_AutomaticSecurityUpdates struct {
+	AutomaticSecurityUpdates *AutomaticSecurityUpdates `protobuf:"bytes,101,opt,name=automatic_security_updates,json=automaticSecurityUpdates,proto3,oneof"`
+}
+
+type Integrity_Immutability struct {
+	Immutability *Immutability `protobuf:"bytes,102,opt,name=immutability,proto3,oneof"`
+}
+
+func (*Integrity_AutomaticSecurityUpdates) isIntegrity_Type() {}
+
+func (*Integrity_Immutability) isIntegrity_Type() {}
 
 type Key struct {
 	state         protoimpl.MessageState
@@ -880,7 +1652,7 @@ type Key struct {
 func (x *Key) Reset() {
 	*x = Key{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[11]
+		mi := &file_api_ontology_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -893,7 +1665,7 @@ func (x *Key) String() string {
 func (*Key) ProtoMessage() {}
 
 func (x *Key) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[11]
+	mi := &file_api_ontology_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -906,7 +1678,7 @@ func (x *Key) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Key.ProtoReflect.Descriptor instead.
 func (*Key) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{11}
+	return file_api_ontology_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *Key) GetEnabled() bool {
@@ -916,34 +1688,29 @@ func (x *Key) GetEnabled() bool {
 	return false
 }
 
-// This encapsulates the whole (source) code of an application.
-type Application struct {
+type KeyValueDatabaseService struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	ProgrammingLanguage string           `protobuf:"bytes,1,opt,name=programmingLanguage,proto3" json:"programmingLanguage,omitempty"`
-	Functionality       []*Functionality `protobuf:"bytes,2,rep,name=Functionality,proto3" json:"Functionality,omitempty"`
-	Compute             *ResourceID      `protobuf:"bytes,3,opt,name=Compute,proto3" json:"Compute,omitempty"`
 }
 
-func (x *Application) Reset() {
-	*x = Application{}
+func (x *KeyValueDatabaseService) Reset() {
+	*x = KeyValueDatabaseService{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[12]
+		mi := &file_api_ontology_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *Application) String() string {
+func (x *KeyValueDatabaseService) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Application) ProtoMessage() {}
+func (*KeyValueDatabaseService) ProtoMessage() {}
 
-func (x *Application) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[12]
+func (x *KeyValueDatabaseService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -954,58 +1721,34 @@ func (x *Application) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Application.ProtoReflect.Descriptor instead.
-func (*Application) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{12}
+// Deprecated: Use KeyValueDatabaseService.ProtoReflect.Descriptor instead.
+func (*KeyValueDatabaseService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *Application) GetProgrammingLanguage() string {
-	if x != nil {
-		return x.ProgrammingLanguage
-	}
-	return ""
-}
-
-func (x *Application) GetFunctionality() []*Functionality {
-	if x != nil {
-		return x.Functionality
-	}
-	return nil
-}
-
-func (x *Application) GetCompute() *ResourceID {
-	if x != nil {
-		return x.Compute
-	}
-	return nil
-}
-
-type ObjectStorageRequest struct {
+type ApplicationLogging struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Type          string      `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
-	ObjectStorage *ResourceID `protobuf:"bytes,2,opt,name=ObjectStorage,proto3" json:"ObjectStorage,omitempty"`
 }
 
-func (x *ObjectStorageRequest) Reset() {
-	*x = ObjectStorageRequest{}
+func (x *ApplicationLogging) Reset() {
+	*x = ApplicationLogging{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[13]
+		mi := &file_api_ontology_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *ObjectStorageRequest) String() string {
+func (x *ApplicationLogging) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ObjectStorageRequest) ProtoMessage() {}
+func (*ApplicationLogging) ProtoMessage() {}
 
-func (x *ObjectStorageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[13]
+func (x *ApplicationLogging) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1016,322 +1759,9 @@ func (x *ObjectStorageRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ObjectStorageRequest.ProtoReflect.Descriptor instead.
-func (*ObjectStorageRequest) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *ObjectStorageRequest) GetType() string {
-	if x != nil {
-		return x.Type
-	}
-	return ""
-}
-
-func (x *ObjectStorageRequest) GetObjectStorage() *ResourceID {
-	if x != nil {
-		return x.ObjectStorage
-	}
-	return nil
-}
-
-type ResourceGroup struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ResourceGroup) Reset() {
-	*x = ResourceGroup{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[14]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ResourceGroup) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResourceGroup) ProtoMessage() {}
-
-func (x *ResourceGroup) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[14]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResourceGroup.ProtoReflect.Descriptor instead.
-func (*ResourceGroup) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{14}
-}
-
-type Authorization struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Authorization_ABAC
-	//	*Authorization_AccessRestriction
-	//	*Authorization_RBAC
-	Type isAuthorization_Type `protobuf_oneof:"type"`
-}
-
-func (x *Authorization) Reset() {
-	*x = Authorization{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[15]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Authorization) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Authorization) ProtoMessage() {}
-
-func (x *Authorization) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[15]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Authorization.ProtoReflect.Descriptor instead.
-func (*Authorization) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{15}
-}
-
-func (m *Authorization) GetType() isAuthorization_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Authorization) GetABAC() *ABAC {
-	if x, ok := x.GetType().(*Authorization_ABAC); ok {
-		return x.ABAC
-	}
-	return nil
-}
-
-func (x *Authorization) GetAccessRestriction() *AccessRestriction {
-	if x, ok := x.GetType().(*Authorization_AccessRestriction); ok {
-		return x.AccessRestriction
-	}
-	return nil
-}
-
-func (x *Authorization) GetRBAC() *RBAC {
-	if x, ok := x.GetType().(*Authorization_RBAC); ok {
-		return x.RBAC
-	}
-	return nil
-}
-
-type isAuthorization_Type interface {
-	isAuthorization_Type()
-}
-
-type Authorization_ABAC struct {
-	ABAC *ABAC `protobuf:"bytes,101,opt,name=a_b_a_c,json=aBAC,proto3,oneof"`
-}
-
-type Authorization_AccessRestriction struct {
-	AccessRestriction *AccessRestriction `protobuf:"bytes,102,opt,name=access_restriction,json=accessRestriction,proto3,oneof"`
-}
-
-type Authorization_RBAC struct {
-	RBAC *RBAC `protobuf:"bytes,103,opt,name=r_b_a_c,json=rBAC,proto3,oneof"`
-}
-
-func (*Authorization_ABAC) isAuthorization_Type() {}
-
-func (*Authorization_AccessRestriction) isAuthorization_Type() {}
-
-func (*Authorization_RBAC) isAuthorization_Type() {}
-
-type EncryptionInUse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-}
-
-func (x *EncryptionInUse) Reset() {
-	*x = EncryptionInUse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[16]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *EncryptionInUse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EncryptionInUse) ProtoMessage() {}
-
-func (x *EncryptionInUse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[16]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EncryptionInUse.ProtoReflect.Descriptor instead.
-func (*EncryptionInUse) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{16}
-}
-
-func (x *EncryptionInUse) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-type CICDService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*CICDService_Job
-	//	*CICDService_Workflow
-	Type isCICDService_Type `protobuf_oneof:"type"`
-}
-
-func (x *CICDService) Reset() {
-	*x = CICDService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[17]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CICDService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CICDService) ProtoMessage() {}
-
-func (x *CICDService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[17]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CICDService.ProtoReflect.Descriptor instead.
-func (*CICDService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{17}
-}
-
-func (m *CICDService) GetType() isCICDService_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *CICDService) GetJob() *Job {
-	if x, ok := x.GetType().(*CICDService_Job); ok {
-		return x.Job
-	}
-	return nil
-}
-
-func (x *CICDService) GetWorkflow() *Workflow {
-	if x, ok := x.GetType().(*CICDService_Workflow); ok {
-		return x.Workflow
-	}
-	return nil
-}
-
-type isCICDService_Type interface {
-	isCICDService_Type()
-}
-
-type CICDService_Job struct {
-	Job *Job `protobuf:"bytes,101,opt,name=job,proto3,oneof"`
-}
-
-type CICDService_Workflow struct {
-	Workflow *Workflow `protobuf:"bytes,102,opt,name=workflow,proto3,oneof"`
-}
-
-func (*CICDService_Job) isCICDService_Type() {}
-
-func (*CICDService_Workflow) isCICDService_Type() {}
-
-type CloudSDK struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *CloudSDK) Reset() {
-	*x = CloudSDK{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[18]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CloudSDK) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CloudSDK) ProtoMessage() {}
-
-func (x *CloudSDK) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[18]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CloudSDK.ProtoReflect.Descriptor instead.
-func (*CloudSDK) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{18}
+// Deprecated: Use ApplicationLogging.ProtoReflect.Descriptor instead.
+func (*ApplicationLogging) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{23}
 }
 
 type Container struct {
@@ -1345,7 +1775,7 @@ type Container struct {
 func (x *Container) Reset() {
 	*x = Container{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[19]
+		mi := &file_api_ontology_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1358,7 +1788,7 @@ func (x *Container) String() string {
 func (*Container) ProtoMessage() {}
 
 func (x *Container) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[19]
+	mi := &file_api_ontology_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1371,7 +1801,7 @@ func (x *Container) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Container.ProtoReflect.Descriptor instead.
 func (*Container) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{19}
+	return file_api_ontology_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *Container) GetImage() *ResourceID {
@@ -1381,29 +1811,33 @@ func (x *Container) GetImage() *ResourceID {
 	return nil
 }
 
-type KeyVault struct {
+type L3Firewall struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Enabled         bool   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Inbound         bool   `protobuf:"varint,2,opt,name=inbound,proto3" json:"inbound,omitempty"`
+	RestrictedPorts string `protobuf:"bytes,3,opt,name=restrictedPorts,proto3" json:"restrictedPorts,omitempty"`
 }
 
-func (x *KeyVault) Reset() {
-	*x = KeyVault{}
+func (x *L3Firewall) Reset() {
+	*x = L3Firewall{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[20]
+		mi := &file_api_ontology_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *KeyVault) String() string {
+func (x *L3Firewall) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*KeyVault) ProtoMessage() {}
+func (*L3Firewall) ProtoMessage() {}
 
-func (x *KeyVault) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[20]
+func (x *L3Firewall) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1414,82 +1848,58 @@ func (x *KeyVault) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use KeyVault.ProtoReflect.Descriptor instead.
-func (*KeyVault) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{20}
+// Deprecated: Use L3Firewall.ProtoReflect.Descriptor instead.
+func (*L3Firewall) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{25}
 }
 
-// An HTTP endpoint, that is routed through a (reverse) proxy, e.g. a load balancer.
-type ProxiedEndpoint struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	HttpEndpoint string `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
-}
-
-func (x *ProxiedEndpoint) Reset() {
-	*x = ProxiedEndpoint{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[21]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ProxiedEndpoint) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ProxiedEndpoint) ProtoMessage() {}
-
-func (x *ProxiedEndpoint) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[21]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ProxiedEndpoint.ProtoReflect.Descriptor instead.
-func (*ProxiedEndpoint) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *ProxiedEndpoint) GetHttpEndpoint() string {
+func (x *L3Firewall) GetEnabled() bool {
 	if x != nil {
-		return x.HttpEndpoint
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *L3Firewall) GetInbound() bool {
+	if x != nil {
+		return x.Inbound
+	}
+	return false
+}
+
+func (x *L3Firewall) GetRestrictedPorts() string {
+	if x != nil {
+		return x.RestrictedPorts
 	}
 	return ""
 }
 
-type DatabaseConnect struct {
+// A logging-as-a-service offering, e.g. for analyzing logs; has a Storage resource that stores the logs
+type LoggingService struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Storage []*ResourceID `protobuf:"bytes,1,rep,name=Storage,proto3" json:"Storage,omitempty"`
 }
 
-func (x *DatabaseConnect) Reset() {
-	*x = DatabaseConnect{}
+func (x *LoggingService) Reset() {
+	*x = LoggingService{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[22]
+		mi := &file_api_ontology_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *DatabaseConnect) String() string {
+func (x *LoggingService) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DatabaseConnect) ProtoMessage() {}
+func (*LoggingService) ProtoMessage() {}
 
-func (x *DatabaseConnect) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[22]
+func (x *LoggingService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1500,9 +1910,245 @@ func (x *DatabaseConnect) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DatabaseConnect.ProtoReflect.Descriptor instead.
-func (*DatabaseConnect) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{22}
+// Deprecated: Use LoggingService.ProtoReflect.Descriptor instead.
+func (*LoggingService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *LoggingService) GetStorage() []*ResourceID {
+	if x != nil {
+		return x.Storage
+	}
+	return nil
+}
+
+type OTPBasedAuthentication struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Activated bool `protobuf:"varint,1,opt,name=activated,proto3" json:"activated,omitempty"`
+}
+
+func (x *OTPBasedAuthentication) Reset() {
+	*x = OTPBasedAuthentication{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OTPBasedAuthentication) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OTPBasedAuthentication) ProtoMessage() {}
+
+func (x *OTPBasedAuthentication) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OTPBasedAuthentication.ProtoReflect.Descriptor instead.
+func (*OTPBasedAuthentication) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *OTPBasedAuthentication) GetActivated() bool {
+	if x != nil {
+		return x.Activated
+	}
+	return false
+}
+
+type DatabaseOperation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	DatabaseStorage *ResourceID `protobuf:"bytes,1,opt,name=DatabaseStorage,proto3" json:"DatabaseStorage,omitempty"`
+	DatabaseService *ResourceID `protobuf:"bytes,2,opt,name=DatabaseService,proto3" json:"DatabaseService,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*DatabaseOperation_DatabaseConnect
+	//	*DatabaseOperation_DatabaseQuery
+	Type isDatabaseOperation_Type `protobuf_oneof:"type"`
+}
+
+func (x *DatabaseOperation) Reset() {
+	*x = DatabaseOperation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[28]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DatabaseOperation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseOperation) ProtoMessage() {}
+
+func (x *DatabaseOperation) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[28]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseOperation.ProtoReflect.Descriptor instead.
+func (*DatabaseOperation) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *DatabaseOperation) GetDatabaseStorage() *ResourceID {
+	if x != nil {
+		return x.DatabaseStorage
+	}
+	return nil
+}
+
+func (x *DatabaseOperation) GetDatabaseService() *ResourceID {
+	if x != nil {
+		return x.DatabaseService
+	}
+	return nil
+}
+
+func (m *DatabaseOperation) GetType() isDatabaseOperation_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *DatabaseOperation) GetDatabaseConnect() *DatabaseConnect {
+	if x, ok := x.GetType().(*DatabaseOperation_DatabaseConnect); ok {
+		return x.DatabaseConnect
+	}
+	return nil
+}
+
+func (x *DatabaseOperation) GetDatabaseQuery() *DatabaseQuery {
+	if x, ok := x.GetType().(*DatabaseOperation_DatabaseQuery); ok {
+		return x.DatabaseQuery
+	}
+	return nil
+}
+
+type isDatabaseOperation_Type interface {
+	isDatabaseOperation_Type()
+}
+
+type DatabaseOperation_DatabaseConnect struct {
+	DatabaseConnect *DatabaseConnect `protobuf:"bytes,101,opt,name=database_connect,json=databaseConnect,proto3,oneof"`
+}
+
+type DatabaseOperation_DatabaseQuery struct {
+	DatabaseQuery *DatabaseQuery `protobuf:"bytes,102,opt,name=database_query,json=databaseQuery,proto3,oneof"`
+}
+
+func (*DatabaseOperation_DatabaseConnect) isDatabaseOperation_Type() {}
+
+func (*DatabaseOperation_DatabaseQuery) isDatabaseOperation_Type() {}
+
+type GeoLocation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Region string `protobuf:"bytes,1,opt,name=region,proto3" json:"region,omitempty"`
+}
+
+func (x *GeoLocation) Reset() {
+	*x = GeoLocation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[29]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GeoLocation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GeoLocation) ProtoMessage() {}
+
+func (x *GeoLocation) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[29]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GeoLocation.ProtoReflect.Descriptor instead.
+func (*GeoLocation) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *GeoLocation) GetRegion() string {
+	if x != nil {
+		return x.Region
+	}
+	return ""
+}
+
+type DeviceProvisioningService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DeviceProvisioningService) Reset() {
+	*x = DeviceProvisioningService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[30]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeviceProvisioningService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceProvisioningService) ProtoMessage() {}
+
+func (x *DeviceProvisioningService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[30]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceProvisioningService.ProtoReflect.Descriptor instead.
+func (*DeviceProvisioningService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{30}
 }
 
 // Via the Authenticity relationship, the access type can be specified, e.g. public access (no authentication), password-based, etc.
@@ -1525,7 +2171,7 @@ type HttpEndpoint struct {
 func (x *HttpEndpoint) Reset() {
 	*x = HttpEndpoint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[23]
+		mi := &file_api_ontology_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1538,7 +2184,7 @@ func (x *HttpEndpoint) String() string {
 func (*HttpEndpoint) ProtoMessage() {}
 
 func (x *HttpEndpoint) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[23]
+	mi := &file_api_ontology_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1551,7 +2197,7 @@ func (x *HttpEndpoint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HttpEndpoint.ProtoReflect.Descriptor instead.
 func (*HttpEndpoint) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{23}
+	return file_api_ontology_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *HttpEndpoint) GetMethod() string {
@@ -1613,35 +2259,36 @@ type HttpEndpoint_ProxiedEndpoint struct {
 
 func (*HttpEndpoint_ProxiedEndpoint) isHttpEndpoint_Type() {}
 
-type Integrity struct {
+type Image struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	Application *Application `protobuf:"bytes,1,opt,name=Application,proto3" json:"Application,omitempty"`
 	// Types that are assignable to Type:
 	//
-	//	*Integrity_AutomaticSecurityUpdates
-	//	*Integrity_Immutability
-	Type isIntegrity_Type `protobuf_oneof:"type"`
+	//	*Image_ContainerImage
+	//	*Image_VMImage
+	Type isImage_Type `protobuf_oneof:"type"`
 }
 
-func (x *Integrity) Reset() {
-	*x = Integrity{}
+func (x *Image) Reset() {
+	*x = Image{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[24]
+		mi := &file_api_ontology_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *Integrity) String() string {
+func (x *Image) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Integrity) ProtoMessage() {}
+func (*Image) ProtoMessage() {}
 
-func (x *Integrity) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[24]
+func (x *Image) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1652,319 +2299,54 @@ func (x *Integrity) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Integrity.ProtoReflect.Descriptor instead.
-func (*Integrity) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{24}
+// Deprecated: Use Image.ProtoReflect.Descriptor instead.
+func (*Image) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{32}
 }
 
-func (m *Integrity) GetType() isIntegrity_Type {
+func (x *Image) GetApplication() *Application {
+	if x != nil {
+		return x.Application
+	}
+	return nil
+}
+
+func (m *Image) GetType() isImage_Type {
 	if m != nil {
 		return m.Type
 	}
 	return nil
 }
 
-func (x *Integrity) GetAutomaticSecurityUpdates() *AutomaticSecurityUpdates {
-	if x, ok := x.GetType().(*Integrity_AutomaticSecurityUpdates); ok {
-		return x.AutomaticSecurityUpdates
+func (x *Image) GetContainerImage() *ContainerImage {
+	if x, ok := x.GetType().(*Image_ContainerImage); ok {
+		return x.ContainerImage
 	}
 	return nil
 }
 
-func (x *Integrity) GetImmutability() *Immutability {
-	if x, ok := x.GetType().(*Integrity_Immutability); ok {
-		return x.Immutability
+func (x *Image) GetVMImage() *VMImage {
+	if x, ok := x.GetType().(*Image_VMImage); ok {
+		return x.VMImage
 	}
 	return nil
 }
 
-type isIntegrity_Type interface {
-	isIntegrity_Type()
+type isImage_Type interface {
+	isImage_Type()
 }
 
-type Integrity_AutomaticSecurityUpdates struct {
-	AutomaticSecurityUpdates *AutomaticSecurityUpdates `protobuf:"bytes,101,opt,name=automatic_security_updates,json=automaticSecurityUpdates,proto3,oneof"`
+type Image_ContainerImage struct {
+	ContainerImage *ContainerImage `protobuf:"bytes,101,opt,name=container_image,json=containerImage,proto3,oneof"`
 }
 
-type Integrity_Immutability struct {
-	Immutability *Immutability `protobuf:"bytes,102,opt,name=immutability,proto3,oneof"`
+type Image_VMImage struct {
+	VMImage *VMImage `protobuf:"bytes,102,opt,name=v_m_image,json=vMImage,proto3,oneof"`
 }
 
-func (*Integrity_AutomaticSecurityUpdates) isIntegrity_Type() {}
+func (*Image_ContainerImage) isImage_Type() {}
 
-func (*Integrity_Immutability) isIntegrity_Type() {}
-
-// A logging-as-a-service offering, e.g. for analyzing logs; has a Storage resource that stores the logs
-type LoggingService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Storage []*ResourceID `protobuf:"bytes,1,rep,name=Storage,proto3" json:"Storage,omitempty"`
-}
-
-func (x *LoggingService) Reset() {
-	*x = LoggingService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[25]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *LoggingService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LoggingService) ProtoMessage() {}
-
-func (x *LoggingService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[25]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LoggingService.ProtoReflect.Descriptor instead.
-func (*LoggingService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{25}
-}
-
-func (x *LoggingService) GetStorage() []*ResourceID {
-	if x != nil {
-		return x.Storage
-	}
-	return nil
-}
-
-type MessagingHub struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *MessagingHub) Reset() {
-	*x = MessagingHub{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[26]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MessagingHub) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MessagingHub) ProtoMessage() {}
-
-func (x *MessagingHub) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[26]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use MessagingHub.ProtoReflect.Descriptor instead.
-func (*MessagingHub) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{26}
-}
-
-type L3Firewall struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled         bool   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Inbound         bool   `protobuf:"varint,2,opt,name=inbound,proto3" json:"inbound,omitempty"`
-	RestrictedPorts string `protobuf:"bytes,3,opt,name=restrictedPorts,proto3" json:"restrictedPorts,omitempty"`
-}
-
-func (x *L3Firewall) Reset() {
-	*x = L3Firewall{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[27]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *L3Firewall) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*L3Firewall) ProtoMessage() {}
-
-func (x *L3Firewall) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[27]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use L3Firewall.ProtoReflect.Descriptor instead.
-func (*L3Firewall) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{27}
-}
-
-func (x *L3Firewall) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *L3Firewall) GetInbound() bool {
-	if x != nil {
-		return x.Inbound
-	}
-	return false
-}
-
-func (x *L3Firewall) GetRestrictedPorts() string {
-	if x != nil {
-		return x.RestrictedPorts
-	}
-	return ""
-}
-
-type OSLogging struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *OSLogging) Reset() {
-	*x = OSLogging{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[28]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OSLogging) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OSLogging) ProtoMessage() {}
-
-func (x *OSLogging) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[28]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use OSLogging.ProtoReflect.Descriptor instead.
-func (*OSLogging) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{28}
-}
-
-type GeoLocation struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Region string `protobuf:"bytes,1,opt,name=region,proto3" json:"region,omitempty"`
-}
-
-func (x *GeoLocation) Reset() {
-	*x = GeoLocation{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[29]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *GeoLocation) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GeoLocation) ProtoMessage() {}
-
-func (x *GeoLocation) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[29]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GeoLocation.ProtoReflect.Descriptor instead.
-func (*GeoLocation) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{29}
-}
-
-func (x *GeoLocation) GetRegion() string {
-	if x != nil {
-		return x.Region
-	}
-	return ""
-}
-
-type BlockStorage struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *BlockStorage) Reset() {
-	*x = BlockStorage{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[30]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *BlockStorage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*BlockStorage) ProtoMessage() {}
-
-func (x *BlockStorage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[30]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use BlockStorage.ProtoReflect.Descriptor instead.
-func (*BlockStorage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{30}
-}
+func (*Image_VMImage) isImage_Type() {}
 
 type Logging struct {
 	state         protoimpl.MessageState
@@ -1986,7 +2368,7 @@ type Logging struct {
 func (x *Logging) Reset() {
 	*x = Logging{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[31]
+		mi := &file_api_ontology_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1999,7 +2381,7 @@ func (x *Logging) String() string {
 func (*Logging) ProtoMessage() {}
 
 func (x *Logging) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[31]
+	mi := &file_api_ontology_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2012,7 +2394,7 @@ func (x *Logging) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Logging.ProtoReflect.Descriptor instead.
 func (*Logging) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{31}
+	return file_api_ontology_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *Logging) GetEnabled() bool {
@@ -2105,3955 +2487,6 @@ func (*Logging_OSLogging) isLogging_Type() {}
 
 func (*Logging_ResourceLogging) isLogging_Type() {}
 
-// RetentionPeriod in hours
-type Backup struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled bool        `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Storage *ResourceID `protobuf:"bytes,2,opt,name=Storage,proto3" json:"Storage,omitempty"`
-}
-
-func (x *Backup) Reset() {
-	*x = Backup{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[32]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Backup) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Backup) ProtoMessage() {}
-
-func (x *Backup) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[32]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Backup.ProtoReflect.Descriptor instead.
-func (*Backup) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{32}
-}
-
-func (x *Backup) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *Backup) GetStorage() *ResourceID {
-	if x != nil {
-		return x.Storage
-	}
-	return nil
-}
-
-type Compute struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	NetworkInterface []*ResourceID    `protobuf:"bytes,1,rep,name=NetworkInterface,proto3" json:"NetworkInterface,omitempty"`
-	EncryptionInUse  *EncryptionInUse `protobuf:"bytes,2,opt,name=EncryptionInUse,proto3" json:"EncryptionInUse,omitempty"`
-	ResourceLogging  *ResourceLogging `protobuf:"bytes,3,opt,name=ResourceLogging,proto3" json:"ResourceLogging,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*Compute_Container
-	//	*Compute_Function
-	//	*Compute_VirtualMachine
-	//	*Compute_WebApp
-	Type isCompute_Type `protobuf_oneof:"type"`
-}
-
-func (x *Compute) Reset() {
-	*x = Compute{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[33]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Compute) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Compute) ProtoMessage() {}
-
-func (x *Compute) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[33]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Compute.ProtoReflect.Descriptor instead.
-func (*Compute) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{33}
-}
-
-func (x *Compute) GetNetworkInterface() []*ResourceID {
-	if x != nil {
-		return x.NetworkInterface
-	}
-	return nil
-}
-
-func (x *Compute) GetEncryptionInUse() *EncryptionInUse {
-	if x != nil {
-		return x.EncryptionInUse
-	}
-	return nil
-}
-
-func (x *Compute) GetResourceLogging() *ResourceLogging {
-	if x != nil {
-		return x.ResourceLogging
-	}
-	return nil
-}
-
-func (m *Compute) GetType() isCompute_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Compute) GetContainer() *Container {
-	if x, ok := x.GetType().(*Compute_Container); ok {
-		return x.Container
-	}
-	return nil
-}
-
-func (x *Compute) GetFunction() *Function {
-	if x, ok := x.GetType().(*Compute_Function); ok {
-		return x.Function
-	}
-	return nil
-}
-
-func (x *Compute) GetVirtualMachine() *VirtualMachine {
-	if x, ok := x.GetType().(*Compute_VirtualMachine); ok {
-		return x.VirtualMachine
-	}
-	return nil
-}
-
-func (x *Compute) GetWebApp() *WebApp {
-	if x, ok := x.GetType().(*Compute_WebApp); ok {
-		return x.WebApp
-	}
-	return nil
-}
-
-type isCompute_Type interface {
-	isCompute_Type()
-}
-
-type Compute_Container struct {
-	Container *Container `protobuf:"bytes,101,opt,name=container,proto3,oneof"`
-}
-
-type Compute_Function struct {
-	Function *Function `protobuf:"bytes,102,opt,name=function,proto3,oneof"`
-}
-
-type Compute_VirtualMachine struct {
-	VirtualMachine *VirtualMachine `protobuf:"bytes,103,opt,name=virtual_machine,json=virtualMachine,proto3,oneof"`
-}
-
-type Compute_WebApp struct {
-	WebApp *WebApp `protobuf:"bytes,104,opt,name=web_app,json=webApp,proto3,oneof"`
-}
-
-func (*Compute_Container) isCompute_Type() {}
-
-func (*Compute_Function) isCompute_Type() {}
-
-func (*Compute_VirtualMachine) isCompute_Type() {}
-
-func (*Compute_WebApp) isCompute_Type() {}
-
-type ContainerOrchestration struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	ManagementUrl   string           `protobuf:"bytes,1,opt,name=managementUrl,proto3" json:"managementUrl,omitempty"`
-	ResourceLogging *ResourceLogging `protobuf:"bytes,2,opt,name=ResourceLogging,proto3" json:"ResourceLogging,omitempty"`
-	Container       []*ResourceID    `protobuf:"bytes,3,rep,name=Container,proto3" json:"Container,omitempty"`
-}
-
-func (x *ContainerOrchestration) Reset() {
-	*x = ContainerOrchestration{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[34]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ContainerOrchestration) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ContainerOrchestration) ProtoMessage() {}
-
-func (x *ContainerOrchestration) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[34]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ContainerOrchestration.ProtoReflect.Descriptor instead.
-func (*ContainerOrchestration) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{34}
-}
-
-func (x *ContainerOrchestration) GetManagementUrl() string {
-	if x != nil {
-		return x.ManagementUrl
-	}
-	return ""
-}
-
-func (x *ContainerOrchestration) GetResourceLogging() *ResourceLogging {
-	if x != nil {
-		return x.ResourceLogging
-	}
-	return nil
-}
-
-func (x *ContainerOrchestration) GetContainer() []*ResourceID {
-	if x != nil {
-		return x.Container
-	}
-	return nil
-}
-
-type DatabaseOperation struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	DatabaseStorage *ResourceID `protobuf:"bytes,1,opt,name=DatabaseStorage,proto3" json:"DatabaseStorage,omitempty"`
-	DatabaseService *ResourceID `protobuf:"bytes,2,opt,name=DatabaseService,proto3" json:"DatabaseService,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*DatabaseOperation_DatabaseConnect
-	//	*DatabaseOperation_DatabaseQuery
-	Type isDatabaseOperation_Type `protobuf_oneof:"type"`
-}
-
-func (x *DatabaseOperation) Reset() {
-	*x = DatabaseOperation{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[35]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DatabaseOperation) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DatabaseOperation) ProtoMessage() {}
-
-func (x *DatabaseOperation) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[35]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DatabaseOperation.ProtoReflect.Descriptor instead.
-func (*DatabaseOperation) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{35}
-}
-
-func (x *DatabaseOperation) GetDatabaseStorage() *ResourceID {
-	if x != nil {
-		return x.DatabaseStorage
-	}
-	return nil
-}
-
-func (x *DatabaseOperation) GetDatabaseService() *ResourceID {
-	if x != nil {
-		return x.DatabaseService
-	}
-	return nil
-}
-
-func (m *DatabaseOperation) GetType() isDatabaseOperation_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *DatabaseOperation) GetDatabaseConnect() *DatabaseConnect {
-	if x, ok := x.GetType().(*DatabaseOperation_DatabaseConnect); ok {
-		return x.DatabaseConnect
-	}
-	return nil
-}
-
-func (x *DatabaseOperation) GetDatabaseQuery() *DatabaseQuery {
-	if x, ok := x.GetType().(*DatabaseOperation_DatabaseQuery); ok {
-		return x.DatabaseQuery
-	}
-	return nil
-}
-
-type isDatabaseOperation_Type interface {
-	isDatabaseOperation_Type()
-}
-
-type DatabaseOperation_DatabaseConnect struct {
-	DatabaseConnect *DatabaseConnect `protobuf:"bytes,101,opt,name=database_connect,json=databaseConnect,proto3,oneof"`
-}
-
-type DatabaseOperation_DatabaseQuery struct {
-	DatabaseQuery *DatabaseQuery `protobuf:"bytes,102,opt,name=database_query,json=databaseQuery,proto3,oneof"`
-}
-
-func (*DatabaseOperation_DatabaseConnect) isDatabaseOperation_Type() {}
-
-func (*DatabaseOperation_DatabaseQuery) isDatabaseOperation_Type() {}
-
-// An file storage service represents the network service that is used to access a list of file storage shares. The storage itself is modelled as a FileStorage. The service has an http endpoint.
-type FileStorageService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	HttpEndpoint *HttpEndpoint `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
-}
-
-func (x *FileStorageService) Reset() {
-	*x = FileStorageService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[36]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *FileStorageService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*FileStorageService) ProtoMessage() {}
-
-func (x *FileStorageService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[36]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use FileStorageService.ProtoReflect.Descriptor instead.
-func (*FileStorageService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{36}
-}
-
-func (x *FileStorageService) GetHttpEndpoint() *HttpEndpoint {
-	if x != nil {
-		return x.HttpEndpoint
-	}
-	return nil
-}
-
-type HttpClientLibrary struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *HttpClientLibrary) Reset() {
-	*x = HttpClientLibrary{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[37]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *HttpClientLibrary) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HttpClientLibrary) ProtoMessage() {}
-
-func (x *HttpClientLibrary) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[37]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HttpClientLibrary.ProtoReflect.Descriptor instead.
-func (*HttpClientLibrary) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{37}
-}
-
-type ActivityLogging struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ActivityLogging) Reset() {
-	*x = ActivityLogging{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[38]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ActivityLogging) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ActivityLogging) ProtoMessage() {}
-
-func (x *ActivityLogging) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[38]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ActivityLogging.ProtoReflect.Descriptor instead.
-func (*ActivityLogging) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{38}
-}
-
-type DDoSProtection struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *DDoSProtection) Reset() {
-	*x = DDoSProtection{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[39]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DDoSProtection) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DDoSProtection) ProtoMessage() {}
-
-func (x *DDoSProtection) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[39]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DDoSProtection.ProtoReflect.Descriptor instead.
-func (*DDoSProtection) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{39}
-}
-
-type Logger struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *Logger) Reset() {
-	*x = Logger{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[40]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Logger) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Logger) ProtoMessage() {}
-
-func (x *Logger) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[40]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Logger.ProtoReflect.Descriptor instead.
-func (*Logger) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{40}
-}
-
-type VMImage struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *VMImage) Reset() {
-	*x = VMImage{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[41]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *VMImage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VMImage) ProtoMessage() {}
-
-func (x *VMImage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[41]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VMImage.ProtoReflect.Descriptor instead.
-func (*VMImage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{41}
-}
-
-type VirtualMachine struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	BlockStorage             []*ResourceID             `protobuf:"bytes,1,rep,name=BlockStorage,proto3" json:"BlockStorage,omitempty"`
-	ActivityLogging          *ActivityLogging          `protobuf:"bytes,2,opt,name=ActivityLogging,proto3" json:"ActivityLogging,omitempty"`
-	AutomaticSecurityUpdates *AutomaticSecurityUpdates `protobuf:"bytes,3,opt,name=AutomaticSecurityUpdates,proto3" json:"AutomaticSecurityUpdates,omitempty"`
-	BootLogging              *BootLogging              `protobuf:"bytes,4,opt,name=BootLogging,proto3" json:"BootLogging,omitempty"`
-	MalwareProtection        *MalwareProtection        `protobuf:"bytes,5,opt,name=MalwareProtection,proto3" json:"MalwareProtection,omitempty"`
-	OSLogging                *OSLogging                `protobuf:"bytes,6,opt,name=OSLogging,proto3" json:"OSLogging,omitempty"`
-}
-
-func (x *VirtualMachine) Reset() {
-	*x = VirtualMachine{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[42]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *VirtualMachine) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VirtualMachine) ProtoMessage() {}
-
-func (x *VirtualMachine) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[42]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VirtualMachine.ProtoReflect.Descriptor instead.
-func (*VirtualMachine) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{42}
-}
-
-func (x *VirtualMachine) GetBlockStorage() []*ResourceID {
-	if x != nil {
-		return x.BlockStorage
-	}
-	return nil
-}
-
-func (x *VirtualMachine) GetActivityLogging() *ActivityLogging {
-	if x != nil {
-		return x.ActivityLogging
-	}
-	return nil
-}
-
-func (x *VirtualMachine) GetAutomaticSecurityUpdates() *AutomaticSecurityUpdates {
-	if x != nil {
-		return x.AutomaticSecurityUpdates
-	}
-	return nil
-}
-
-func (x *VirtualMachine) GetBootLogging() *BootLogging {
-	if x != nil {
-		return x.BootLogging
-	}
-	return nil
-}
-
-func (x *VirtualMachine) GetMalwareProtection() *MalwareProtection {
-	if x != nil {
-		return x.MalwareProtection
-	}
-	return nil
-}
-
-func (x *VirtualMachine) GetOSLogging() *OSLogging {
-	if x != nil {
-		return x.OSLogging
-	}
-	return nil
-}
-
-type Availability struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Availability_Backup
-	//	*Availability_DDoSProtection
-	//	*Availability_GeoLocation
-	//	*Availability_Redundancy
-	Type isAvailability_Type `protobuf_oneof:"type"`
-}
-
-func (x *Availability) Reset() {
-	*x = Availability{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[43]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Availability) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Availability) ProtoMessage() {}
-
-func (x *Availability) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[43]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Availability.ProtoReflect.Descriptor instead.
-func (*Availability) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{43}
-}
-
-func (m *Availability) GetType() isAvailability_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Availability) GetBackup() *Backup {
-	if x, ok := x.GetType().(*Availability_Backup); ok {
-		return x.Backup
-	}
-	return nil
-}
-
-func (x *Availability) GetDDoSProtection() *DDoSProtection {
-	if x, ok := x.GetType().(*Availability_DDoSProtection); ok {
-		return x.DDoSProtection
-	}
-	return nil
-}
-
-func (x *Availability) GetGeoLocation() *GeoLocation {
-	if x, ok := x.GetType().(*Availability_GeoLocation); ok {
-		return x.GeoLocation
-	}
-	return nil
-}
-
-func (x *Availability) GetRedundancy() *Redundancy {
-	if x, ok := x.GetType().(*Availability_Redundancy); ok {
-		return x.Redundancy
-	}
-	return nil
-}
-
-type isAvailability_Type interface {
-	isAvailability_Type()
-}
-
-type Availability_Backup struct {
-	Backup *Backup `protobuf:"bytes,101,opt,name=backup,proto3,oneof"`
-}
-
-type Availability_DDoSProtection struct {
-	DDoSProtection *DDoSProtection `protobuf:"bytes,102,opt,name=d_do_s_protection,json=dDoSProtection,proto3,oneof"`
-}
-
-type Availability_GeoLocation struct {
-	GeoLocation *GeoLocation `protobuf:"bytes,103,opt,name=geo_location,json=geoLocation,proto3,oneof"`
-}
-
-type Availability_Redundancy struct {
-	Redundancy *Redundancy `protobuf:"bytes,104,opt,name=redundancy,proto3,oneof"`
-}
-
-func (*Availability_Backup) isAvailability_Type() {}
-
-func (*Availability_DDoSProtection) isAvailability_Type() {}
-
-func (*Availability_GeoLocation) isAvailability_Type() {}
-
-func (*Availability_Redundancy) isAvailability_Type() {}
-
-type NetworkInterface struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	NetworkService *ResourceID `protobuf:"bytes,1,opt,name=NetworkService,proto3" json:"NetworkService,omitempty"`
-}
-
-func (x *NetworkInterface) Reset() {
-	*x = NetworkInterface{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[44]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *NetworkInterface) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*NetworkInterface) ProtoMessage() {}
-
-func (x *NetworkInterface) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[44]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use NetworkInterface.ProtoReflect.Descriptor instead.
-func (*NetworkInterface) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{44}
-}
-
-func (x *NetworkInterface) GetNetworkService() *ResourceID {
-	if x != nil {
-		return x.NetworkService
-	}
-	return nil
-}
-
-type ABAC struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ABAC) Reset() {
-	*x = ABAC{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[45]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ABAC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ABAC) ProtoMessage() {}
-
-func (x *ABAC) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[45]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ABAC.ProtoReflect.Descriptor instead.
-func (*ABAC) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{45}
-}
-
-type AccessRestriction struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*AccessRestriction_Firewall
-	Type isAccessRestriction_Type `protobuf_oneof:"type"`
-}
-
-func (x *AccessRestriction) Reset() {
-	*x = AccessRestriction{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[46]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *AccessRestriction) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AccessRestriction) ProtoMessage() {}
-
-func (x *AccessRestriction) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[46]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AccessRestriction.ProtoReflect.Descriptor instead.
-func (*AccessRestriction) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{46}
-}
-
-func (m *AccessRestriction) GetType() isAccessRestriction_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *AccessRestriction) GetFirewall() *Firewall {
-	if x, ok := x.GetType().(*AccessRestriction_Firewall); ok {
-		return x.Firewall
-	}
-	return nil
-}
-
-type isAccessRestriction_Type interface {
-	isAccessRestriction_Type()
-}
-
-type AccessRestriction_Firewall struct {
-	Firewall *Firewall `protobuf:"bytes,101,opt,name=firewall,proto3,oneof"`
-}
-
-func (*AccessRestriction_Firewall) isAccessRestriction_Type() {}
-
-type DocumentDatabaseService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *DocumentDatabaseService) Reset() {
-	*x = DocumentDatabaseService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[47]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DocumentDatabaseService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DocumentDatabaseService) ProtoMessage() {}
-
-func (x *DocumentDatabaseService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[47]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DocumentDatabaseService.ProtoReflect.Descriptor instead.
-func (*DocumentDatabaseService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{47}
-}
-
-type BootLogging struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *BootLogging) Reset() {
-	*x = BootLogging{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[48]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *BootLogging) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*BootLogging) ProtoMessage() {}
-
-func (x *BootLogging) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[48]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use BootLogging.ProtoReflect.Descriptor instead.
-func (*BootLogging) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{48}
-}
-
-type FileStorage struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *FileStorage) Reset() {
-	*x = FileStorage{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[49]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *FileStorage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*FileStorage) ProtoMessage() {}
-
-func (x *FileStorage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[49]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use FileStorage.ProtoReflect.Descriptor instead.
-func (*FileStorage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{49}
-}
-
-type ObjectStorage struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ObjectStorage) Reset() {
-	*x = ObjectStorage{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[50]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ObjectStorage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ObjectStorage) ProtoMessage() {}
-
-func (x *ObjectStorage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[50]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ObjectStorage.ProtoReflect.Descriptor instead.
-func (*ObjectStorage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{50}
-}
-
-type Operation struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Operation_DatabaseOperation
-	//	*Operation_HttpRequest
-	//	*Operation_LogOperation
-	//	*Operation_ObjectStorageRequest
-	Type isOperation_Type `protobuf_oneof:"type"`
-}
-
-func (x *Operation) Reset() {
-	*x = Operation{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[51]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Operation) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Operation) ProtoMessage() {}
-
-func (x *Operation) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[51]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Operation.ProtoReflect.Descriptor instead.
-func (*Operation) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{51}
-}
-
-func (m *Operation) GetType() isOperation_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Operation) GetDatabaseOperation() *DatabaseOperation {
-	if x, ok := x.GetType().(*Operation_DatabaseOperation); ok {
-		return x.DatabaseOperation
-	}
-	return nil
-}
-
-func (x *Operation) GetHttpRequest() *HttpRequest {
-	if x, ok := x.GetType().(*Operation_HttpRequest); ok {
-		return x.HttpRequest
-	}
-	return nil
-}
-
-func (x *Operation) GetLogOperation() *LogOperation {
-	if x, ok := x.GetType().(*Operation_LogOperation); ok {
-		return x.LogOperation
-	}
-	return nil
-}
-
-func (x *Operation) GetObjectStorageRequest() *ObjectStorageRequest {
-	if x, ok := x.GetType().(*Operation_ObjectStorageRequest); ok {
-		return x.ObjectStorageRequest
-	}
-	return nil
-}
-
-type isOperation_Type interface {
-	isOperation_Type()
-}
-
-type Operation_DatabaseOperation struct {
-	DatabaseOperation *DatabaseOperation `protobuf:"bytes,101,opt,name=database_operation,json=databaseOperation,proto3,oneof"`
-}
-
-type Operation_HttpRequest struct {
-	HttpRequest *HttpRequest `protobuf:"bytes,102,opt,name=http_request,json=httpRequest,proto3,oneof"`
-}
-
-type Operation_LogOperation struct {
-	LogOperation *LogOperation `protobuf:"bytes,103,opt,name=log_operation,json=logOperation,proto3,oneof"`
-}
-
-type Operation_ObjectStorageRequest struct {
-	ObjectStorageRequest *ObjectStorageRequest `protobuf:"bytes,104,opt,name=object_storage_request,json=objectStorageRequest,proto3,oneof"`
-}
-
-func (*Operation_DatabaseOperation) isOperation_Type() {}
-
-func (*Operation_HttpRequest) isOperation_Type() {}
-
-func (*Operation_LogOperation) isOperation_Type() {}
-
-func (*Operation_ObjectStorageRequest) isOperation_Type() {}
-
-type Resource struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Resource string `protobuf:"bytes,1,opt,name=Resource,proto3" json:"Resource,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*Resource_Application
-	//	*Resource_CloudResource
-	//	*Resource_Document
-	Type isResource_Type `protobuf_oneof:"type"`
-}
-
-func (x *Resource) Reset() {
-	*x = Resource{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[52]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Resource) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Resource) ProtoMessage() {}
-
-func (x *Resource) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[52]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Resource.ProtoReflect.Descriptor instead.
-func (*Resource) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{52}
-}
-
-func (x *Resource) GetResource() string {
-	if x != nil {
-		return x.Resource
-	}
-	return ""
-}
-
-func (m *Resource) GetType() isResource_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Resource) GetApplication() *Application {
-	if x, ok := x.GetType().(*Resource_Application); ok {
-		return x.Application
-	}
-	return nil
-}
-
-func (x *Resource) GetCloudResource() *CloudResource {
-	if x, ok := x.GetType().(*Resource_CloudResource); ok {
-		return x.CloudResource
-	}
-	return nil
-}
-
-func (x *Resource) GetDocument() *Document {
-	if x, ok := x.GetType().(*Resource_Document); ok {
-		return x.Document
-	}
-	return nil
-}
-
-type isResource_Type interface {
-	isResource_Type()
-}
-
-type Resource_Application struct {
-	Application *Application `protobuf:"bytes,101,opt,name=application,proto3,oneof"`
-}
-
-type Resource_CloudResource struct {
-	CloudResource *CloudResource `protobuf:"bytes,102,opt,name=cloud_resource,json=cloudResource,proto3,oneof"`
-}
-
-type Resource_Document struct {
-	Document *Document `protobuf:"bytes,103,opt,name=document,proto3,oneof"`
-}
-
-func (*Resource_Application) isResource_Type() {}
-
-func (*Resource_CloudResource) isResource_Type() {}
-
-func (*Resource_Document) isResource_Type() {}
-
-type HttpServer struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	HttpRequestHandler *HttpRequestHandler `protobuf:"bytes,1,opt,name=HttpRequestHandler,proto3" json:"HttpRequestHandler,omitempty"`
-}
-
-func (x *HttpServer) Reset() {
-	*x = HttpServer{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[53]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *HttpServer) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HttpServer) ProtoMessage() {}
-
-func (x *HttpServer) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[53]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HttpServer.ProtoReflect.Descriptor instead.
-func (*HttpServer) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{53}
-}
-
-func (x *HttpServer) GetHttpRequestHandler() *HttpRequestHandler {
-	if x != nil {
-		return x.HttpRequestHandler
-	}
-	return nil
-}
-
-type TokenBasedAuthentication struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled  bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Enforced bool `protobuf:"varint,2,opt,name=enforced,proto3" json:"enforced,omitempty"`
-}
-
-func (x *TokenBasedAuthentication) Reset() {
-	*x = TokenBasedAuthentication{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[54]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *TokenBasedAuthentication) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TokenBasedAuthentication) ProtoMessage() {}
-
-func (x *TokenBasedAuthentication) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[54]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TokenBasedAuthentication.ProtoReflect.Descriptor instead.
-func (*TokenBasedAuthentication) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{54}
-}
-
-func (x *TokenBasedAuthentication) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *TokenBasedAuthentication) GetEnforced() bool {
-	if x != nil {
-		return x.Enforced
-	}
-	return false
-}
-
-// A NetworkService is an application (on the network layer) running on a Compute resource. It provides access to a resource
-type NetworkService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Compute             *ResourceID          `protobuf:"bytes,1,opt,name=Compute,proto3" json:"Compute,omitempty"`
-	TransportEncryption *TransportEncryption `protobuf:"bytes,2,opt,name=TransportEncryption,proto3" json:"TransportEncryption,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*NetworkService_LoadBalancer
-	//	*NetworkService_LoggingService
-	//	*NetworkService_StorageService
-	Type isNetworkService_Type `protobuf_oneof:"type"`
-}
-
-func (x *NetworkService) Reset() {
-	*x = NetworkService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[55]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *NetworkService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*NetworkService) ProtoMessage() {}
-
-func (x *NetworkService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[55]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use NetworkService.ProtoReflect.Descriptor instead.
-func (*NetworkService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{55}
-}
-
-func (x *NetworkService) GetCompute() *ResourceID {
-	if x != nil {
-		return x.Compute
-	}
-	return nil
-}
-
-func (x *NetworkService) GetTransportEncryption() *TransportEncryption {
-	if x != nil {
-		return x.TransportEncryption
-	}
-	return nil
-}
-
-func (m *NetworkService) GetType() isNetworkService_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *NetworkService) GetLoadBalancer() *LoadBalancer {
-	if x, ok := x.GetType().(*NetworkService_LoadBalancer); ok {
-		return x.LoadBalancer
-	}
-	return nil
-}
-
-func (x *NetworkService) GetLoggingService() *LoggingService {
-	if x, ok := x.GetType().(*NetworkService_LoggingService); ok {
-		return x.LoggingService
-	}
-	return nil
-}
-
-func (x *NetworkService) GetStorageService() *StorageService {
-	if x, ok := x.GetType().(*NetworkService_StorageService); ok {
-		return x.StorageService
-	}
-	return nil
-}
-
-type isNetworkService_Type interface {
-	isNetworkService_Type()
-}
-
-type NetworkService_LoadBalancer struct {
-	LoadBalancer *LoadBalancer `protobuf:"bytes,101,opt,name=load_balancer,json=loadBalancer,proto3,oneof"`
-}
-
-type NetworkService_LoggingService struct {
-	LoggingService *LoggingService `protobuf:"bytes,102,opt,name=logging_service,json=loggingService,proto3,oneof"`
-}
-
-type NetworkService_StorageService struct {
-	StorageService *StorageService `protobuf:"bytes,103,opt,name=storage_service,json=storageService,proto3,oneof"`
-}
-
-func (*NetworkService_LoadBalancer) isNetworkService_Type() {}
-
-func (*NetworkService_LoggingService) isNetworkService_Type() {}
-
-func (*NetworkService_StorageService) isNetworkService_Type() {}
-
-type Authenticity struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Authenticity_CertificateBasedAuthentication
-	//	*Authenticity_TokenBasedAuthentication
-	//	*Authenticity_NoAuthentication
-	//	*Authenticity_OTPBasedAuthentication
-	//	*Authenticity_PasswordBasedAuthentication
-	//	*Authenticity_SingleSignOn
-	Type isAuthenticity_Type `protobuf_oneof:"type"`
-}
-
-func (x *Authenticity) Reset() {
-	*x = Authenticity{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[56]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Authenticity) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Authenticity) ProtoMessage() {}
-
-func (x *Authenticity) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[56]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Authenticity.ProtoReflect.Descriptor instead.
-func (*Authenticity) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{56}
-}
-
-func (m *Authenticity) GetType() isAuthenticity_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Authenticity) GetCertificateBasedAuthentication() *CertificateBasedAuthentication {
-	if x, ok := x.GetType().(*Authenticity_CertificateBasedAuthentication); ok {
-		return x.CertificateBasedAuthentication
-	}
-	return nil
-}
-
-func (x *Authenticity) GetTokenBasedAuthentication() *TokenBasedAuthentication {
-	if x, ok := x.GetType().(*Authenticity_TokenBasedAuthentication); ok {
-		return x.TokenBasedAuthentication
-	}
-	return nil
-}
-
-func (x *Authenticity) GetNoAuthentication() *NoAuthentication {
-	if x, ok := x.GetType().(*Authenticity_NoAuthentication); ok {
-		return x.NoAuthentication
-	}
-	return nil
-}
-
-func (x *Authenticity) GetOTPBasedAuthentication() *OTPBasedAuthentication {
-	if x, ok := x.GetType().(*Authenticity_OTPBasedAuthentication); ok {
-		return x.OTPBasedAuthentication
-	}
-	return nil
-}
-
-func (x *Authenticity) GetPasswordBasedAuthentication() *PasswordBasedAuthentication {
-	if x, ok := x.GetType().(*Authenticity_PasswordBasedAuthentication); ok {
-		return x.PasswordBasedAuthentication
-	}
-	return nil
-}
-
-func (x *Authenticity) GetSingleSignOn() *SingleSignOn {
-	if x, ok := x.GetType().(*Authenticity_SingleSignOn); ok {
-		return x.SingleSignOn
-	}
-	return nil
-}
-
-type isAuthenticity_Type interface {
-	isAuthenticity_Type()
-}
-
-type Authenticity_CertificateBasedAuthentication struct {
-	CertificateBasedAuthentication *CertificateBasedAuthentication `protobuf:"bytes,101,opt,name=certificate_based_authentication,json=certificateBasedAuthentication,proto3,oneof"`
-}
-
-type Authenticity_TokenBasedAuthentication struct {
-	TokenBasedAuthentication *TokenBasedAuthentication `protobuf:"bytes,102,opt,name=token_based_authentication,json=tokenBasedAuthentication,proto3,oneof"`
-}
-
-type Authenticity_NoAuthentication struct {
-	NoAuthentication *NoAuthentication `protobuf:"bytes,103,opt,name=no_authentication,json=noAuthentication,proto3,oneof"`
-}
-
-type Authenticity_OTPBasedAuthentication struct {
-	OTPBasedAuthentication *OTPBasedAuthentication `protobuf:"bytes,104,opt,name=o_t_p_based_authentication,json=oTPBasedAuthentication,proto3,oneof"`
-}
-
-type Authenticity_PasswordBasedAuthentication struct {
-	PasswordBasedAuthentication *PasswordBasedAuthentication `protobuf:"bytes,105,opt,name=password_based_authentication,json=passwordBasedAuthentication,proto3,oneof"`
-}
-
-type Authenticity_SingleSignOn struct {
-	SingleSignOn *SingleSignOn `protobuf:"bytes,106,opt,name=single_sign_on,json=singleSignOn,proto3,oneof"`
-}
-
-func (*Authenticity_CertificateBasedAuthentication) isAuthenticity_Type() {}
-
-func (*Authenticity_TokenBasedAuthentication) isAuthenticity_Type() {}
-
-func (*Authenticity_NoAuthentication) isAuthenticity_Type() {}
-
-func (*Authenticity_OTPBasedAuthentication) isAuthenticity_Type() {}
-
-func (*Authenticity_PasswordBasedAuthentication) isAuthenticity_Type() {}
-
-func (*Authenticity_SingleSignOn) isAuthenticity_Type() {}
-
-type Function struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *Function) Reset() {
-	*x = Function{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[57]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Function) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Function) ProtoMessage() {}
-
-func (x *Function) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[57]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Function.ProtoReflect.Descriptor instead.
-func (*Function) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{57}
-}
-
-type Functionality struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Functionality_HttpEndpoint
-	//	*Functionality_HttpRequestHandler
-	//	*Functionality_Operation
-	Type isFunctionality_Type `protobuf_oneof:"type"`
-}
-
-func (x *Functionality) Reset() {
-	*x = Functionality{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[58]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Functionality) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Functionality) ProtoMessage() {}
-
-func (x *Functionality) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[58]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Functionality.ProtoReflect.Descriptor instead.
-func (*Functionality) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{58}
-}
-
-func (m *Functionality) GetType() isFunctionality_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Functionality) GetHttpEndpoint() *HttpEndpoint {
-	if x, ok := x.GetType().(*Functionality_HttpEndpoint); ok {
-		return x.HttpEndpoint
-	}
-	return nil
-}
-
-func (x *Functionality) GetHttpRequestHandler() *HttpRequestHandler {
-	if x, ok := x.GetType().(*Functionality_HttpRequestHandler); ok {
-		return x.HttpRequestHandler
-	}
-	return nil
-}
-
-func (x *Functionality) GetOperation() *Operation {
-	if x, ok := x.GetType().(*Functionality_Operation); ok {
-		return x.Operation
-	}
-	return nil
-}
-
-type isFunctionality_Type interface {
-	isFunctionality_Type()
-}
-
-type Functionality_HttpEndpoint struct {
-	HttpEndpoint *HttpEndpoint `protobuf:"bytes,101,opt,name=http_endpoint,json=httpEndpoint,proto3,oneof"`
-}
-
-type Functionality_HttpRequestHandler struct {
-	HttpRequestHandler *HttpRequestHandler `protobuf:"bytes,102,opt,name=http_request_handler,json=httpRequestHandler,proto3,oneof"`
-}
-
-type Functionality_Operation struct {
-	Operation *Operation `protobuf:"bytes,103,opt,name=operation,proto3,oneof"`
-}
-
-func (*Functionality_HttpEndpoint) isFunctionality_Type() {}
-
-func (*Functionality_HttpRequestHandler) isFunctionality_Type() {}
-
-func (*Functionality_Operation) isFunctionality_Type() {}
-
-// A LogOperation is used by an application
-type LogOperation struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Logging *Logging `protobuf:"bytes,1,opt,name=Logging,proto3" json:"Logging,omitempty"`
-}
-
-func (x *LogOperation) Reset() {
-	*x = LogOperation{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[59]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *LogOperation) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LogOperation) ProtoMessage() {}
-
-func (x *LogOperation) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[59]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LogOperation.ProtoReflect.Descriptor instead.
-func (*LogOperation) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{59}
-}
-
-func (x *LogOperation) GetLogging() *Logging {
-	if x != nil {
-		return x.Logging
-	}
-	return nil
-}
-
-// analyzes the activity within a Compute resource
-type MalwareProtection struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled            bool                `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ApplicationLogging *ApplicationLogging `protobuf:"bytes,2,opt,name=ApplicationLogging,proto3" json:"ApplicationLogging,omitempty"`
-}
-
-func (x *MalwareProtection) Reset() {
-	*x = MalwareProtection{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[60]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *MalwareProtection) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MalwareProtection) ProtoMessage() {}
-
-func (x *MalwareProtection) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[60]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use MalwareProtection.ProtoReflect.Descriptor instead.
-func (*MalwareProtection) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{60}
-}
-
-func (x *MalwareProtection) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *MalwareProtection) GetApplicationLogging() *ApplicationLogging {
-	if x != nil {
-		return x.ApplicationLogging
-	}
-	return nil
-}
-
-type DatabaseQuery struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Modify bool `protobuf:"varint,1,opt,name=modify,proto3" json:"modify,omitempty"`
-}
-
-func (x *DatabaseQuery) Reset() {
-	*x = DatabaseQuery{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[61]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DatabaseQuery) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DatabaseQuery) ProtoMessage() {}
-
-func (x *DatabaseQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[61]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DatabaseQuery.ProtoReflect.Descriptor instead.
-func (*DatabaseQuery) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{61}
-}
-
-func (x *DatabaseQuery) GetModify() bool {
-	if x != nil {
-		return x.Modify
-	}
-	return false
-}
-
-type Firewall struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Firewall_L3Firewall
-	//	*Firewall_WebApplicationFirewall
-	Type isFirewall_Type `protobuf_oneof:"type"`
-}
-
-func (x *Firewall) Reset() {
-	*x = Firewall{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[62]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Firewall) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Firewall) ProtoMessage() {}
-
-func (x *Firewall) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[62]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Firewall.ProtoReflect.Descriptor instead.
-func (*Firewall) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{62}
-}
-
-func (m *Firewall) GetType() isFirewall_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Firewall) GetL3Firewall() *L3Firewall {
-	if x, ok := x.GetType().(*Firewall_L3Firewall); ok {
-		return x.L3Firewall
-	}
-	return nil
-}
-
-func (x *Firewall) GetWebApplicationFirewall() *WebApplicationFirewall {
-	if x, ok := x.GetType().(*Firewall_WebApplicationFirewall); ok {
-		return x.WebApplicationFirewall
-	}
-	return nil
-}
-
-type isFirewall_Type interface {
-	isFirewall_Type()
-}
-
-type Firewall_L3Firewall struct {
-	L3Firewall *L3Firewall `protobuf:"bytes,101,opt,name=l3_firewall,json=l3Firewall,proto3,oneof"`
-}
-
-type Firewall_WebApplicationFirewall struct {
-	WebApplicationFirewall *WebApplicationFirewall `protobuf:"bytes,102,opt,name=web_application_firewall,json=webApplicationFirewall,proto3,oneof"`
-}
-
-func (*Firewall_L3Firewall) isFirewall_Type() {}
-
-func (*Firewall_WebApplicationFirewall) isFirewall_Type() {}
-
-type PasswordBasedAuthentication struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Activated bool `protobuf:"varint,1,opt,name=activated,proto3" json:"activated,omitempty"`
-}
-
-func (x *PasswordBasedAuthentication) Reset() {
-	*x = PasswordBasedAuthentication{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[63]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *PasswordBasedAuthentication) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PasswordBasedAuthentication) ProtoMessage() {}
-
-func (x *PasswordBasedAuthentication) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[63]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PasswordBasedAuthentication.ProtoReflect.Descriptor instead.
-func (*PasswordBasedAuthentication) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{63}
-}
-
-func (x *PasswordBasedAuthentication) GetActivated() bool {
-	if x != nil {
-		return x.Activated
-	}
-	return false
-}
-
-type PasswordPolicy struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *PasswordPolicy) Reset() {
-	*x = PasswordPolicy{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[64]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *PasswordPolicy) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PasswordPolicy) ProtoMessage() {}
-
-func (x *PasswordPolicy) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[64]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PasswordPolicy.ProtoReflect.Descriptor instead.
-func (*PasswordPolicy) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{64}
-}
-
-type ResourceLogging struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ResourceLogging) Reset() {
-	*x = ResourceLogging{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[65]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ResourceLogging) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResourceLogging) ProtoMessage() {}
-
-func (x *ResourceLogging) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[65]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResourceLogging.ProtoReflect.Descriptor instead.
-func (*ResourceLogging) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{65}
-}
-
-type SingleSignOn struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-}
-
-func (x *SingleSignOn) Reset() {
-	*x = SingleSignOn{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[66]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *SingleSignOn) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SingleSignOn) ProtoMessage() {}
-
-func (x *SingleSignOn) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[66]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SingleSignOn.ProtoReflect.Descriptor instead.
-func (*SingleSignOn) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{66}
-}
-
-func (x *SingleSignOn) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-type VirtualSubNetwork struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *VirtualSubNetwork) Reset() {
-	*x = VirtualSubNetwork{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[67]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *VirtualSubNetwork) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VirtualSubNetwork) ProtoMessage() {}
-
-func (x *VirtualSubNetwork) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[67]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VirtualSubNetwork.ProtoReflect.Descriptor instead.
-func (*VirtualSubNetwork) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{67}
-}
-
-type Redundancy struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *Redundancy) Reset() {
-	*x = Redundancy{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[68]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Redundancy) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Redundancy) ProtoMessage() {}
-
-func (x *Redundancy) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[68]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Redundancy.ProtoReflect.Descriptor instead.
-func (*Redundancy) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{68}
-}
-
-type CertificateBasedAuthentication struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-}
-
-func (x *CertificateBasedAuthentication) Reset() {
-	*x = CertificateBasedAuthentication{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[69]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CertificateBasedAuthentication) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CertificateBasedAuthentication) ProtoMessage() {}
-
-func (x *CertificateBasedAuthentication) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[69]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CertificateBasedAuthentication.ProtoReflect.Descriptor instead.
-func (*CertificateBasedAuthentication) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{69}
-}
-
-func (x *CertificateBasedAuthentication) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-type Job struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *Job) Reset() {
-	*x = Job{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[70]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Job) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Job) ProtoMessage() {}
-
-func (x *Job) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[70]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Job.ProtoReflect.Descriptor instead.
-func (*Job) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{70}
-}
-
-type NoAuthentication struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *NoAuthentication) Reset() {
-	*x = NoAuthentication{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[71]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *NoAuthentication) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*NoAuthentication) ProtoMessage() {}
-
-func (x *NoAuthentication) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[71]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use NoAuthentication.ProtoReflect.Descriptor instead.
-func (*NoAuthentication) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{71}
-}
-
-// An object storage service represents the network service that is used to access a list of object storage containers. The storage itself is modelled as a ObjectStorage. The service has an http endpoint.
-type ObjectStorageService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	HttpEndpoint *HttpEndpoint `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
-}
-
-func (x *ObjectStorageService) Reset() {
-	*x = ObjectStorageService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[72]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ObjectStorageService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ObjectStorageService) ProtoMessage() {}
-
-func (x *ObjectStorageService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[72]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ObjectStorageService.ProtoReflect.Descriptor instead.
-func (*ObjectStorageService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{72}
-}
-
-func (x *ObjectStorageService) GetHttpEndpoint() *HttpEndpoint {
-	if x != nil {
-		return x.HttpEndpoint
-	}
-	return nil
-}
-
-type CustomerKeyEncryption struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	KeyUrl string `protobuf:"bytes,1,opt,name=keyUrl,proto3" json:"keyUrl,omitempty"`
-}
-
-func (x *CustomerKeyEncryption) Reset() {
-	*x = CustomerKeyEncryption{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[73]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CustomerKeyEncryption) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CustomerKeyEncryption) ProtoMessage() {}
-
-func (x *CustomerKeyEncryption) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[73]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CustomerKeyEncryption.ProtoReflect.Descriptor instead.
-func (*CustomerKeyEncryption) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{73}
-}
-
-func (x *CustomerKeyEncryption) GetKeyUrl() string {
-	if x != nil {
-		return x.KeyUrl
-	}
-	return ""
-}
-
-type DeviceProvisioningService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *DeviceProvisioningService) Reset() {
-	*x = DeviceProvisioningService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[74]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DeviceProvisioningService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DeviceProvisioningService) ProtoMessage() {}
-
-func (x *DeviceProvisioningService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[74]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DeviceProvisioningService.ProtoReflect.Descriptor instead.
-func (*DeviceProvisioningService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{74}
-}
-
-type Identity struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Authenticity []*Authenticity `protobuf:"bytes,1,rep,name=Authenticity,proto3" json:"Authenticity,omitempty"`
-}
-
-func (x *Identity) Reset() {
-	*x = Identity{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[75]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Identity) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Identity) ProtoMessage() {}
-
-func (x *Identity) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[75]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Identity.ProtoReflect.Descriptor instead.
-func (*Identity) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{75}
-}
-
-func (x *Identity) GetAuthenticity() []*Authenticity {
-	if x != nil {
-		return x.Authenticity
-	}
-	return nil
-}
-
-type ManagedKeyEncryption struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ManagedKeyEncryption) Reset() {
-	*x = ManagedKeyEncryption{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[76]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ManagedKeyEncryption) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ManagedKeyEncryption) ProtoMessage() {}
-
-func (x *ManagedKeyEncryption) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[76]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ManagedKeyEncryption.ProtoReflect.Descriptor instead.
-func (*ManagedKeyEncryption) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{76}
-}
-
-type RoleAssignment struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *RoleAssignment) Reset() {
-	*x = RoleAssignment{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[77]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RoleAssignment) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RoleAssignment) ProtoMessage() {}
-
-func (x *RoleAssignment) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[77]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RoleAssignment.ProtoReflect.Descriptor instead.
-func (*RoleAssignment) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{77}
-}
-
-type Workflow struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *Workflow) Reset() {
-	*x = Workflow{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[78]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Workflow) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Workflow) ProtoMessage() {}
-
-func (x *Workflow) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[78]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Workflow.ProtoReflect.Descriptor instead.
-func (*Workflow) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{78}
-}
-
-// This class represents a database service. For example, a postgres SQL server would be modelled as a database service (with a host and IP) and the individual tables or collections would be modelled as a DatabaseStorage entity.
-type DatabaseService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	HttpEndpoint      *HttpEndpoint      `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
-	MalwareProtection *MalwareProtection `protobuf:"bytes,2,opt,name=MalwareProtection,proto3" json:"MalwareProtection,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*DatabaseService_DocumentDatabaseService
-	//	*DatabaseService_KeyValueDatabaseService
-	//	*DatabaseService_RelationalDatabaseService
-	Type isDatabaseService_Type `protobuf_oneof:"type"`
-}
-
-func (x *DatabaseService) Reset() {
-	*x = DatabaseService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[79]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *DatabaseService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DatabaseService) ProtoMessage() {}
-
-func (x *DatabaseService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[79]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DatabaseService.ProtoReflect.Descriptor instead.
-func (*DatabaseService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{79}
-}
-
-func (x *DatabaseService) GetHttpEndpoint() *HttpEndpoint {
-	if x != nil {
-		return x.HttpEndpoint
-	}
-	return nil
-}
-
-func (x *DatabaseService) GetMalwareProtection() *MalwareProtection {
-	if x != nil {
-		return x.MalwareProtection
-	}
-	return nil
-}
-
-func (m *DatabaseService) GetType() isDatabaseService_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *DatabaseService) GetDocumentDatabaseService() *DocumentDatabaseService {
-	if x, ok := x.GetType().(*DatabaseService_DocumentDatabaseService); ok {
-		return x.DocumentDatabaseService
-	}
-	return nil
-}
-
-func (x *DatabaseService) GetKeyValueDatabaseService() *KeyValueDatabaseService {
-	if x, ok := x.GetType().(*DatabaseService_KeyValueDatabaseService); ok {
-		return x.KeyValueDatabaseService
-	}
-	return nil
-}
-
-func (x *DatabaseService) GetRelationalDatabaseService() *RelationalDatabaseService {
-	if x, ok := x.GetType().(*DatabaseService_RelationalDatabaseService); ok {
-		return x.RelationalDatabaseService
-	}
-	return nil
-}
-
-type isDatabaseService_Type interface {
-	isDatabaseService_Type()
-}
-
-type DatabaseService_DocumentDatabaseService struct {
-	DocumentDatabaseService *DocumentDatabaseService `protobuf:"bytes,101,opt,name=document_database_service,json=documentDatabaseService,proto3,oneof"`
-}
-
-type DatabaseService_KeyValueDatabaseService struct {
-	KeyValueDatabaseService *KeyValueDatabaseService `protobuf:"bytes,102,opt,name=key_value_database_service,json=keyValueDatabaseService,proto3,oneof"`
-}
-
-type DatabaseService_RelationalDatabaseService struct {
-	RelationalDatabaseService *RelationalDatabaseService `protobuf:"bytes,103,opt,name=relational_database_service,json=relationalDatabaseService,proto3,oneof"`
-}
-
-func (*DatabaseService_DocumentDatabaseService) isDatabaseService_Type() {}
-
-func (*DatabaseService_KeyValueDatabaseService) isDatabaseService_Type() {}
-
-func (*DatabaseService_RelationalDatabaseService) isDatabaseService_Type() {}
-
-type HttpRequestHandler struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Path         string          `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	Application  *Application    `protobuf:"bytes,2,opt,name=Application,proto3" json:"Application,omitempty"`
-	HttpEndpoint []*HttpEndpoint `protobuf:"bytes,3,rep,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
-}
-
-func (x *HttpRequestHandler) Reset() {
-	*x = HttpRequestHandler{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[80]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *HttpRequestHandler) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HttpRequestHandler) ProtoMessage() {}
-
-func (x *HttpRequestHandler) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[80]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HttpRequestHandler.ProtoReflect.Descriptor instead.
-func (*HttpRequestHandler) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{80}
-}
-
-func (x *HttpRequestHandler) GetPath() string {
-	if x != nil {
-		return x.Path
-	}
-	return ""
-}
-
-func (x *HttpRequestHandler) GetApplication() *Application {
-	if x != nil {
-		return x.Application
-	}
-	return nil
-}
-
-func (x *HttpRequestHandler) GetHttpEndpoint() []*HttpEndpoint {
-	if x != nil {
-		return x.HttpEndpoint
-	}
-	return nil
-}
-
-type RelationalDatabaseService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *RelationalDatabaseService) Reset() {
-	*x = RelationalDatabaseService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[81]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RelationalDatabaseService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RelationalDatabaseService) ProtoMessage() {}
-
-func (x *RelationalDatabaseService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[81]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RelationalDatabaseService.ProtoReflect.Descriptor instead.
-func (*RelationalDatabaseService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{81}
-}
-
-// enabled means the resource _can_ be reached via https, while enforced means it _can only_ be reached via https (or http traffic is redirected)
-type TransportEncryption struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Algorithm  string `protobuf:"bytes,1,opt,name=algorithm,proto3" json:"algorithm,omitempty"`
-	Enabled    bool   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Enforced   bool   `protobuf:"varint,3,opt,name=enforced,proto3" json:"enforced,omitempty"`
-	TlsVersion string `protobuf:"bytes,4,opt,name=tlsVersion,proto3" json:"tlsVersion,omitempty"`
-}
-
-func (x *TransportEncryption) Reset() {
-	*x = TransportEncryption{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[82]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *TransportEncryption) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TransportEncryption) ProtoMessage() {}
-
-func (x *TransportEncryption) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[82]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TransportEncryption.ProtoReflect.Descriptor instead.
-func (*TransportEncryption) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{82}
-}
-
-func (x *TransportEncryption) GetAlgorithm() string {
-	if x != nil {
-		return x.Algorithm
-	}
-	return ""
-}
-
-func (x *TransportEncryption) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *TransportEncryption) GetEnforced() bool {
-	if x != nil {
-		return x.Enforced
-	}
-	return false
-}
-
-func (x *TransportEncryption) GetTlsVersion() string {
-	if x != nil {
-		return x.TlsVersion
-	}
-	return ""
-}
-
-type ContainerImage struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ContainerImage) Reset() {
-	*x = ContainerImage{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[83]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ContainerImage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ContainerImage) ProtoMessage() {}
-
-func (x *ContainerImage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[83]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ContainerImage.ProtoReflect.Descriptor instead.
-func (*ContainerImage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{83}
-}
-
-type WebApp struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *WebApp) Reset() {
-	*x = WebApp{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[84]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *WebApp) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*WebApp) ProtoMessage() {}
-
-func (x *WebApp) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[84]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use WebApp.ProtoReflect.Descriptor instead.
-func (*WebApp) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{84}
-}
-
-type Auditing struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Auditing_AnomalyDetection
-	//	*Auditing_Logging
-	//	*Auditing_MalwareProtection
-	Type isAuditing_Type `protobuf_oneof:"type"`
-}
-
-func (x *Auditing) Reset() {
-	*x = Auditing{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[85]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Auditing) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Auditing) ProtoMessage() {}
-
-func (x *Auditing) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[85]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Auditing.ProtoReflect.Descriptor instead.
-func (*Auditing) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{85}
-}
-
-func (m *Auditing) GetType() isAuditing_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Auditing) GetAnomalyDetection() *AnomalyDetection {
-	if x, ok := x.GetType().(*Auditing_AnomalyDetection); ok {
-		return x.AnomalyDetection
-	}
-	return nil
-}
-
-func (x *Auditing) GetLogging() *Logging {
-	if x, ok := x.GetType().(*Auditing_Logging); ok {
-		return x.Logging
-	}
-	return nil
-}
-
-func (x *Auditing) GetMalwareProtection() *MalwareProtection {
-	if x, ok := x.GetType().(*Auditing_MalwareProtection); ok {
-		return x.MalwareProtection
-	}
-	return nil
-}
-
-type isAuditing_Type interface {
-	isAuditing_Type()
-}
-
-type Auditing_AnomalyDetection struct {
-	AnomalyDetection *AnomalyDetection `protobuf:"bytes,101,opt,name=anomaly_detection,json=anomalyDetection,proto3,oneof"`
-}
-
-type Auditing_Logging struct {
-	Logging *Logging `protobuf:"bytes,102,opt,name=logging,proto3,oneof"`
-}
-
-type Auditing_MalwareProtection struct {
-	MalwareProtection *MalwareProtection `protobuf:"bytes,103,opt,name=malware_protection,json=malwareProtection,proto3,oneof"`
-}
-
-func (*Auditing_AnomalyDetection) isAuditing_Type() {}
-
-func (*Auditing_Logging) isAuditing_Type() {}
-
-func (*Auditing_MalwareProtection) isAuditing_Type() {}
-
-// This feature is, e.g., available on some VM services to automatically update their software. It ensures that a resource is protected from tampering with its state.
-type AutomaticSecurityUpdates struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-}
-
-func (x *AutomaticSecurityUpdates) Reset() {
-	*x = AutomaticSecurityUpdates{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[86]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *AutomaticSecurityUpdates) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AutomaticSecurityUpdates) ProtoMessage() {}
-
-func (x *AutomaticSecurityUpdates) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[86]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AutomaticSecurityUpdates.ProtoReflect.Descriptor instead.
-func (*AutomaticSecurityUpdates) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{86}
-}
-
-func (x *AutomaticSecurityUpdates) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-type Identifiable struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Activated     bool           `protobuf:"varint,1,opt,name=activated,proto3" json:"activated,omitempty"`
-	Authenticity  *Authenticity  `protobuf:"bytes,2,opt,name=Authenticity,proto3" json:"Authenticity,omitempty"`
-	Authorization *Authorization `protobuf:"bytes,3,opt,name=Authorization,proto3" json:"Authorization,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*Identifiable_Identity
-	//	*Identifiable_RoleAssignment
-	Type isIdentifiable_Type `protobuf_oneof:"type"`
-}
-
-func (x *Identifiable) Reset() {
-	*x = Identifiable{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[87]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Identifiable) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Identifiable) ProtoMessage() {}
-
-func (x *Identifiable) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[87]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Identifiable.ProtoReflect.Descriptor instead.
-func (*Identifiable) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{87}
-}
-
-func (x *Identifiable) GetActivated() bool {
-	if x != nil {
-		return x.Activated
-	}
-	return false
-}
-
-func (x *Identifiable) GetAuthenticity() *Authenticity {
-	if x != nil {
-		return x.Authenticity
-	}
-	return nil
-}
-
-func (x *Identifiable) GetAuthorization() *Authorization {
-	if x != nil {
-		return x.Authorization
-	}
-	return nil
-}
-
-func (m *Identifiable) GetType() isIdentifiable_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Identifiable) GetIdentity() *Identity {
-	if x, ok := x.GetType().(*Identifiable_Identity); ok {
-		return x.Identity
-	}
-	return nil
-}
-
-func (x *Identifiable) GetRoleAssignment() *RoleAssignment {
-	if x, ok := x.GetType().(*Identifiable_RoleAssignment); ok {
-		return x.RoleAssignment
-	}
-	return nil
-}
-
-type isIdentifiable_Type interface {
-	isIdentifiable_Type()
-}
-
-type Identifiable_Identity struct {
-	Identity *Identity `protobuf:"bytes,101,opt,name=identity,proto3,oneof"`
-}
-
-type Identifiable_RoleAssignment struct {
-	RoleAssignment *RoleAssignment `protobuf:"bytes,102,opt,name=role_assignment,json=roleAssignment,proto3,oneof"`
-}
-
-func (*Identifiable_Identity) isIdentifiable_Type() {}
-
-func (*Identifiable_RoleAssignment) isIdentifiable_Type() {}
-
-type Networking struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*Networking_NetworkInterface
-	//	*Networking_NetworkSecurityGroup
-	//	*Networking_NetworkService
-	//	*Networking_VirtualNetwork
-	//	*Networking_VirtualSubNetwork
-	Type isNetworking_Type `protobuf_oneof:"type"`
-}
-
-func (x *Networking) Reset() {
-	*x = Networking{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[88]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Networking) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Networking) ProtoMessage() {}
-
-func (x *Networking) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[88]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Networking.ProtoReflect.Descriptor instead.
-func (*Networking) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{88}
-}
-
-func (m *Networking) GetType() isNetworking_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *Networking) GetNetworkInterface() *NetworkInterface {
-	if x, ok := x.GetType().(*Networking_NetworkInterface); ok {
-		return x.NetworkInterface
-	}
-	return nil
-}
-
-func (x *Networking) GetNetworkSecurityGroup() *NetworkSecurityGroup {
-	if x, ok := x.GetType().(*Networking_NetworkSecurityGroup); ok {
-		return x.NetworkSecurityGroup
-	}
-	return nil
-}
-
-func (x *Networking) GetNetworkService() *NetworkService {
-	if x, ok := x.GetType().(*Networking_NetworkService); ok {
-		return x.NetworkService
-	}
-	return nil
-}
-
-func (x *Networking) GetVirtualNetwork() *VirtualNetwork {
-	if x, ok := x.GetType().(*Networking_VirtualNetwork); ok {
-		return x.VirtualNetwork
-	}
-	return nil
-}
-
-func (x *Networking) GetVirtualSubNetwork() *VirtualSubNetwork {
-	if x, ok := x.GetType().(*Networking_VirtualSubNetwork); ok {
-		return x.VirtualSubNetwork
-	}
-	return nil
-}
-
-type isNetworking_Type interface {
-	isNetworking_Type()
-}
-
-type Networking_NetworkInterface struct {
-	NetworkInterface *NetworkInterface `protobuf:"bytes,101,opt,name=network_interface,json=networkInterface,proto3,oneof"`
-}
-
-type Networking_NetworkSecurityGroup struct {
-	NetworkSecurityGroup *NetworkSecurityGroup `protobuf:"bytes,102,opt,name=network_security_group,json=networkSecurityGroup,proto3,oneof"`
-}
-
-type Networking_NetworkService struct {
-	NetworkService *NetworkService `protobuf:"bytes,103,opt,name=network_service,json=networkService,proto3,oneof"`
-}
-
-type Networking_VirtualNetwork struct {
-	VirtualNetwork *VirtualNetwork `protobuf:"bytes,104,opt,name=virtual_network,json=virtualNetwork,proto3,oneof"`
-}
-
-type Networking_VirtualSubNetwork struct {
-	VirtualSubNetwork *VirtualSubNetwork `protobuf:"bytes,105,opt,name=virtual_sub_network,json=virtualSubNetwork,proto3,oneof"`
-}
-
-func (*Networking_NetworkInterface) isNetworking_Type() {}
-
-func (*Networking_NetworkSecurityGroup) isNetworking_Type() {}
-
-func (*Networking_NetworkService) isNetworking_Type() {}
-
-func (*Networking_VirtualNetwork) isNetworking_Type() {}
-
-func (*Networking_VirtualSubNetwork) isNetworking_Type() {}
-
-type SecurityFeature struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*SecurityFeature_Auditing
-	//	*SecurityFeature_Authenticity
-	//	*SecurityFeature_Authorization
-	//	*SecurityFeature_Availability
-	//	*SecurityFeature_Confidentiality
-	//	*SecurityFeature_Integrity
-	Type isSecurityFeature_Type `protobuf_oneof:"type"`
-}
-
-func (x *SecurityFeature) Reset() {
-	*x = SecurityFeature{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[89]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *SecurityFeature) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SecurityFeature) ProtoMessage() {}
-
-func (x *SecurityFeature) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[89]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SecurityFeature.ProtoReflect.Descriptor instead.
-func (*SecurityFeature) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{89}
-}
-
-func (m *SecurityFeature) GetType() isSecurityFeature_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *SecurityFeature) GetAuditing() *Auditing {
-	if x, ok := x.GetType().(*SecurityFeature_Auditing); ok {
-		return x.Auditing
-	}
-	return nil
-}
-
-func (x *SecurityFeature) GetAuthenticity() *Authenticity {
-	if x, ok := x.GetType().(*SecurityFeature_Authenticity); ok {
-		return x.Authenticity
-	}
-	return nil
-}
-
-func (x *SecurityFeature) GetAuthorization() *Authorization {
-	if x, ok := x.GetType().(*SecurityFeature_Authorization); ok {
-		return x.Authorization
-	}
-	return nil
-}
-
-func (x *SecurityFeature) GetAvailability() *Availability {
-	if x, ok := x.GetType().(*SecurityFeature_Availability); ok {
-		return x.Availability
-	}
-	return nil
-}
-
-func (x *SecurityFeature) GetConfidentiality() *Confidentiality {
-	if x, ok := x.GetType().(*SecurityFeature_Confidentiality); ok {
-		return x.Confidentiality
-	}
-	return nil
-}
-
-func (x *SecurityFeature) GetIntegrity() *Integrity {
-	if x, ok := x.GetType().(*SecurityFeature_Integrity); ok {
-		return x.Integrity
-	}
-	return nil
-}
-
-type isSecurityFeature_Type interface {
-	isSecurityFeature_Type()
-}
-
-type SecurityFeature_Auditing struct {
-	Auditing *Auditing `protobuf:"bytes,101,opt,name=auditing,proto3,oneof"`
-}
-
-type SecurityFeature_Authenticity struct {
-	Authenticity *Authenticity `protobuf:"bytes,102,opt,name=authenticity,proto3,oneof"`
-}
-
-type SecurityFeature_Authorization struct {
-	Authorization *Authorization `protobuf:"bytes,103,opt,name=authorization,proto3,oneof"`
-}
-
-type SecurityFeature_Availability struct {
-	Availability *Availability `protobuf:"bytes,104,opt,name=availability,proto3,oneof"`
-}
-
-type SecurityFeature_Confidentiality struct {
-	Confidentiality *Confidentiality `protobuf:"bytes,105,opt,name=confidentiality,proto3,oneof"`
-}
-
-type SecurityFeature_Integrity struct {
-	Integrity *Integrity `protobuf:"bytes,106,opt,name=integrity,proto3,oneof"`
-}
-
-func (*SecurityFeature_Auditing) isSecurityFeature_Type() {}
-
-func (*SecurityFeature_Authenticity) isSecurityFeature_Type() {}
-
-func (*SecurityFeature_Authorization) isSecurityFeature_Type() {}
-
-func (*SecurityFeature_Availability) isSecurityFeature_Type() {}
-
-func (*SecurityFeature_Confidentiality) isSecurityFeature_Type() {}
-
-func (*SecurityFeature_Integrity) isSecurityFeature_Type() {}
-
-// This entity represents a network-based service that can be used to access a particular storage backend. It has multiple subclasses, e.g., for databases or object stores. It has a list of storage resources associated to it.
-type StorageService struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Storage []*ResourceID `protobuf:"bytes,1,rep,name=Storage,proto3" json:"Storage,omitempty"`
-	// Types that are assignable to Type:
-	//
-	//	*StorageService_DatabaseService
-	//	*StorageService_FileStorageService
-	//	*StorageService_ObjectStorageService
-	Type isStorageService_Type `protobuf_oneof:"type"`
-}
-
-func (x *StorageService) Reset() {
-	*x = StorageService{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[90]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *StorageService) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*StorageService) ProtoMessage() {}
-
-func (x *StorageService) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[90]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use StorageService.ProtoReflect.Descriptor instead.
-func (*StorageService) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{90}
-}
-
-func (x *StorageService) GetStorage() []*ResourceID {
-	if x != nil {
-		return x.Storage
-	}
-	return nil
-}
-
-func (m *StorageService) GetType() isStorageService_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *StorageService) GetDatabaseService() *DatabaseService {
-	if x, ok := x.GetType().(*StorageService_DatabaseService); ok {
-		return x.DatabaseService
-	}
-	return nil
-}
-
-func (x *StorageService) GetFileStorageService() *FileStorageService {
-	if x, ok := x.GetType().(*StorageService_FileStorageService); ok {
-		return x.FileStorageService
-	}
-	return nil
-}
-
-func (x *StorageService) GetObjectStorageService() *ObjectStorageService {
-	if x, ok := x.GetType().(*StorageService_ObjectStorageService); ok {
-		return x.ObjectStorageService
-	}
-	return nil
-}
-
-type isStorageService_Type interface {
-	isStorageService_Type()
-}
-
-type StorageService_DatabaseService struct {
-	DatabaseService *DatabaseService `protobuf:"bytes,101,opt,name=database_service,json=databaseService,proto3,oneof"`
-}
-
-type StorageService_FileStorageService struct {
-	FileStorageService *FileStorageService `protobuf:"bytes,102,opt,name=file_storage_service,json=fileStorageService,proto3,oneof"`
-}
-
-type StorageService_ObjectStorageService struct {
-	ObjectStorageService *ObjectStorageService `protobuf:"bytes,103,opt,name=object_storage_service,json=objectStorageService,proto3,oneof"`
-}
-
-func (*StorageService_DatabaseService) isStorageService_Type() {}
-
-func (*StorageService_FileStorageService) isStorageService_Type() {}
-
-func (*StorageService_ObjectStorageService) isStorageService_Type() {}
-
-type VirtualNetwork struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *VirtualNetwork) Reset() {
-	*x = VirtualNetwork{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[91]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *VirtualNetwork) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VirtualNetwork) ProtoMessage() {}
-
-func (x *VirtualNetwork) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[91]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VirtualNetwork.ProtoReflect.Descriptor instead.
-func (*VirtualNetwork) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{91}
-}
-
-type IoT struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Types that are assignable to Type:
-	//
-	//	*IoT_DeviceProvisioningService
-	//	*IoT_MessagingHub
-	Type isIoT_Type `protobuf_oneof:"type"`
-}
-
-func (x *IoT) Reset() {
-	*x = IoT{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[92]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *IoT) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IoT) ProtoMessage() {}
-
-func (x *IoT) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[92]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IoT.ProtoReflect.Descriptor instead.
-func (*IoT) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{92}
-}
-
-func (m *IoT) GetType() isIoT_Type {
-	if m != nil {
-		return m.Type
-	}
-	return nil
-}
-
-func (x *IoT) GetDeviceProvisioningService() *DeviceProvisioningService {
-	if x, ok := x.GetType().(*IoT_DeviceProvisioningService); ok {
-		return x.DeviceProvisioningService
-	}
-	return nil
-}
-
-func (x *IoT) GetMessagingHub() *MessagingHub {
-	if x, ok := x.GetType().(*IoT_MessagingHub); ok {
-		return x.MessagingHub
-	}
-	return nil
-}
-
-type isIoT_Type interface {
-	isIoT_Type()
-}
-
-type IoT_DeviceProvisioningService struct {
-	DeviceProvisioningService *DeviceProvisioningService `protobuf:"bytes,101,opt,name=device_provisioning_service,json=deviceProvisioningService,proto3,oneof"`
-}
-
-type IoT_MessagingHub struct {
-	MessagingHub *MessagingHub `protobuf:"bytes,102,opt,name=messaging_hub,json=messagingHub,proto3,oneof"`
-}
-
-func (*IoT_DeviceProvisioningService) isIoT_Type() {}
-
-func (*IoT_MessagingHub) isIoT_Type() {}
-
-type RBAC struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *RBAC) Reset() {
-	*x = RBAC{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[93]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RBAC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RBAC) ProtoMessage() {}
-
-func (x *RBAC) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[93]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RBAC.ProtoReflect.Descriptor instead.
-func (*RBAC) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{93}
-}
-
-type Document struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	SecurityFeature []*SecurityFeature `protobuf:"bytes,1,rep,name=SecurityFeature,proto3" json:"SecurityFeature,omitempty"`
-}
-
-func (x *Document) Reset() {
-	*x = Document{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[94]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Document) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Document) ProtoMessage() {}
-
-func (x *Document) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[94]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Document.ProtoReflect.Descriptor instead.
-func (*Document) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{94}
-}
-
-func (x *Document) GetSecurityFeature() []*SecurityFeature {
-	if x != nil {
-		return x.SecurityFeature
-	}
-	return nil
-}
-
-type Immutability struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-}
-
-func (x *Immutability) Reset() {
-	*x = Immutability{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[95]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Immutability) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Immutability) ProtoMessage() {}
-
-func (x *Immutability) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[95]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Immutability.ProtoReflect.Descriptor instead.
-func (*Immutability) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{95}
-}
-
-func (x *Immutability) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-type OTPBasedAuthentication struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Activated bool `protobuf:"varint,1,opt,name=activated,proto3" json:"activated,omitempty"`
-}
-
-func (x *OTPBasedAuthentication) Reset() {
-	*x = OTPBasedAuthentication{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[96]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OTPBasedAuthentication) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OTPBasedAuthentication) ProtoMessage() {}
-
-func (x *OTPBasedAuthentication) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[96]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use OTPBasedAuthentication.ProtoReflect.Descriptor instead.
-func (*OTPBasedAuthentication) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{96}
-}
-
-func (x *OTPBasedAuthentication) GetActivated() bool {
-	if x != nil {
-		return x.Activated
-	}
-	return false
-}
-
 type Storage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -6075,7 +2508,7 @@ type Storage struct {
 func (x *Storage) Reset() {
 	*x = Storage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[97]
+		mi := &file_api_ontology_proto_msgTypes[34]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6088,7 +2521,7 @@ func (x *Storage) String() string {
 func (*Storage) ProtoMessage() {}
 
 func (x *Storage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[97]
+	mi := &file_api_ontology_proto_msgTypes[34]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6101,7 +2534,7 @@ func (x *Storage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Storage.ProtoReflect.Descriptor instead.
 func (*Storage) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{97}
+	return file_api_ontology_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *Storage) GetBackup() []*Backup {
@@ -6195,29 +2628,29 @@ func (*Storage_FileStorage) isStorage_Type() {}
 
 func (*Storage_ObjectStorage) isStorage_Type() {}
 
-type ContainerRegistry struct {
+type BlockStorage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *ContainerRegistry) Reset() {
-	*x = ContainerRegistry{}
+func (x *BlockStorage) Reset() {
+	*x = BlockStorage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[98]
+		mi := &file_api_ontology_proto_msgTypes[35]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *ContainerRegistry) String() string {
+func (x *BlockStorage) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ContainerRegistry) ProtoMessage() {}
+func (*BlockStorage) ProtoMessage() {}
 
-func (x *ContainerRegistry) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[98]
+func (x *BlockStorage) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[35]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6228,36 +2661,34 @@ func (x *ContainerRegistry) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ContainerRegistry.ProtoReflect.Descriptor instead.
-func (*ContainerRegistry) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{98}
+// Deprecated: Use BlockStorage.ProtoReflect.Descriptor instead.
+func (*BlockStorage) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{35}
 }
 
-type HttpRequest struct {
+type RelationalDatabaseService struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	HttpEndpoint *HttpEndpoint `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
 }
 
-func (x *HttpRequest) Reset() {
-	*x = HttpRequest{}
+func (x *RelationalDatabaseService) Reset() {
+	*x = RelationalDatabaseService{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[99]
+		mi := &file_api_ontology_proto_msgTypes[36]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *HttpRequest) String() string {
+func (x *RelationalDatabaseService) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HttpRequest) ProtoMessage() {}
+func (*RelationalDatabaseService) ProtoMessage() {}
 
-func (x *HttpRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[99]
+func (x *RelationalDatabaseService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[36]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6268,88 +2699,103 @@ func (x *HttpRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HttpRequest.ProtoReflect.Descriptor instead.
-func (*HttpRequest) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{99}
+// Deprecated: Use RelationalDatabaseService.ProtoReflect.Descriptor instead.
+func (*RelationalDatabaseService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{36}
 }
 
-func (x *HttpRequest) GetHttpEndpoint() *HttpEndpoint {
+type ContainerOrchestration struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ManagementUrl   string           `protobuf:"bytes,1,opt,name=managementUrl,proto3" json:"managementUrl,omitempty"`
+	ResourceLogging *ResourceLogging `protobuf:"bytes,2,opt,name=ResourceLogging,proto3" json:"ResourceLogging,omitempty"`
+	Container       []*ResourceID    `protobuf:"bytes,3,rep,name=Container,proto3" json:"Container,omitempty"`
+}
+
+func (x *ContainerOrchestration) Reset() {
+	*x = ContainerOrchestration{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[37]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ContainerOrchestration) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContainerOrchestration) ProtoMessage() {}
+
+func (x *ContainerOrchestration) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[37]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContainerOrchestration.ProtoReflect.Descriptor instead.
+func (*ContainerOrchestration) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *ContainerOrchestration) GetManagementUrl() string {
 	if x != nil {
-		return x.HttpEndpoint
+		return x.ManagementUrl
+	}
+	return ""
+}
+
+func (x *ContainerOrchestration) GetResourceLogging() *ResourceLogging {
+	if x != nil {
+		return x.ResourceLogging
 	}
 	return nil
 }
 
-type ApplicationLogging struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *ApplicationLogging) Reset() {
-	*x = ApplicationLogging{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[100]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
+func (x *ContainerOrchestration) GetContainer() []*ResourceID {
+	if x != nil {
+		return x.Container
 	}
+	return nil
 }
 
-func (x *ApplicationLogging) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ApplicationLogging) ProtoMessage() {}
-
-func (x *ApplicationLogging) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[100]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ApplicationLogging.ProtoReflect.Descriptor instead.
-func (*ApplicationLogging) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{100}
-}
-
-type AtRestEncryption struct {
+type Firewall struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Algorithm string `protobuf:"bytes,1,opt,name=algorithm,proto3" json:"algorithm,omitempty"`
-	Enabled   bool   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	KeyUrl    string `protobuf:"bytes,3,opt,name=keyUrl,proto3" json:"keyUrl,omitempty"`
 	// Types that are assignable to Type:
 	//
-	//	*AtRestEncryption_CustomerKeyEncryption
-	//	*AtRestEncryption_ManagedKeyEncryption
-	Type isAtRestEncryption_Type `protobuf_oneof:"type"`
+	//	*Firewall_L3Firewall
+	//	*Firewall_WebApplicationFirewall
+	Type isFirewall_Type `protobuf_oneof:"type"`
 }
 
-func (x *AtRestEncryption) Reset() {
-	*x = AtRestEncryption{}
+func (x *Firewall) Reset() {
+	*x = Firewall{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[101]
+		mi := &file_api_ontology_proto_msgTypes[38]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *AtRestEncryption) String() string {
+func (x *Firewall) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AtRestEncryption) ProtoMessage() {}
+func (*Firewall) ProtoMessage() {}
 
-func (x *AtRestEncryption) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[101]
+func (x *Firewall) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[38]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6360,68 +2806,1300 @@ func (x *AtRestEncryption) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AtRestEncryption.ProtoReflect.Descriptor instead.
-func (*AtRestEncryption) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{101}
+// Deprecated: Use Firewall.ProtoReflect.Descriptor instead.
+func (*Firewall) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{38}
 }
 
-func (x *AtRestEncryption) GetAlgorithm() string {
-	if x != nil {
-		return x.Algorithm
-	}
-	return ""
-}
-
-func (x *AtRestEncryption) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *AtRestEncryption) GetKeyUrl() string {
-	if x != nil {
-		return x.KeyUrl
-	}
-	return ""
-}
-
-func (m *AtRestEncryption) GetType() isAtRestEncryption_Type {
+func (m *Firewall) GetType() isFirewall_Type {
 	if m != nil {
 		return m.Type
 	}
 	return nil
 }
 
-func (x *AtRestEncryption) GetCustomerKeyEncryption() *CustomerKeyEncryption {
-	if x, ok := x.GetType().(*AtRestEncryption_CustomerKeyEncryption); ok {
-		return x.CustomerKeyEncryption
+func (x *Firewall) GetL3Firewall() *L3Firewall {
+	if x, ok := x.GetType().(*Firewall_L3Firewall); ok {
+		return x.L3Firewall
 	}
 	return nil
 }
 
-func (x *AtRestEncryption) GetManagedKeyEncryption() *ManagedKeyEncryption {
-	if x, ok := x.GetType().(*AtRestEncryption_ManagedKeyEncryption); ok {
-		return x.ManagedKeyEncryption
+func (x *Firewall) GetWebApplicationFirewall() *WebApplicationFirewall {
+	if x, ok := x.GetType().(*Firewall_WebApplicationFirewall); ok {
+		return x.WebApplicationFirewall
 	}
 	return nil
 }
 
-type isAtRestEncryption_Type interface {
-	isAtRestEncryption_Type()
+type isFirewall_Type interface {
+	isFirewall_Type()
 }
 
-type AtRestEncryption_CustomerKeyEncryption struct {
-	CustomerKeyEncryption *CustomerKeyEncryption `protobuf:"bytes,101,opt,name=customer_key_encryption,json=customerKeyEncryption,proto3,oneof"`
+type Firewall_L3Firewall struct {
+	L3Firewall *L3Firewall `protobuf:"bytes,101,opt,name=l3_firewall,json=l3Firewall,proto3,oneof"`
 }
 
-type AtRestEncryption_ManagedKeyEncryption struct {
-	ManagedKeyEncryption *ManagedKeyEncryption `protobuf:"bytes,102,opt,name=managed_key_encryption,json=managedKeyEncryption,proto3,oneof"`
+type Firewall_WebApplicationFirewall struct {
+	WebApplicationFirewall *WebApplicationFirewall `protobuf:"bytes,102,opt,name=web_application_firewall,json=webApplicationFirewall,proto3,oneof"`
 }
 
-func (*AtRestEncryption_CustomerKeyEncryption) isAtRestEncryption_Type() {}
+func (*Firewall_L3Firewall) isFirewall_Type() {}
 
-func (*AtRestEncryption_ManagedKeyEncryption) isAtRestEncryption_Type() {}
+func (*Firewall_WebApplicationFirewall) isFirewall_Type() {}
+
+type Framework struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Framework_CloudSDK
+	//	*Framework_HttpClientLibrary
+	//	*Framework_HttpServer
+	//	*Framework_Logger
+	Type isFramework_Type `protobuf_oneof:"type"`
+}
+
+func (x *Framework) Reset() {
+	*x = Framework{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[39]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Framework) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Framework) ProtoMessage() {}
+
+func (x *Framework) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[39]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Framework.ProtoReflect.Descriptor instead.
+func (*Framework) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{39}
+}
+
+func (m *Framework) GetType() isFramework_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Framework) GetCloudSDK() *CloudSDK {
+	if x, ok := x.GetType().(*Framework_CloudSDK); ok {
+		return x.CloudSDK
+	}
+	return nil
+}
+
+func (x *Framework) GetHttpClientLibrary() *HttpClientLibrary {
+	if x, ok := x.GetType().(*Framework_HttpClientLibrary); ok {
+		return x.HttpClientLibrary
+	}
+	return nil
+}
+
+func (x *Framework) GetHttpServer() *HttpServer {
+	if x, ok := x.GetType().(*Framework_HttpServer); ok {
+		return x.HttpServer
+	}
+	return nil
+}
+
+func (x *Framework) GetLogger() *Logger {
+	if x, ok := x.GetType().(*Framework_Logger); ok {
+		return x.Logger
+	}
+	return nil
+}
+
+type isFramework_Type interface {
+	isFramework_Type()
+}
+
+type Framework_CloudSDK struct {
+	CloudSDK *CloudSDK `protobuf:"bytes,101,opt,name=cloud_s_d_k,json=cloudSDK,proto3,oneof"`
+}
+
+type Framework_HttpClientLibrary struct {
+	HttpClientLibrary *HttpClientLibrary `protobuf:"bytes,102,opt,name=http_client_library,json=httpClientLibrary,proto3,oneof"`
+}
+
+type Framework_HttpServer struct {
+	HttpServer *HttpServer `protobuf:"bytes,103,opt,name=http_server,json=httpServer,proto3,oneof"`
+}
+
+type Framework_Logger struct {
+	Logger *Logger `protobuf:"bytes,104,opt,name=logger,proto3,oneof"`
+}
+
+func (*Framework_CloudSDK) isFramework_Type() {}
+
+func (*Framework_HttpClientLibrary) isFramework_Type() {}
+
+func (*Framework_HttpServer) isFramework_Type() {}
+
+func (*Framework_Logger) isFramework_Type() {}
+
+type ObjectStorageRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Type          string      `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	ObjectStorage *ResourceID `protobuf:"bytes,2,opt,name=ObjectStorage,proto3" json:"ObjectStorage,omitempty"`
+}
+
+func (x *ObjectStorageRequest) Reset() {
+	*x = ObjectStorageRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[40]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ObjectStorageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ObjectStorageRequest) ProtoMessage() {}
+
+func (x *ObjectStorageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[40]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ObjectStorageRequest.ProtoReflect.Descriptor instead.
+func (*ObjectStorageRequest) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *ObjectStorageRequest) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *ObjectStorageRequest) GetObjectStorage() *ResourceID {
+	if x != nil {
+		return x.ObjectStorage
+	}
+	return nil
+}
+
+type CertificateBasedAuthentication struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *CertificateBasedAuthentication) Reset() {
+	*x = CertificateBasedAuthentication{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[41]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CertificateBasedAuthentication) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CertificateBasedAuthentication) ProtoMessage() {}
+
+func (x *CertificateBasedAuthentication) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[41]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CertificateBasedAuthentication.ProtoReflect.Descriptor instead.
+func (*CertificateBasedAuthentication) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *CertificateBasedAuthentication) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type CustomerKeyEncryption struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	KeyUrl string `protobuf:"bytes,1,opt,name=keyUrl,proto3" json:"keyUrl,omitempty"`
+}
+
+func (x *CustomerKeyEncryption) Reset() {
+	*x = CustomerKeyEncryption{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[42]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CustomerKeyEncryption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CustomerKeyEncryption) ProtoMessage() {}
+
+func (x *CustomerKeyEncryption) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[42]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CustomerKeyEncryption.ProtoReflect.Descriptor instead.
+func (*CustomerKeyEncryption) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *CustomerKeyEncryption) GetKeyUrl() string {
+	if x != nil {
+		return x.KeyUrl
+	}
+	return ""
+}
+
+type EncryptionInUse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *EncryptionInUse) Reset() {
+	*x = EncryptionInUse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[43]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EncryptionInUse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EncryptionInUse) ProtoMessage() {}
+
+func (x *EncryptionInUse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[43]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EncryptionInUse.ProtoReflect.Descriptor instead.
+func (*EncryptionInUse) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *EncryptionInUse) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type Function struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Function) Reset() {
+	*x = Function{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[44]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Function) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Function) ProtoMessage() {}
+
+func (x *Function) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[44]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Function.ProtoReflect.Descriptor instead.
+func (*Function) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{44}
+}
+
+type TokenBasedAuthentication struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled  bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Enforced bool `protobuf:"varint,2,opt,name=enforced,proto3" json:"enforced,omitempty"`
+}
+
+func (x *TokenBasedAuthentication) Reset() {
+	*x = TokenBasedAuthentication{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[45]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TokenBasedAuthentication) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TokenBasedAuthentication) ProtoMessage() {}
+
+func (x *TokenBasedAuthentication) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[45]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TokenBasedAuthentication.ProtoReflect.Descriptor instead.
+func (*TokenBasedAuthentication) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *TokenBasedAuthentication) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *TokenBasedAuthentication) GetEnforced() bool {
+	if x != nil {
+		return x.Enforced
+	}
+	return false
+}
+
+type ObjectStorage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ObjectStorage) Reset() {
+	*x = ObjectStorage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[46]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ObjectStorage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ObjectStorage) ProtoMessage() {}
+
+func (x *ObjectStorage) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[46]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ObjectStorage.ProtoReflect.Descriptor instead.
+func (*ObjectStorage) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{46}
+}
+
+type Resource struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Resource string `protobuf:"bytes,1,opt,name=Resource,proto3" json:"Resource,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*Resource_Application
+	//	*Resource_CloudResource
+	//	*Resource_Document
+	Type isResource_Type `protobuf_oneof:"type"`
+}
+
+func (x *Resource) Reset() {
+	*x = Resource{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[47]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Resource) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Resource) ProtoMessage() {}
+
+func (x *Resource) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[47]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Resource.ProtoReflect.Descriptor instead.
+func (*Resource) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *Resource) GetResource() string {
+	if x != nil {
+		return x.Resource
+	}
+	return ""
+}
+
+func (m *Resource) GetType() isResource_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Resource) GetApplication() *Application {
+	if x, ok := x.GetType().(*Resource_Application); ok {
+		return x.Application
+	}
+	return nil
+}
+
+func (x *Resource) GetCloudResource() *CloudResource {
+	if x, ok := x.GetType().(*Resource_CloudResource); ok {
+		return x.CloudResource
+	}
+	return nil
+}
+
+func (x *Resource) GetDocument() *Document {
+	if x, ok := x.GetType().(*Resource_Document); ok {
+		return x.Document
+	}
+	return nil
+}
+
+type isResource_Type interface {
+	isResource_Type()
+}
+
+type Resource_Application struct {
+	Application *Application `protobuf:"bytes,101,opt,name=application,proto3,oneof"`
+}
+
+type Resource_CloudResource struct {
+	CloudResource *CloudResource `protobuf:"bytes,102,opt,name=cloud_resource,json=cloudResource,proto3,oneof"`
+}
+
+type Resource_Document struct {
+	Document *Document `protobuf:"bytes,103,opt,name=document,proto3,oneof"`
+}
+
+func (*Resource_Application) isResource_Type() {}
+
+func (*Resource_CloudResource) isResource_Type() {}
+
+func (*Resource_Document) isResource_Type() {}
+
+type CICDService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*CICDService_Job
+	//	*CICDService_Workflow
+	Type isCICDService_Type `protobuf_oneof:"type"`
+}
+
+func (x *CICDService) Reset() {
+	*x = CICDService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[48]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CICDService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CICDService) ProtoMessage() {}
+
+func (x *CICDService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[48]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CICDService.ProtoReflect.Descriptor instead.
+func (*CICDService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{48}
+}
+
+func (m *CICDService) GetType() isCICDService_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *CICDService) GetJob() *Job {
+	if x, ok := x.GetType().(*CICDService_Job); ok {
+		return x.Job
+	}
+	return nil
+}
+
+func (x *CICDService) GetWorkflow() *Workflow {
+	if x, ok := x.GetType().(*CICDService_Workflow); ok {
+		return x.Workflow
+	}
+	return nil
+}
+
+type isCICDService_Type interface {
+	isCICDService_Type()
+}
+
+type CICDService_Job struct {
+	Job *Job `protobuf:"bytes,101,opt,name=job,proto3,oneof"`
+}
+
+type CICDService_Workflow struct {
+	Workflow *Workflow `protobuf:"bytes,102,opt,name=workflow,proto3,oneof"`
+}
+
+func (*CICDService_Job) isCICDService_Type() {}
+
+func (*CICDService_Workflow) isCICDService_Type() {}
+
+// A Load Balancer may have multiple access restriction features, e.g. a L3 firewall and a WAF
+type LoadBalancer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Url            string          `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	HttpEndpoint   []*HttpEndpoint `protobuf:"bytes,2,rep,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+	NetworkService []*ResourceID   `protobuf:"bytes,3,rep,name=NetworkService,proto3" json:"NetworkService,omitempty"`
+}
+
+func (x *LoadBalancer) Reset() {
+	*x = LoadBalancer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[49]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LoadBalancer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadBalancer) ProtoMessage() {}
+
+func (x *LoadBalancer) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[49]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadBalancer.ProtoReflect.Descriptor instead.
+func (*LoadBalancer) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *LoadBalancer) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *LoadBalancer) GetHttpEndpoint() []*HttpEndpoint {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+func (x *LoadBalancer) GetNetworkService() []*ResourceID {
+	if x != nil {
+		return x.NetworkService
+	}
+	return nil
+}
+
+// A LogOperation is used by an application
+type LogOperation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Logging *Logging `protobuf:"bytes,1,opt,name=Logging,proto3" json:"Logging,omitempty"`
+}
+
+func (x *LogOperation) Reset() {
+	*x = LogOperation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[50]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LogOperation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogOperation) ProtoMessage() {}
+
+func (x *LogOperation) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[50]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogOperation.ProtoReflect.Descriptor instead.
+func (*LogOperation) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *LogOperation) GetLogging() *Logging {
+	if x != nil {
+		return x.Logging
+	}
+	return nil
+}
+
+type VirtualSubNetwork struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *VirtualSubNetwork) Reset() {
+	*x = VirtualSubNetwork{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[51]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VirtualSubNetwork) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VirtualSubNetwork) ProtoMessage() {}
+
+func (x *VirtualSubNetwork) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[51]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VirtualSubNetwork.ProtoReflect.Descriptor instead.
+func (*VirtualSubNetwork) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{51}
+}
+
+// This represents the cloud account as a whole, e.g., an Azure subscription.
+type Account struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Account) Reset() {
+	*x = Account{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[52]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Account) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Account) ProtoMessage() {}
+
+func (x *Account) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[52]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Account.ProtoReflect.Descriptor instead.
+func (*Account) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{52}
+}
+
+// RetentionPeriod in hours
+type Backup struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool        `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Storage *ResourceID `protobuf:"bytes,2,opt,name=Storage,proto3" json:"Storage,omitempty"`
+}
+
+func (x *Backup) Reset() {
+	*x = Backup{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[53]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Backup) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Backup) ProtoMessage() {}
+
+func (x *Backup) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[53]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Backup.ProtoReflect.Descriptor instead.
+func (*Backup) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{53}
+}
+
+func (x *Backup) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *Backup) GetStorage() *ResourceID {
+	if x != nil {
+		return x.Storage
+	}
+	return nil
+}
+
+type DocumentDatabaseService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DocumentDatabaseService) Reset() {
+	*x = DocumentDatabaseService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[54]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DocumentDatabaseService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DocumentDatabaseService) ProtoMessage() {}
+
+func (x *DocumentDatabaseService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[54]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DocumentDatabaseService.ProtoReflect.Descriptor instead.
+func (*DocumentDatabaseService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{54}
+}
+
+type ManagedKeyEncryption struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ManagedKeyEncryption) Reset() {
+	*x = ManagedKeyEncryption{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[55]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ManagedKeyEncryption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ManagedKeyEncryption) ProtoMessage() {}
+
+func (x *ManagedKeyEncryption) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[55]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ManagedKeyEncryption.ProtoReflect.Descriptor instead.
+func (*ManagedKeyEncryption) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{55}
+}
+
+// This class represents a database service. For example, a postgres SQL server would be modelled as a database service (with a host and IP) and the individual tables or collections would be modelled as a DatabaseStorage entity.
+type DatabaseService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HttpEndpoint      *HttpEndpoint      `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+	MalwareProtection *MalwareProtection `protobuf:"bytes,2,opt,name=MalwareProtection,proto3" json:"MalwareProtection,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*DatabaseService_DocumentDatabaseService
+	//	*DatabaseService_KeyValueDatabaseService
+	//	*DatabaseService_RelationalDatabaseService
+	Type isDatabaseService_Type `protobuf_oneof:"type"`
+}
+
+func (x *DatabaseService) Reset() {
+	*x = DatabaseService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[56]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DatabaseService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseService) ProtoMessage() {}
+
+func (x *DatabaseService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[56]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseService.ProtoReflect.Descriptor instead.
+func (*DatabaseService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{56}
+}
+
+func (x *DatabaseService) GetHttpEndpoint() *HttpEndpoint {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+func (x *DatabaseService) GetMalwareProtection() *MalwareProtection {
+	if x != nil {
+		return x.MalwareProtection
+	}
+	return nil
+}
+
+func (m *DatabaseService) GetType() isDatabaseService_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *DatabaseService) GetDocumentDatabaseService() *DocumentDatabaseService {
+	if x, ok := x.GetType().(*DatabaseService_DocumentDatabaseService); ok {
+		return x.DocumentDatabaseService
+	}
+	return nil
+}
+
+func (x *DatabaseService) GetKeyValueDatabaseService() *KeyValueDatabaseService {
+	if x, ok := x.GetType().(*DatabaseService_KeyValueDatabaseService); ok {
+		return x.KeyValueDatabaseService
+	}
+	return nil
+}
+
+func (x *DatabaseService) GetRelationalDatabaseService() *RelationalDatabaseService {
+	if x, ok := x.GetType().(*DatabaseService_RelationalDatabaseService); ok {
+		return x.RelationalDatabaseService
+	}
+	return nil
+}
+
+type isDatabaseService_Type interface {
+	isDatabaseService_Type()
+}
+
+type DatabaseService_DocumentDatabaseService struct {
+	DocumentDatabaseService *DocumentDatabaseService `protobuf:"bytes,101,opt,name=document_database_service,json=documentDatabaseService,proto3,oneof"`
+}
+
+type DatabaseService_KeyValueDatabaseService struct {
+	KeyValueDatabaseService *KeyValueDatabaseService `protobuf:"bytes,102,opt,name=key_value_database_service,json=keyValueDatabaseService,proto3,oneof"`
+}
+
+type DatabaseService_RelationalDatabaseService struct {
+	RelationalDatabaseService *RelationalDatabaseService `protobuf:"bytes,103,opt,name=relational_database_service,json=relationalDatabaseService,proto3,oneof"`
+}
+
+func (*DatabaseService_DocumentDatabaseService) isDatabaseService_Type() {}
+
+func (*DatabaseService_KeyValueDatabaseService) isDatabaseService_Type() {}
+
+func (*DatabaseService_RelationalDatabaseService) isDatabaseService_Type() {}
+
+// describes the actual database or a table in a database
+type DatabaseStorage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Storage string `protobuf:"bytes,1,opt,name=Storage,proto3" json:"Storage,omitempty"`
+}
+
+func (x *DatabaseStorage) Reset() {
+	*x = DatabaseStorage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[57]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DatabaseStorage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseStorage) ProtoMessage() {}
+
+func (x *DatabaseStorage) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[57]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseStorage.ProtoReflect.Descriptor instead.
+func (*DatabaseStorage) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *DatabaseStorage) GetStorage() string {
+	if x != nil {
+		return x.Storage
+	}
+	return ""
+}
+
+type RoleAssignment struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RoleAssignment) Reset() {
+	*x = RoleAssignment{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[58]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RoleAssignment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoleAssignment) ProtoMessage() {}
+
+func (x *RoleAssignment) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[58]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoleAssignment.ProtoReflect.Descriptor instead.
+func (*RoleAssignment) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{58}
+}
+
+type HttpClientLibrary struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *HttpClientLibrary) Reset() {
+	*x = HttpClientLibrary{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[59]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HttpClientLibrary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HttpClientLibrary) ProtoMessage() {}
+
+func (x *HttpClientLibrary) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[59]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HttpClientLibrary.ProtoReflect.Descriptor instead.
+func (*HttpClientLibrary) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{59}
+}
+
+type MessagingHub struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MessagingHub) Reset() {
+	*x = MessagingHub{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[60]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MessagingHub) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MessagingHub) ProtoMessage() {}
+
+func (x *MessagingHub) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[60]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MessagingHub.ProtoReflect.Descriptor instead.
+func (*MessagingHub) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{60}
+}
+
+type VirtualNetwork struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *VirtualNetwork) Reset() {
+	*x = VirtualNetwork{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[61]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VirtualNetwork) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VirtualNetwork) ProtoMessage() {}
+
+func (x *VirtualNetwork) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[61]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VirtualNetwork.ProtoReflect.Descriptor instead.
+func (*VirtualNetwork) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{61}
+}
 
 type Confidentiality struct {
 	state         protoimpl.MessageState
@@ -6440,7 +4118,7 @@ type Confidentiality struct {
 func (x *Confidentiality) Reset() {
 	*x = Confidentiality{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_ontology_proto_msgTypes[102]
+		mi := &file_api_ontology_proto_msgTypes[62]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6453,7 +4131,7 @@ func (x *Confidentiality) String() string {
 func (*Confidentiality) ProtoMessage() {}
 
 func (x *Confidentiality) ProtoReflect() protoreflect.Message {
-	mi := &file_api_ontology_proto_msgTypes[102]
+	mi := &file_api_ontology_proto_msgTypes[62]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6466,7 +4144,7 @@ func (x *Confidentiality) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Confidentiality.ProtoReflect.Descriptor instead.
 func (*Confidentiality) Descriptor() ([]byte, []int) {
-	return file_api_ontology_proto_rawDescGZIP(), []int{102}
+	return file_api_ontology_proto_rawDescGZIP(), []int{62}
 }
 
 func (m *Confidentiality) GetType() isConfidentiality_Type {
@@ -6532,978 +4210,3264 @@ func (*Confidentiality_Key) isConfidentiality_Type() {}
 
 func (*Confidentiality_TransportEncryption) isConfidentiality_Type() {}
 
+// An file storage service represents the network service that is used to access a list of file storage shares. The storage itself is modelled as a FileStorage. The service has an http endpoint.
+type FileStorageService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HttpEndpoint *HttpEndpoint `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+}
+
+func (x *FileStorageService) Reset() {
+	*x = FileStorageService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[63]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FileStorageService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileStorageService) ProtoMessage() {}
+
+func (x *FileStorageService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[63]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileStorageService.ProtoReflect.Descriptor instead.
+func (*FileStorageService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{63}
+}
+
+func (x *FileStorageService) GetHttpEndpoint() *HttpEndpoint {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+type BootLogging struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *BootLogging) Reset() {
+	*x = BootLogging{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[64]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BootLogging) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BootLogging) ProtoMessage() {}
+
+func (x *BootLogging) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[64]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BootLogging.ProtoReflect.Descriptor instead.
+func (*BootLogging) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{64}
+}
+
+type KeyVault struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *KeyVault) Reset() {
+	*x = KeyVault{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[65]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *KeyVault) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*KeyVault) ProtoMessage() {}
+
+func (x *KeyVault) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[65]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use KeyVault.ProtoReflect.Descriptor instead.
+func (*KeyVault) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{65}
+}
+
+type Workflow struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Workflow) Reset() {
+	*x = Workflow{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[66]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Workflow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Workflow) ProtoMessage() {}
+
+func (x *Workflow) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[66]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Workflow.ProtoReflect.Descriptor instead.
+func (*Workflow) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{66}
+}
+
+type Document struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SecurityFeature []*SecurityFeature `protobuf:"bytes,1,rep,name=SecurityFeature,proto3" json:"SecurityFeature,omitempty"`
+}
+
+func (x *Document) Reset() {
+	*x = Document{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[67]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Document) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Document) ProtoMessage() {}
+
+func (x *Document) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[67]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Document.ProtoReflect.Descriptor instead.
+func (*Document) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{67}
+}
+
+func (x *Document) GetSecurityFeature() []*SecurityFeature {
+	if x != nil {
+		return x.SecurityFeature
+	}
+	return nil
+}
+
+type FileStorage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *FileStorage) Reset() {
+	*x = FileStorage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[68]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FileStorage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileStorage) ProtoMessage() {}
+
+func (x *FileStorage) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[68]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileStorage.ProtoReflect.Descriptor instead.
+func (*FileStorage) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{68}
+}
+
+type RBAC struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *RBAC) Reset() {
+	*x = RBAC{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[69]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RBAC) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RBAC) ProtoMessage() {}
+
+func (x *RBAC) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[69]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RBAC.ProtoReflect.Descriptor instead.
+func (*RBAC) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{69}
+}
+
+type Auditing struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Auditing_AnomalyDetection
+	//	*Auditing_Logging
+	//	*Auditing_MalwareProtection
+	Type isAuditing_Type `protobuf_oneof:"type"`
+}
+
+func (x *Auditing) Reset() {
+	*x = Auditing{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[70]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Auditing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Auditing) ProtoMessage() {}
+
+func (x *Auditing) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[70]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Auditing.ProtoReflect.Descriptor instead.
+func (*Auditing) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{70}
+}
+
+func (m *Auditing) GetType() isAuditing_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Auditing) GetAnomalyDetection() *AnomalyDetection {
+	if x, ok := x.GetType().(*Auditing_AnomalyDetection); ok {
+		return x.AnomalyDetection
+	}
+	return nil
+}
+
+func (x *Auditing) GetLogging() *Logging {
+	if x, ok := x.GetType().(*Auditing_Logging); ok {
+		return x.Logging
+	}
+	return nil
+}
+
+func (x *Auditing) GetMalwareProtection() *MalwareProtection {
+	if x, ok := x.GetType().(*Auditing_MalwareProtection); ok {
+		return x.MalwareProtection
+	}
+	return nil
+}
+
+type isAuditing_Type interface {
+	isAuditing_Type()
+}
+
+type Auditing_AnomalyDetection struct {
+	AnomalyDetection *AnomalyDetection `protobuf:"bytes,101,opt,name=anomaly_detection,json=anomalyDetection,proto3,oneof"`
+}
+
+type Auditing_Logging struct {
+	Logging *Logging `protobuf:"bytes,102,opt,name=logging,proto3,oneof"`
+}
+
+type Auditing_MalwareProtection struct {
+	MalwareProtection *MalwareProtection `protobuf:"bytes,103,opt,name=malware_protection,json=malwareProtection,proto3,oneof"`
+}
+
+func (*Auditing_AnomalyDetection) isAuditing_Type() {}
+
+func (*Auditing_Logging) isAuditing_Type() {}
+
+func (*Auditing_MalwareProtection) isAuditing_Type() {}
+
+type Availability struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Availability_Backup
+	//	*Availability_DDoSProtection
+	//	*Availability_GeoLocation
+	//	*Availability_Redundancy
+	Type isAvailability_Type `protobuf_oneof:"type"`
+}
+
+func (x *Availability) Reset() {
+	*x = Availability{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[71]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Availability) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Availability) ProtoMessage() {}
+
+func (x *Availability) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[71]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Availability.ProtoReflect.Descriptor instead.
+func (*Availability) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{71}
+}
+
+func (m *Availability) GetType() isAvailability_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Availability) GetBackup() *Backup {
+	if x, ok := x.GetType().(*Availability_Backup); ok {
+		return x.Backup
+	}
+	return nil
+}
+
+func (x *Availability) GetDDoSProtection() *DDoSProtection {
+	if x, ok := x.GetType().(*Availability_DDoSProtection); ok {
+		return x.DDoSProtection
+	}
+	return nil
+}
+
+func (x *Availability) GetGeoLocation() *GeoLocation {
+	if x, ok := x.GetType().(*Availability_GeoLocation); ok {
+		return x.GeoLocation
+	}
+	return nil
+}
+
+func (x *Availability) GetRedundancy() *Redundancy {
+	if x, ok := x.GetType().(*Availability_Redundancy); ok {
+		return x.Redundancy
+	}
+	return nil
+}
+
+type isAvailability_Type interface {
+	isAvailability_Type()
+}
+
+type Availability_Backup struct {
+	Backup *Backup `protobuf:"bytes,101,opt,name=backup,proto3,oneof"`
+}
+
+type Availability_DDoSProtection struct {
+	DDoSProtection *DDoSProtection `protobuf:"bytes,102,opt,name=d_do_s_protection,json=dDoSProtection,proto3,oneof"`
+}
+
+type Availability_GeoLocation struct {
+	GeoLocation *GeoLocation `protobuf:"bytes,103,opt,name=geo_location,json=geoLocation,proto3,oneof"`
+}
+
+type Availability_Redundancy struct {
+	Redundancy *Redundancy `protobuf:"bytes,104,opt,name=redundancy,proto3,oneof"`
+}
+
+func (*Availability_Backup) isAvailability_Type() {}
+
+func (*Availability_DDoSProtection) isAvailability_Type() {}
+
+func (*Availability_GeoLocation) isAvailability_Type() {}
+
+func (*Availability_Redundancy) isAvailability_Type() {}
+
+// A WAF is a L7 firewall that includes L3 capabilities
+type WebApplicationFirewall struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *WebApplicationFirewall) Reset() {
+	*x = WebApplicationFirewall{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[72]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WebApplicationFirewall) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebApplicationFirewall) ProtoMessage() {}
+
+func (x *WebApplicationFirewall) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[72]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebApplicationFirewall.ProtoReflect.Descriptor instead.
+func (*WebApplicationFirewall) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{72}
+}
+
+func (x *WebApplicationFirewall) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type AccessRestriction struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*AccessRestriction_Firewall
+	Type isAccessRestriction_Type `protobuf_oneof:"type"`
+}
+
+func (x *AccessRestriction) Reset() {
+	*x = AccessRestriction{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[73]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AccessRestriction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccessRestriction) ProtoMessage() {}
+
+func (x *AccessRestriction) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[73]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccessRestriction.ProtoReflect.Descriptor instead.
+func (*AccessRestriction) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{73}
+}
+
+func (m *AccessRestriction) GetType() isAccessRestriction_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *AccessRestriction) GetFirewall() *Firewall {
+	if x, ok := x.GetType().(*AccessRestriction_Firewall); ok {
+		return x.Firewall
+	}
+	return nil
+}
+
+type isAccessRestriction_Type interface {
+	isAccessRestriction_Type()
+}
+
+type AccessRestriction_Firewall struct {
+	Firewall *Firewall `protobuf:"bytes,101,opt,name=firewall,proto3,oneof"`
+}
+
+func (*AccessRestriction_Firewall) isAccessRestriction_Type() {}
+
+type HttpServer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HttpRequestHandler *HttpRequestHandler `protobuf:"bytes,1,opt,name=HttpRequestHandler,proto3" json:"HttpRequestHandler,omitempty"`
+}
+
+func (x *HttpServer) Reset() {
+	*x = HttpServer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[74]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HttpServer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HttpServer) ProtoMessage() {}
+
+func (x *HttpServer) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[74]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HttpServer.ProtoReflect.Descriptor instead.
+func (*HttpServer) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{74}
+}
+
+func (x *HttpServer) GetHttpRequestHandler() *HttpRequestHandler {
+	if x != nil {
+		return x.HttpRequestHandler
+	}
+	return nil
+}
+
+type WebApp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *WebApp) Reset() {
+	*x = WebApp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[75]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WebApp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebApp) ProtoMessage() {}
+
+func (x *WebApp) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[75]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebApp.ProtoReflect.Descriptor instead.
+func (*WebApp) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{75}
+}
+
+type Compute struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	NetworkInterface []*ResourceID    `protobuf:"bytes,1,rep,name=NetworkInterface,proto3" json:"NetworkInterface,omitempty"`
+	EncryptionInUse  *EncryptionInUse `protobuf:"bytes,2,opt,name=EncryptionInUse,proto3" json:"EncryptionInUse,omitempty"`
+	ResourceLogging  *ResourceLogging `protobuf:"bytes,3,opt,name=ResourceLogging,proto3" json:"ResourceLogging,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*Compute_Container
+	//	*Compute_Function
+	//	*Compute_VirtualMachine
+	//	*Compute_WebApp
+	Type isCompute_Type `protobuf_oneof:"type"`
+}
+
+func (x *Compute) Reset() {
+	*x = Compute{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[76]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Compute) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Compute) ProtoMessage() {}
+
+func (x *Compute) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[76]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Compute.ProtoReflect.Descriptor instead.
+func (*Compute) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{76}
+}
+
+func (x *Compute) GetNetworkInterface() []*ResourceID {
+	if x != nil {
+		return x.NetworkInterface
+	}
+	return nil
+}
+
+func (x *Compute) GetEncryptionInUse() *EncryptionInUse {
+	if x != nil {
+		return x.EncryptionInUse
+	}
+	return nil
+}
+
+func (x *Compute) GetResourceLogging() *ResourceLogging {
+	if x != nil {
+		return x.ResourceLogging
+	}
+	return nil
+}
+
+func (m *Compute) GetType() isCompute_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Compute) GetContainer() *Container {
+	if x, ok := x.GetType().(*Compute_Container); ok {
+		return x.Container
+	}
+	return nil
+}
+
+func (x *Compute) GetFunction() *Function {
+	if x, ok := x.GetType().(*Compute_Function); ok {
+		return x.Function
+	}
+	return nil
+}
+
+func (x *Compute) GetVirtualMachine() *VirtualMachine {
+	if x, ok := x.GetType().(*Compute_VirtualMachine); ok {
+		return x.VirtualMachine
+	}
+	return nil
+}
+
+func (x *Compute) GetWebApp() *WebApp {
+	if x, ok := x.GetType().(*Compute_WebApp); ok {
+		return x.WebApp
+	}
+	return nil
+}
+
+type isCompute_Type interface {
+	isCompute_Type()
+}
+
+type Compute_Container struct {
+	Container *Container `protobuf:"bytes,101,opt,name=container,proto3,oneof"`
+}
+
+type Compute_Function struct {
+	Function *Function `protobuf:"bytes,102,opt,name=function,proto3,oneof"`
+}
+
+type Compute_VirtualMachine struct {
+	VirtualMachine *VirtualMachine `protobuf:"bytes,103,opt,name=virtual_machine,json=virtualMachine,proto3,oneof"`
+}
+
+type Compute_WebApp struct {
+	WebApp *WebApp `protobuf:"bytes,104,opt,name=web_app,json=webApp,proto3,oneof"`
+}
+
+func (*Compute_Container) isCompute_Type() {}
+
+func (*Compute_Function) isCompute_Type() {}
+
+func (*Compute_VirtualMachine) isCompute_Type() {}
+
+func (*Compute_WebApp) isCompute_Type() {}
+
+type Immutability struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *Immutability) Reset() {
+	*x = Immutability{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[77]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Immutability) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Immutability) ProtoMessage() {}
+
+func (x *Immutability) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[77]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Immutability.ProtoReflect.Descriptor instead.
+func (*Immutability) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{77}
+}
+
+func (x *Immutability) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type Redundancy struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Redundancy) Reset() {
+	*x = Redundancy{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[78]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Redundancy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Redundancy) ProtoMessage() {}
+
+func (x *Redundancy) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[78]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Redundancy.ProtoReflect.Descriptor instead.
+func (*Redundancy) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{78}
+}
+
+type Operation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Operation_DatabaseOperation
+	//	*Operation_HttpRequest
+	//	*Operation_LogOperation
+	//	*Operation_ObjectStorageRequest
+	Type isOperation_Type `protobuf_oneof:"type"`
+}
+
+func (x *Operation) Reset() {
+	*x = Operation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[79]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Operation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Operation) ProtoMessage() {}
+
+func (x *Operation) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[79]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Operation.ProtoReflect.Descriptor instead.
+func (*Operation) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{79}
+}
+
+func (m *Operation) GetType() isOperation_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Operation) GetDatabaseOperation() *DatabaseOperation {
+	if x, ok := x.GetType().(*Operation_DatabaseOperation); ok {
+		return x.DatabaseOperation
+	}
+	return nil
+}
+
+func (x *Operation) GetHttpRequest() *HttpRequest {
+	if x, ok := x.GetType().(*Operation_HttpRequest); ok {
+		return x.HttpRequest
+	}
+	return nil
+}
+
+func (x *Operation) GetLogOperation() *LogOperation {
+	if x, ok := x.GetType().(*Operation_LogOperation); ok {
+		return x.LogOperation
+	}
+	return nil
+}
+
+func (x *Operation) GetObjectStorageRequest() *ObjectStorageRequest {
+	if x, ok := x.GetType().(*Operation_ObjectStorageRequest); ok {
+		return x.ObjectStorageRequest
+	}
+	return nil
+}
+
+type isOperation_Type interface {
+	isOperation_Type()
+}
+
+type Operation_DatabaseOperation struct {
+	DatabaseOperation *DatabaseOperation `protobuf:"bytes,101,opt,name=database_operation,json=databaseOperation,proto3,oneof"`
+}
+
+type Operation_HttpRequest struct {
+	HttpRequest *HttpRequest `protobuf:"bytes,102,opt,name=http_request,json=httpRequest,proto3,oneof"`
+}
+
+type Operation_LogOperation struct {
+	LogOperation *LogOperation `protobuf:"bytes,103,opt,name=log_operation,json=logOperation,proto3,oneof"`
+}
+
+type Operation_ObjectStorageRequest struct {
+	ObjectStorageRequest *ObjectStorageRequest `protobuf:"bytes,104,opt,name=object_storage_request,json=objectStorageRequest,proto3,oneof"`
+}
+
+func (*Operation_DatabaseOperation) isOperation_Type() {}
+
+func (*Operation_HttpRequest) isOperation_Type() {}
+
+func (*Operation_LogOperation) isOperation_Type() {}
+
+func (*Operation_ObjectStorageRequest) isOperation_Type() {}
+
+type VirtualMachine struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BlockStorage             []*ResourceID             `protobuf:"bytes,1,rep,name=BlockStorage,proto3" json:"BlockStorage,omitempty"`
+	ActivityLogging          *ActivityLogging          `protobuf:"bytes,2,opt,name=ActivityLogging,proto3" json:"ActivityLogging,omitempty"`
+	AutomaticSecurityUpdates *AutomaticSecurityUpdates `protobuf:"bytes,3,opt,name=AutomaticSecurityUpdates,proto3" json:"AutomaticSecurityUpdates,omitempty"`
+	BootLogging              *BootLogging              `protobuf:"bytes,4,opt,name=BootLogging,proto3" json:"BootLogging,omitempty"`
+	MalwareProtection        *MalwareProtection        `protobuf:"bytes,5,opt,name=MalwareProtection,proto3" json:"MalwareProtection,omitempty"`
+	OSLogging                *OSLogging                `protobuf:"bytes,6,opt,name=OSLogging,proto3" json:"OSLogging,omitempty"`
+}
+
+func (x *VirtualMachine) Reset() {
+	*x = VirtualMachine{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[80]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VirtualMachine) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VirtualMachine) ProtoMessage() {}
+
+func (x *VirtualMachine) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[80]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VirtualMachine.ProtoReflect.Descriptor instead.
+func (*VirtualMachine) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{80}
+}
+
+func (x *VirtualMachine) GetBlockStorage() []*ResourceID {
+	if x != nil {
+		return x.BlockStorage
+	}
+	return nil
+}
+
+func (x *VirtualMachine) GetActivityLogging() *ActivityLogging {
+	if x != nil {
+		return x.ActivityLogging
+	}
+	return nil
+}
+
+func (x *VirtualMachine) GetAutomaticSecurityUpdates() *AutomaticSecurityUpdates {
+	if x != nil {
+		return x.AutomaticSecurityUpdates
+	}
+	return nil
+}
+
+func (x *VirtualMachine) GetBootLogging() *BootLogging {
+	if x != nil {
+		return x.BootLogging
+	}
+	return nil
+}
+
+func (x *VirtualMachine) GetMalwareProtection() *MalwareProtection {
+	if x != nil {
+		return x.MalwareProtection
+	}
+	return nil
+}
+
+func (x *VirtualMachine) GetOSLogging() *OSLogging {
+	if x != nil {
+		return x.OSLogging
+	}
+	return nil
+}
+
+type DDoSProtection struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DDoSProtection) Reset() {
+	*x = DDoSProtection{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[81]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DDoSProtection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DDoSProtection) ProtoMessage() {}
+
+func (x *DDoSProtection) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[81]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DDoSProtection.ProtoReflect.Descriptor instead.
+func (*DDoSProtection) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{81}
+}
+
+type OSLogging struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *OSLogging) Reset() {
+	*x = OSLogging{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[82]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OSLogging) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OSLogging) ProtoMessage() {}
+
+func (x *OSLogging) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[82]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OSLogging.ProtoReflect.Descriptor instead.
+func (*OSLogging) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{82}
+}
+
+// An HTTP endpoint, that is routed through a (reverse) proxy, e.g. a load balancer.
+type ProxiedEndpoint struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HttpEndpoint string `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+}
+
+func (x *ProxiedEndpoint) Reset() {
+	*x = ProxiedEndpoint{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[83]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProxiedEndpoint) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProxiedEndpoint) ProtoMessage() {}
+
+func (x *ProxiedEndpoint) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[83]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProxiedEndpoint.ProtoReflect.Descriptor instead.
+func (*ProxiedEndpoint) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{83}
+}
+
+func (x *ProxiedEndpoint) GetHttpEndpoint() string {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return ""
+}
+
+// This feature is, e.g., available on some VM services to automatically update their software. It ensures that a resource is protected from tampering with its state.
+type AutomaticSecurityUpdates struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *AutomaticSecurityUpdates) Reset() {
+	*x = AutomaticSecurityUpdates{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[84]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AutomaticSecurityUpdates) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AutomaticSecurityUpdates) ProtoMessage() {}
+
+func (x *AutomaticSecurityUpdates) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[84]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AutomaticSecurityUpdates.ProtoReflect.Descriptor instead.
+func (*AutomaticSecurityUpdates) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{84}
+}
+
+func (x *AutomaticSecurityUpdates) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+// analyzes the activity within a Compute resource
+type MalwareProtection struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled            bool                `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ApplicationLogging *ApplicationLogging `protobuf:"bytes,2,opt,name=ApplicationLogging,proto3" json:"ApplicationLogging,omitempty"`
+}
+
+func (x *MalwareProtection) Reset() {
+	*x = MalwareProtection{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[85]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MalwareProtection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MalwareProtection) ProtoMessage() {}
+
+func (x *MalwareProtection) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[85]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MalwareProtection.ProtoReflect.Descriptor instead.
+func (*MalwareProtection) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{85}
+}
+
+func (x *MalwareProtection) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *MalwareProtection) GetApplicationLogging() *ApplicationLogging {
+	if x != nil {
+		return x.ApplicationLogging
+	}
+	return nil
+}
+
+type VMImage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *VMImage) Reset() {
+	*x = VMImage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[86]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VMImage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VMImage) ProtoMessage() {}
+
+func (x *VMImage) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[86]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VMImage.ProtoReflect.Descriptor instead.
+func (*VMImage) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{86}
+}
+
+type Authorization struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Authorization_ABAC
+	//	*Authorization_AccessRestriction
+	//	*Authorization_RBAC
+	Type isAuthorization_Type `protobuf_oneof:"type"`
+}
+
+func (x *Authorization) Reset() {
+	*x = Authorization{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[87]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Authorization) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Authorization) ProtoMessage() {}
+
+func (x *Authorization) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[87]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Authorization.ProtoReflect.Descriptor instead.
+func (*Authorization) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{87}
+}
+
+func (m *Authorization) GetType() isAuthorization_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Authorization) GetABAC() *ABAC {
+	if x, ok := x.GetType().(*Authorization_ABAC); ok {
+		return x.ABAC
+	}
+	return nil
+}
+
+func (x *Authorization) GetAccessRestriction() *AccessRestriction {
+	if x, ok := x.GetType().(*Authorization_AccessRestriction); ok {
+		return x.AccessRestriction
+	}
+	return nil
+}
+
+func (x *Authorization) GetRBAC() *RBAC {
+	if x, ok := x.GetType().(*Authorization_RBAC); ok {
+		return x.RBAC
+	}
+	return nil
+}
+
+type isAuthorization_Type interface {
+	isAuthorization_Type()
+}
+
+type Authorization_ABAC struct {
+	ABAC *ABAC `protobuf:"bytes,101,opt,name=a_b_a_c,json=aBAC,proto3,oneof"`
+}
+
+type Authorization_AccessRestriction struct {
+	AccessRestriction *AccessRestriction `protobuf:"bytes,102,opt,name=access_restriction,json=accessRestriction,proto3,oneof"`
+}
+
+type Authorization_RBAC struct {
+	RBAC *RBAC `protobuf:"bytes,103,opt,name=r_b_a_c,json=rBAC,proto3,oneof"`
+}
+
+func (*Authorization_ABAC) isAuthorization_Type() {}
+
+func (*Authorization_AccessRestriction) isAuthorization_Type() {}
+
+func (*Authorization_RBAC) isAuthorization_Type() {}
+
+type DatabaseQuery struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Modify bool `protobuf:"varint,1,opt,name=modify,proto3" json:"modify,omitempty"`
+}
+
+func (x *DatabaseQuery) Reset() {
+	*x = DatabaseQuery{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[88]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DatabaseQuery) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseQuery) ProtoMessage() {}
+
+func (x *DatabaseQuery) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[88]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseQuery.ProtoReflect.Descriptor instead.
+func (*DatabaseQuery) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{88}
+}
+
+func (x *DatabaseQuery) GetModify() bool {
+	if x != nil {
+		return x.Modify
+	}
+	return false
+}
+
+type PasswordBasedAuthentication struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Activated bool `protobuf:"varint,1,opt,name=activated,proto3" json:"activated,omitempty"`
+}
+
+func (x *PasswordBasedAuthentication) Reset() {
+	*x = PasswordBasedAuthentication{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[89]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PasswordBasedAuthentication) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordBasedAuthentication) ProtoMessage() {}
+
+func (x *PasswordBasedAuthentication) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[89]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordBasedAuthentication.ProtoReflect.Descriptor instead.
+func (*PasswordBasedAuthentication) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{89}
+}
+
+func (x *PasswordBasedAuthentication) GetActivated() bool {
+	if x != nil {
+		return x.Activated
+	}
+	return false
+}
+
+type SingleSignOn struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *SingleSignOn) Reset() {
+	*x = SingleSignOn{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[90]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SingleSignOn) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SingleSignOn) ProtoMessage() {}
+
+func (x *SingleSignOn) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[90]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SingleSignOn.ProtoReflect.Descriptor instead.
+func (*SingleSignOn) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{90}
+}
+
+func (x *SingleSignOn) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+// Analyzes the activity of a NetworkService (which includes DatabaseServices).
+// Scope contains the resource ID of the protected resource.
+type AnomalyDetection struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Enabled            bool                `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ApplicationLogging *ApplicationLogging `protobuf:"bytes,2,opt,name=ApplicationLogging,proto3" json:"ApplicationLogging,omitempty"`
+}
+
+func (x *AnomalyDetection) Reset() {
+	*x = AnomalyDetection{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[91]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AnomalyDetection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnomalyDetection) ProtoMessage() {}
+
+func (x *AnomalyDetection) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[91]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnomalyDetection.ProtoReflect.Descriptor instead.
+func (*AnomalyDetection) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{91}
+}
+
+func (x *AnomalyDetection) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *AnomalyDetection) GetApplicationLogging() *ApplicationLogging {
+	if x != nil {
+		return x.ApplicationLogging
+	}
+	return nil
+}
+
+// This encapsulates the whole (source) code of an application.
+type Application struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ProgrammingLanguage string           `protobuf:"bytes,1,opt,name=programmingLanguage,proto3" json:"programmingLanguage,omitempty"`
+	Functionality       []*Functionality `protobuf:"bytes,2,rep,name=Functionality,proto3" json:"Functionality,omitempty"`
+	Compute             *ResourceID      `protobuf:"bytes,3,opt,name=Compute,proto3" json:"Compute,omitempty"`
+}
+
+func (x *Application) Reset() {
+	*x = Application{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[92]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Application) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Application) ProtoMessage() {}
+
+func (x *Application) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[92]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Application.ProtoReflect.Descriptor instead.
+func (*Application) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{92}
+}
+
+func (x *Application) GetProgrammingLanguage() string {
+	if x != nil {
+		return x.ProgrammingLanguage
+	}
+	return ""
+}
+
+func (x *Application) GetFunctionality() []*Functionality {
+	if x != nil {
+		return x.Functionality
+	}
+	return nil
+}
+
+func (x *Application) GetCompute() *ResourceID {
+	if x != nil {
+		return x.Compute
+	}
+	return nil
+}
+
+type Identity struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Authenticity []*Authenticity `protobuf:"bytes,1,rep,name=Authenticity,proto3" json:"Authenticity,omitempty"`
+}
+
+func (x *Identity) Reset() {
+	*x = Identity{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[93]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Identity) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Identity) ProtoMessage() {}
+
+func (x *Identity) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[93]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Identity.ProtoReflect.Descriptor instead.
+func (*Identity) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{93}
+}
+
+func (x *Identity) GetAuthenticity() []*Authenticity {
+	if x != nil {
+		return x.Authenticity
+	}
+	return nil
+}
+
+type NoAuthentication struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *NoAuthentication) Reset() {
+	*x = NoAuthentication{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[94]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *NoAuthentication) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NoAuthentication) ProtoMessage() {}
+
+func (x *NoAuthentication) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[94]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NoAuthentication.ProtoReflect.Descriptor instead.
+func (*NoAuthentication) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{94}
+}
+
+type PasswordPolicy struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *PasswordPolicy) Reset() {
+	*x = PasswordPolicy{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[95]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PasswordPolicy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordPolicy) ProtoMessage() {}
+
+func (x *PasswordPolicy) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[95]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordPolicy.ProtoReflect.Descriptor instead.
+func (*PasswordPolicy) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{95}
+}
+
+type ActivityLogging struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ActivityLogging) Reset() {
+	*x = ActivityLogging{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[96]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ActivityLogging) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActivityLogging) ProtoMessage() {}
+
+func (x *ActivityLogging) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[96]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActivityLogging.ProtoReflect.Descriptor instead.
+func (*ActivityLogging) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{96}
+}
+
+type ContainerRegistry struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ContainerRegistry) Reset() {
+	*x = ContainerRegistry{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[97]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ContainerRegistry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContainerRegistry) ProtoMessage() {}
+
+func (x *ContainerRegistry) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[97]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContainerRegistry.ProtoReflect.Descriptor instead.
+func (*ContainerRegistry) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{97}
+}
+
+type HttpRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HttpEndpoint *HttpEndpoint `protobuf:"bytes,1,opt,name=HttpEndpoint,proto3" json:"HttpEndpoint,omitempty"`
+}
+
+func (x *HttpRequest) Reset() {
+	*x = HttpRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[98]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HttpRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HttpRequest) ProtoMessage() {}
+
+func (x *HttpRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[98]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HttpRequest.ProtoReflect.Descriptor instead.
+func (*HttpRequest) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{98}
+}
+
+func (x *HttpRequest) GetHttpEndpoint() *HttpEndpoint {
+	if x != nil {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+type Functionality struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Type:
+	//
+	//	*Functionality_HttpEndpoint
+	//	*Functionality_HttpRequestHandler
+	//	*Functionality_Operation
+	Type isFunctionality_Type `protobuf_oneof:"type"`
+}
+
+func (x *Functionality) Reset() {
+	*x = Functionality{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[99]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Functionality) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Functionality) ProtoMessage() {}
+
+func (x *Functionality) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[99]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Functionality.ProtoReflect.Descriptor instead.
+func (*Functionality) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{99}
+}
+
+func (m *Functionality) GetType() isFunctionality_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *Functionality) GetHttpEndpoint() *HttpEndpoint {
+	if x, ok := x.GetType().(*Functionality_HttpEndpoint); ok {
+		return x.HttpEndpoint
+	}
+	return nil
+}
+
+func (x *Functionality) GetHttpRequestHandler() *HttpRequestHandler {
+	if x, ok := x.GetType().(*Functionality_HttpRequestHandler); ok {
+		return x.HttpRequestHandler
+	}
+	return nil
+}
+
+func (x *Functionality) GetOperation() *Operation {
+	if x, ok := x.GetType().(*Functionality_Operation); ok {
+		return x.Operation
+	}
+	return nil
+}
+
+type isFunctionality_Type interface {
+	isFunctionality_Type()
+}
+
+type Functionality_HttpEndpoint struct {
+	HttpEndpoint *HttpEndpoint `protobuf:"bytes,101,opt,name=http_endpoint,json=httpEndpoint,proto3,oneof"`
+}
+
+type Functionality_HttpRequestHandler struct {
+	HttpRequestHandler *HttpRequestHandler `protobuf:"bytes,102,opt,name=http_request_handler,json=httpRequestHandler,proto3,oneof"`
+}
+
+type Functionality_Operation struct {
+	Operation *Operation `protobuf:"bytes,103,opt,name=operation,proto3,oneof"`
+}
+
+func (*Functionality_HttpEndpoint) isFunctionality_Type() {}
+
+func (*Functionality_HttpRequestHandler) isFunctionality_Type() {}
+
+func (*Functionality_Operation) isFunctionality_Type() {}
+
+// A NetworkService is an application (on the network layer) running on a Compute resource. It provides access to a resource
+type NetworkService struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Compute             *ResourceID          `protobuf:"bytes,1,opt,name=Compute,proto3" json:"Compute,omitempty"`
+	TransportEncryption *TransportEncryption `protobuf:"bytes,2,opt,name=TransportEncryption,proto3" json:"TransportEncryption,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*NetworkService_LoadBalancer
+	//	*NetworkService_LoggingService
+	//	*NetworkService_StorageService
+	Type isNetworkService_Type `protobuf_oneof:"type"`
+}
+
+func (x *NetworkService) Reset() {
+	*x = NetworkService{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[100]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *NetworkService) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NetworkService) ProtoMessage() {}
+
+func (x *NetworkService) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[100]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NetworkService.ProtoReflect.Descriptor instead.
+func (*NetworkService) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{100}
+}
+
+func (x *NetworkService) GetCompute() *ResourceID {
+	if x != nil {
+		return x.Compute
+	}
+	return nil
+}
+
+func (x *NetworkService) GetTransportEncryption() *TransportEncryption {
+	if x != nil {
+		return x.TransportEncryption
+	}
+	return nil
+}
+
+func (m *NetworkService) GetType() isNetworkService_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *NetworkService) GetLoadBalancer() *LoadBalancer {
+	if x, ok := x.GetType().(*NetworkService_LoadBalancer); ok {
+		return x.LoadBalancer
+	}
+	return nil
+}
+
+func (x *NetworkService) GetLoggingService() *LoggingService {
+	if x, ok := x.GetType().(*NetworkService_LoggingService); ok {
+		return x.LoggingService
+	}
+	return nil
+}
+
+func (x *NetworkService) GetStorageService() *StorageService {
+	if x, ok := x.GetType().(*NetworkService_StorageService); ok {
+		return x.StorageService
+	}
+	return nil
+}
+
+type isNetworkService_Type interface {
+	isNetworkService_Type()
+}
+
+type NetworkService_LoadBalancer struct {
+	LoadBalancer *LoadBalancer `protobuf:"bytes,101,opt,name=load_balancer,json=loadBalancer,proto3,oneof"`
+}
+
+type NetworkService_LoggingService struct {
+	LoggingService *LoggingService `protobuf:"bytes,102,opt,name=logging_service,json=loggingService,proto3,oneof"`
+}
+
+type NetworkService_StorageService struct {
+	StorageService *StorageService `protobuf:"bytes,103,opt,name=storage_service,json=storageService,proto3,oneof"`
+}
+
+func (*NetworkService_LoadBalancer) isNetworkService_Type() {}
+
+func (*NetworkService_LoggingService) isNetworkService_Type() {}
+
+func (*NetworkService_StorageService) isNetworkService_Type() {}
+
+type ABAC struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ABAC) Reset() {
+	*x = ABAC{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[101]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ABAC) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ABAC) ProtoMessage() {}
+
+func (x *ABAC) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[101]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ABAC.ProtoReflect.Descriptor instead.
+func (*ABAC) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{101}
+}
+
+type AtRestEncryption struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Algorithm string `protobuf:"bytes,1,opt,name=algorithm,proto3" json:"algorithm,omitempty"`
+	Enabled   bool   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	KeyUrl    string `protobuf:"bytes,3,opt,name=keyUrl,proto3" json:"keyUrl,omitempty"`
+	// Types that are assignable to Type:
+	//
+	//	*AtRestEncryption_CustomerKeyEncryption
+	//	*AtRestEncryption_ManagedKeyEncryption
+	Type isAtRestEncryption_Type `protobuf_oneof:"type"`
+}
+
+func (x *AtRestEncryption) Reset() {
+	*x = AtRestEncryption{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_ontology_proto_msgTypes[102]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AtRestEncryption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AtRestEncryption) ProtoMessage() {}
+
+func (x *AtRestEncryption) ProtoReflect() protoreflect.Message {
+	mi := &file_api_ontology_proto_msgTypes[102]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AtRestEncryption.ProtoReflect.Descriptor instead.
+func (*AtRestEncryption) Descriptor() ([]byte, []int) {
+	return file_api_ontology_proto_rawDescGZIP(), []int{102}
+}
+
+func (x *AtRestEncryption) GetAlgorithm() string {
+	if x != nil {
+		return x.Algorithm
+	}
+	return ""
+}
+
+func (x *AtRestEncryption) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *AtRestEncryption) GetKeyUrl() string {
+	if x != nil {
+		return x.KeyUrl
+	}
+	return ""
+}
+
+func (m *AtRestEncryption) GetType() isAtRestEncryption_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (x *AtRestEncryption) GetCustomerKeyEncryption() *CustomerKeyEncryption {
+	if x, ok := x.GetType().(*AtRestEncryption_CustomerKeyEncryption); ok {
+		return x.CustomerKeyEncryption
+	}
+	return nil
+}
+
+func (x *AtRestEncryption) GetManagedKeyEncryption() *ManagedKeyEncryption {
+	if x, ok := x.GetType().(*AtRestEncryption_ManagedKeyEncryption); ok {
+		return x.ManagedKeyEncryption
+	}
+	return nil
+}
+
+type isAtRestEncryption_Type interface {
+	isAtRestEncryption_Type()
+}
+
+type AtRestEncryption_CustomerKeyEncryption struct {
+	CustomerKeyEncryption *CustomerKeyEncryption `protobuf:"bytes,101,opt,name=customer_key_encryption,json=customerKeyEncryption,proto3,oneof"`
+}
+
+type AtRestEncryption_ManagedKeyEncryption struct {
+	ManagedKeyEncryption *ManagedKeyEncryption `protobuf:"bytes,102,opt,name=managed_key_encryption,json=managedKeyEncryption,proto3,oneof"`
+}
+
+func (*AtRestEncryption_CustomerKeyEncryption) isAtRestEncryption_Type() {}
+
+func (*AtRestEncryption_ManagedKeyEncryption) isAtRestEncryption_Type() {}
+
 var File_api_ontology_proto protoreflect.FileDescriptor
 
 var file_api_ontology_proto_rawDesc = []byte{
 	0x0a, 0x12, 0x61, 0x70, 0x69, 0x2f, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x19, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x1a,
-	0x1c, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e, 0x6e, 0x6f,
-	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1c, 0x67,
-	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x73,
-	0x74, 0x72, 0x75, 0x63, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x13, 0x74, 0x61, 0x67,
-	0x67, 0x65, 0x72, 0x2f, 0x74, 0x61, 0x67, 0x67, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x1a, 0x17, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x2f, 0x76, 0x61, 0x6c, 0x69, 0x64,
-	0x61, 0x74, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x2d, 0x0a, 0x0a, 0x52, 0x65, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x12, 0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x64, 0x22, 0x16, 0x0a, 0x14, 0x4e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x47, 0x72, 0x6f, 0x75, 0x70,
-	0x22, 0x09, 0x0a, 0x07, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xb2, 0x08, 0x0a, 0x0d,
-	0x43, 0x6c, 0x6f, 0x75, 0x64, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x48, 0x0a,
-	0x0b, 0x47, 0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47,
-	0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x47, 0x65, 0x6f, 0x4c,
-	0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3e, 0x0a, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75,
-	0x6e, 0x74, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x07,
-	0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x4e, 0x0a, 0x0f, 0x63, 0x5f, 0x69, 0x5f, 0x63,
-	0x5f, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x49, 0x43,
-	0x44, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0b, 0x63, 0x49, 0x43, 0x44,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3e, 0x0a, 0x07, 0x63, 0x6f, 0x6d, 0x70, 0x75,
-	0x74, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x48, 0x00, 0x52, 0x07,
-	0x63, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x12, 0x6c, 0x0a, 0x17, 0x63, 0x6f, 0x6e, 0x74, 0x61,
-	0x69, 0x6e, 0x65, 0x72, 0x5f, 0x6f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x4f, 0x72,
-	0x63, 0x68, 0x65, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x16, 0x63,
-	0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x4f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74, 0x72,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x5d, 0x0a, 0x12, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e,
-	0x65, 0x72, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x18, 0x69, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x2c, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x6f,
-	0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x48,
-	0x00, 0x52, 0x11, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x52, 0x65, 0x67, 0x69,
-	0x73, 0x74, 0x72, 0x79, 0x12, 0x4d, 0x0a, 0x0c, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69,
-	0x61, 0x62, 0x6c, 0x65, 0x18, 0x6a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x61,
-	0x62, 0x6c, 0x65, 0x48, 0x00, 0x52, 0x0c, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x61,
-	0x62, 0x6c, 0x65, 0x12, 0x38, 0x0a, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x6b, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x20, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49,
-	0x6d, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x33, 0x0a,
-	0x04, 0x69, 0x6f, 0x5f, 0x74, 0x18, 0x6c, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x6f, 0x54, 0x48, 0x00, 0x52, 0x03, 0x69,
-	0x6f, 0x54, 0x12, 0x42, 0x0a, 0x09, 0x6b, 0x65, 0x79, 0x5f, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x18,
-	0x6d, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x4b, 0x65, 0x79, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x48, 0x00, 0x52, 0x08, 0x6b, 0x65,
-	0x79, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x47, 0x0a, 0x0a, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x69, 0x6e, 0x67, 0x18, 0x6e, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e,
-	0x67, 0x48, 0x00, 0x52, 0x0a, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x12,
-	0x54, 0x0a, 0x0f, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x5f, 0x70, 0x6f, 0x6c, 0x69,
-	0x63, 0x79, 0x18, 0x6f, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x50, 0x6f, 0x6c,
-	0x69, 0x63, 0x79, 0x48, 0x00, 0x52, 0x0e, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x50,
-	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x12, 0x51, 0x0a, 0x0e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x5f, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x18, 0x70, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x48, 0x00, 0x52, 0x0d, 0x72, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x3e, 0x0a, 0x07, 0x73, 0x74, 0x6f, 0x72,
-	0x61, 0x67, 0x65, 0x18, 0x71, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52,
-	0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65,
-	0x22, 0xc0, 0x02, 0x0a, 0x09, 0x46, 0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f, 0x72, 0x6b, 0x12, 0x44,
-	0x0a, 0x0b, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x5f, 0x73, 0x5f, 0x64, 0x5f, 0x6b, 0x18, 0x65, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x43, 0x6c, 0x6f, 0x75, 0x64, 0x53, 0x44, 0x4b, 0x48, 0x00, 0x52, 0x08, 0x63, 0x6c, 0x6f, 0x75,
-	0x64, 0x53, 0x44, 0x4b, 0x12, 0x5e, 0x0a, 0x13, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x63, 0x6c, 0x69,
-	0x65, 0x6e, 0x74, 0x5f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x2c, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74,
-	0x74, 0x70, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x48,
-	0x00, 0x52, 0x11, 0x68, 0x74, 0x74, 0x70, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x62,
-	0x72, 0x61, 0x72, 0x79, 0x12, 0x48, 0x0a, 0x0b, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x73, 0x65, 0x72,
-	0x76, 0x65, 0x72, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72,
-	0x48, 0x00, 0x52, 0x0a, 0x68, 0x74, 0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x3b,
-	0x0a, 0x06, 0x6c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x65,
-	0x72, 0x48, 0x00, 0x52, 0x06, 0x6c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x42, 0x06, 0x0a, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x22, 0xf1, 0x01, 0x0a, 0x05, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x48, 0x0a,
-	0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
-	0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x41, 0x70, 0x70, 0x6c,
-	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x54, 0x0a, 0x0f, 0x63, 0x6f, 0x6e, 0x74, 0x61,
-	0x69, 0x6e, 0x65, 0x72, 0x5f, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x6f, 0x6e,
-	0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x63,
-	0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x40, 0x0a,
-	0x09, 0x76, 0x5f, 0x6d, 0x5f, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x22, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x56, 0x4d, 0x49,
-	0x6d, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x07, 0x76, 0x4d, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x42,
-	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x19, 0x0a, 0x17, 0x4b, 0x65, 0x79, 0x56, 0x61,
-	0x6c, 0x75, 0x65, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x22, 0x2b, 0x0a, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74,
-	0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22,
-	0xbc, 0x01, 0x0a, 0x0c, 0x4c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72,
-	0x12, 0x10, 0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75,
-	0x72, 0x6c, 0x12, 0x4b, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69,
-	0x6e, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e,
-	0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x12,
-	0x4d, 0x0a, 0x0e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0e,
-	0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x32,
-	0x0a, 0x16, 0x57, 0x65, 0x62, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62,
-	0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
-	0x65, 0x64, 0x22, 0x8b, 0x01, 0x0a, 0x10, 0x41, 0x6e, 0x6f, 0x6d, 0x61, 0x6c, 0x79, 0x44, 0x65,
-	0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
-	0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x64, 0x12, 0x5d, 0x0a, 0x12, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x12, 0x41, 0x70,
-	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67,
-	0x22, 0x1f, 0x0a, 0x03, 0x4b, 0x65, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
-	0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x64, 0x22, 0xd0, 0x01, 0x0a, 0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x30, 0x0a, 0x13, 0x70, 0x72, 0x6f, 0x67, 0x72, 0x61, 0x6d, 0x6d, 0x69, 0x6e, 0x67,
-	0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x13,
-	0x70, 0x72, 0x6f, 0x67, 0x72, 0x61, 0x6d, 0x6d, 0x69, 0x6e, 0x67, 0x4c, 0x61, 0x6e, 0x67, 0x75,
-	0x61, 0x67, 0x65, 0x12, 0x4e, 0x0a, 0x0d, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x61,
-	0x6c, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x61,
-	0x6c, 0x69, 0x74, 0x79, 0x52, 0x0d, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c,
-	0x69, 0x74, 0x79, 0x12, 0x3f, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x43, 0x6f, 0x6d,
-	0x70, 0x75, 0x74, 0x65, 0x22, 0x77, 0x0a, 0x14, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74,
-	0x6f, 0x72, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04,
-	0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65,
-	0x12, 0x4b, 0x0a, 0x0d, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0d,
-	0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x0f, 0x0a,
-	0x0d, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x22, 0xea,
-	0x01, 0x0a, 0x0d, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x38, 0x0a, 0x07, 0x61, 0x5f, 0x62, 0x5f, 0x61, 0x5f, 0x63, 0x18, 0x65, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1f, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x42,
-	0x41, 0x43, 0x48, 0x00, 0x52, 0x04, 0x61, 0x42, 0x41, 0x43, 0x12, 0x5d, 0x0a, 0x12, 0x61, 0x63,
-	0x63, 0x65, 0x73, 0x73, 0x5f, 0x72, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e,
-	0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x41, 0x63, 0x63, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x11, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x52, 0x65,
-	0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x38, 0x0a, 0x07, 0x72, 0x5f, 0x62,
-	0x5f, 0x61, 0x5f, 0x63, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x42, 0x41, 0x43, 0x48, 0x00, 0x52, 0x04, 0x72,
-	0x42, 0x41, 0x43, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x2b, 0x0a, 0x0f, 0x45,
-	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x12, 0x18,
+	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x15, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x1a, 0x1c, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x73, 0x74, 0x72, 0x75, 0x63,
+	0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x13, 0x74, 0x61, 0x67, 0x67, 0x65, 0x72, 0x2f,
+	0x74, 0x61, 0x67, 0x67, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x76, 0x61,
+	0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x2f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x2d, 0x0a, 0x0a, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x49, 0x44, 0x12, 0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x49, 0x64, 0x22, 0x0f, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x47, 0x72, 0x6f, 0x75, 0x70, 0x22, 0xda, 0x02, 0x0a, 0x0c, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x66, 0x69, 0x61, 0x62, 0x6c, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61,
+	0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76,
+	0x61, 0x74, 0x65, 0x64, 0x12, 0x47, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69,
+	0x63, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x52,
+	0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x12, 0x4a, 0x0a,
+	0x0d, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0d, 0x41, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3d, 0x0a, 0x08, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x08,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x50, 0x0a, 0x0f, 0x72, 0x6f, 0x6c, 0x65,
+	0x5f, 0x61, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x66, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x25, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x6f, 0x6c, 0x65, 0x41, 0x73,
+	0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x0e, 0x72, 0x6f, 0x6c, 0x65,
+	0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x22, 0x16, 0x0a, 0x14, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x63,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x22, 0xd1, 0x03, 0x0a, 0x0a, 0x4e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x12, 0x56, 0x0a, 0x11, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x18, 0x65,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x48, 0x00, 0x52,
+	0x10, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63,
+	0x65, 0x12, 0x63, 0x0a, 0x16, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x5f, 0x73, 0x65, 0x63,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x18, 0x66, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x2b, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x48, 0x00,
+	0x52, 0x14, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74,
+	0x79, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x50, 0x0a, 0x0f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x25, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x50, 0x0a, 0x0f, 0x76, 0x69, 0x72, 0x74,
+	0x75, 0x61, 0x6c, 0x5f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x18, 0x68, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x25, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61,
+	0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x48, 0x00, 0x52, 0x0e, 0x76, 0x69, 0x72, 0x74,
+	0x75, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x12, 0x5a, 0x0a, 0x13, 0x76, 0x69,
+	0x72, 0x74, 0x75, 0x61, 0x6c, 0x5f, 0x73, 0x75, 0x62, 0x5f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x53, 0x75, 0x62, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x48, 0x00, 0x52, 0x11, 0x76, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x53, 0x75, 0x62, 0x4e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xee,
+	0x02, 0x0a, 0x0e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x12, 0x3b, 0x0a, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x53,
+	0x0a, 0x10, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x48, 0x00, 0x52, 0x0f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x12, 0x5d, 0x0a, 0x14, 0x66, 0x69, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x6f, 0x72,
+	0x61, 0x67, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x29, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x74,
+	0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x12,
+	0x66, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x63, 0x0a, 0x16, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x73, 0x74, 0x6f,
+	0x72, 0x61, 0x67, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48,
+	0x00, 0x52, 0x14, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22,
+	0xb7, 0x01, 0x0a, 0x12, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48,
+	0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x44, 0x0a, 0x0b, 0x41, 0x70,
+	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x47, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
+	0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74,
+	0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48,
+	0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74,
+	0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x05, 0x0a, 0x03, 0x4a, 0x6f, 0x62,
+	0x22, 0x08, 0x0a, 0x06, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x22, 0x5f, 0x0a, 0x14, 0x4f, 0x62,
+	0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x47, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69,
+	0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48,
+	0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x89, 0x01, 0x0a, 0x13,
+	0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x6c, 0x67, 0x6f, 0x72, 0x69, 0x74, 0x68, 0x6d,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x6c, 0x67, 0x6f, 0x72, 0x69, 0x74, 0x68,
+	0x6d, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x65,
+	0x6e, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x65,
+	0x6e, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x74, 0x6c, 0x73, 0x56, 0x65,
+	0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x74, 0x6c, 0x73,
+	0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x22, 0x97, 0x05, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68,
+	0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x12, 0x81, 0x01, 0x0a, 0x20, 0x63, 0x65, 0x72,
+	0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x64, 0x5f, 0x61,
+	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x35, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x65, 0x72, 0x74,
+	0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68,
+	0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x1e, 0x63, 0x65,
+	0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75,
+	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x6f, 0x0a, 0x1a,
+	0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x75, 0x74, 0x68,
+	0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x2f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x61,
+	0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x48, 0x00, 0x52, 0x18, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41,
+	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x56, 0x0a,
+	0x11, 0x6e, 0x6f, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x4e, 0x6f, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x48, 0x00, 0x52, 0x10, 0x6e, 0x6f, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x6b, 0x0a, 0x1a, 0x6f, 0x5f, 0x74, 0x5f, 0x70, 0x5f, 0x62,
+	0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x4f, 0x54, 0x50, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e,
+	0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x16, 0x6f, 0x54, 0x50, 0x42,
+	0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x78, 0x0a, 0x1d, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x5f, 0x62,
+	0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41,
+	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52,
+	0x1b, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75,
+	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4b, 0x0a, 0x0e,
+	0x73, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x5f, 0x6f, 0x6e, 0x18, 0x6a,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x69, 0x6e,
+	0x67, 0x6c, 0x65, 0x53, 0x69, 0x67, 0x6e, 0x4f, 0x6e, 0x48, 0x00, 0x52, 0x0c, 0x73, 0x69, 0x6e,
+	0x67, 0x6c, 0x65, 0x53, 0x69, 0x67, 0x6e, 0x4f, 0x6e, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70,
+	0x65, 0x22, 0x11, 0x0a, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x43, 0x6f, 0x6e,
+	0x6e, 0x65, 0x63, 0x74, 0x22, 0x0a, 0x0a, 0x08, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x53, 0x44, 0x4b,
+	0x22, 0x10, 0x0a, 0x0e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x49, 0x6d, 0x61,
+	0x67, 0x65, 0x22, 0xcd, 0x01, 0x0a, 0x03, 0x49, 0x6f, 0x54, 0x12, 0x72, 0x0a, 0x1b, 0x64, 0x65,
+	0x76, 0x69, 0x63, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e,
+	0x67, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x30, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x50, 0x72,
+	0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x48, 0x00, 0x52, 0x19, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69,
+	0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4a,
+	0x0a, 0x0d, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x69, 0x6e, 0x67, 0x5f, 0x68, 0x75, 0x62, 0x18,
+	0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x75, 0x62, 0x48, 0x00, 0x52, 0x0c, 0x6d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x75, 0x62, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x22, 0x11, 0x0a, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f,
+	0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0xd2, 0x03, 0x0a, 0x0f, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69,
+	0x74, 0x79, 0x46, 0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x3d, 0x0a, 0x08, 0x61, 0x75, 0x64,
+	0x69, 0x74, 0x69, 0x6e, 0x67, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x64, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x08,
+	0x61, 0x75, 0x64, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x12, 0x49, 0x0a, 0x0c, 0x61, 0x75, 0x74, 0x68,
+	0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23,
+	0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c,
+	0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63,
+	0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x0c, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63,
+	0x69, 0x74, 0x79, 0x12, 0x4c, 0x0a, 0x0d, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x48, 0x00, 0x52, 0x0d, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x49, 0x0a, 0x0c, 0x61, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74,
+	0x79, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x41, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x0c,
+	0x61, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x52, 0x0a, 0x0f,
+	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x18,
+	0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f,
+	0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52,
+	0x0f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x74, 0x79,
+	0x12, 0x40, 0x0a, 0x09, 0x69, 0x6e, 0x74, 0x65, 0x67, 0x72, 0x69, 0x74, 0x79, 0x18, 0x6a, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x49, 0x6e, 0x74, 0x65,
+	0x67, 0x72, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x09, 0x69, 0x6e, 0x74, 0x65, 0x67, 0x72, 0x69,
+	0x74, 0x79, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xfa, 0x07, 0x0a, 0x0d, 0x43,
+	0x6c, 0x6f, 0x75, 0x64, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x44, 0x0a, 0x0b,
+	0x47, 0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x6f, 0x4c, 0x6f, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x47, 0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x3a, 0x0a, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x65, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x63, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x4a,
+	0x0a, 0x0f, 0x63, 0x5f, 0x69, 0x5f, 0x63, 0x5f, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x43, 0x49, 0x43, 0x44, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0b, 0x63,
+	0x49, 0x43, 0x44, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3a, 0x0a, 0x07, 0x63, 0x6f,
+	0x6d, 0x70, 0x75, 0x74, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x48, 0x00, 0x52, 0x07, 0x63,
+	0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x12, 0x68, 0x0a, 0x17, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69,
+	0x6e, 0x65, 0x72, 0x5f, 0x6f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x4f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x16, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69,
+	0x6e, 0x65, 0x72, 0x4f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x59, 0x0a, 0x12, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x5f, 0x72, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x52, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x48, 0x00, 0x52, 0x11, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69,
+	0x6e, 0x65, 0x72, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x49, 0x0a, 0x0c, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x6a, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x66, 0x69, 0x61, 0x62, 0x6c, 0x65, 0x48, 0x00, 0x52, 0x0c, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x66, 0x69, 0x61, 0x62, 0x6c, 0x65, 0x12, 0x34, 0x0a, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18,
+	0x6b, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x49, 0x6d,
+	0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x2f, 0x0a, 0x04,
+	0x69, 0x6f, 0x5f, 0x74, 0x18, 0x6c, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x49, 0x6f, 0x54, 0x48, 0x00, 0x52, 0x03, 0x69, 0x6f, 0x54, 0x12, 0x3e, 0x0a,
+	0x09, 0x6b, 0x65, 0x79, 0x5f, 0x76, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x6d, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x1f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x65, 0x79, 0x56, 0x61, 0x75, 0x6c,
+	0x74, 0x48, 0x00, 0x52, 0x08, 0x6b, 0x65, 0x79, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x43, 0x0a,
+	0x0a, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x18, 0x6e, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x0a, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69,
+	0x6e, 0x67, 0x12, 0x50, 0x0a, 0x0f, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x5f, 0x70,
+	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x18, 0x6f, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x50, 0x6f, 0x6c, 0x69,
+	0x63, 0x79, 0x48, 0x00, 0x52, 0x0e, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x50, 0x6f,
+	0x6c, 0x69, 0x63, 0x79, 0x12, 0x4d, 0x0a, 0x0e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x5f, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x18, 0x70, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x47, 0x72, 0x6f,
+	0x75, 0x70, 0x48, 0x00, 0x52, 0x0d, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x47, 0x72,
+	0x6f, 0x75, 0x70, 0x12, 0x3a, 0x0a, 0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x71,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f,
+	0x72, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42,
+	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x5d, 0x0a, 0x10, 0x4e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x12, 0x49, 0x0a, 0x0e, 0x4e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0xcf, 0x01, 0x0a, 0x09, 0x49, 0x6e, 0x74, 0x65, 0x67,
+	0x72, 0x69, 0x74, 0x79, 0x12, 0x6f, 0x0a, 0x1a, 0x61, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69,
+	0x63, 0x5f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x75, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x73, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69,
+	0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x48, 0x00, 0x52, 0x18, 0x61, 0x75, 0x74,
+	0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x73, 0x12, 0x49, 0x0a, 0x0c, 0x69, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62,
+	0x69, 0x6c, 0x69, 0x74, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79,
+	0x48, 0x00, 0x52, 0x0c, 0x69, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79,
+	0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x1f, 0x0a, 0x03, 0x4b, 0x65, 0x79, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x19, 0x0a, 0x17, 0x4b, 0x65, 0x79,
+	0x56, 0x61, 0x6c, 0x75, 0x65, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x22, 0x14, 0x0a, 0x12, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x44, 0x0a, 0x09, 0x43, 0x6f,
+	0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x12, 0x37, 0x0a, 0x05, 0x49, 0x6d, 0x61, 0x67, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74,
+	0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52,
+	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x05, 0x49, 0x6d, 0x61, 0x67, 0x65,
+	0x22, 0x6a, 0x0a, 0x0a, 0x4c, 0x33, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x12, 0x18,
 	0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52,
-	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x8c, 0x01, 0x0a, 0x0b, 0x43, 0x49, 0x43,
-	0x44, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x32, 0x0a, 0x03, 0x6a, 0x6f, 0x62, 0x18,
-	0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x4a, 0x6f, 0x62, 0x48, 0x00, 0x52, 0x03, 0x6a, 0x6f, 0x62, 0x12, 0x41, 0x0a, 0x08,
-	0x77, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x57, 0x6f, 0x72, 0x6b, 0x66,
-	0x6c, 0x6f, 0x77, 0x48, 0x00, 0x52, 0x08, 0x77, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77, 0x42,
-	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x0a, 0x0a, 0x08, 0x43, 0x6c, 0x6f, 0x75, 0x64,
-	0x53, 0x44, 0x4b, 0x22, 0x48, 0x0a, 0x09, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72,
-	0x12, 0x3b, 0x0a, 0x05, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f,
-	0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x05, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x22, 0x0a, 0x0a,
-	0x08, 0x4b, 0x65, 0x79, 0x56, 0x61, 0x75, 0x6c, 0x74, 0x22, 0x35, 0x0a, 0x0f, 0x50, 0x72, 0x6f,
-	0x78, 0x69, 0x65, 0x64, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x22, 0x0a, 0x0c,
-	0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
-	0x22, 0x11, 0x0a, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x43, 0x6f, 0x6e, 0x6e,
-	0x65, 0x63, 0x74, 0x22, 0xdc, 0x02, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70,
+	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x69, 0x6e, 0x62, 0x6f,
+	0x75, 0x6e, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69, 0x6e, 0x62, 0x6f, 0x75,
+	0x6e, 0x64, 0x12, 0x28, 0x0a, 0x0f, 0x72, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x65, 0x64,
+	0x50, 0x6f, 0x72, 0x74, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x72, 0x65, 0x73,
+	0x74, 0x72, 0x69, 0x63, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x72, 0x74, 0x73, 0x22, 0x4d, 0x0a, 0x0e,
+	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3b,
+	0x0a, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x49, 0x44, 0x52, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x36, 0x0a, 0x16, 0x4f,
+	0x54, 0x50, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61, 0x74,
+	0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61,
+	0x74, 0x65, 0x64, 0x22, 0xd9, 0x02, 0x0a, 0x11, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4b, 0x0a, 0x0f, 0x44, 0x61, 0x74,
+	0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53,
+	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x4b, 0x0a, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61,
+	0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x49, 0x44, 0x52, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x12, 0x53, 0x0a, 0x10, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x5f,
+	0x63, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x43, 0x6f,
+	0x6e, 0x6e, 0x65, 0x63, 0x74, 0x48, 0x00, 0x52, 0x0f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73,
+	0x65, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x12, 0x4d, 0x0a, 0x0e, 0x64, 0x61, 0x74, 0x61,
+	0x62, 0x61, 0x73, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x24, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73,
+	0x65, 0x51, 0x75, 0x65, 0x72, 0x79, 0x48, 0x00, 0x52, 0x0d, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61,
+	0x73, 0x65, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22,
+	0x25, 0x0a, 0x0b, 0x47, 0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16,
+	0x0a, 0x06, 0x72, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x72, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x22, 0x1b, 0x0a, 0x19, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65,
+	0x50, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x22, 0xd0, 0x02, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70,
 	0x6f, 0x69, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x65, 0x74, 0x68, 0x6f, 0x64, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6d, 0x65, 0x74, 0x68, 0x6f, 0x64, 0x12, 0x12, 0x0a, 0x04,
 	0x70, 0x61, 0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68,
 	0x12, 0x10, 0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75,
-	0x72, 0x6c, 0x12, 0x4b, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69,
-	0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74,
-	0x79, 0x52, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x12,
-	0x60, 0x0a, 0x13, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72,
-	0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f,
-	0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x13, 0x54, 0x72,
-	0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x57, 0x0a, 0x10, 0x70, 0x72, 0x6f, 0x78, 0x69, 0x65, 0x64, 0x5f, 0x65, 0x6e, 0x64,
-	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x50, 0x72, 0x6f, 0x78, 0x69, 0x65, 0x64, 0x45,
-	0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x0f, 0x70, 0x72, 0x6f, 0x78, 0x69,
-	0x65, 0x64, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x22, 0xd7, 0x01, 0x0a, 0x09, 0x49, 0x6e, 0x74, 0x65, 0x67, 0x72, 0x69, 0x74, 0x79,
-	0x12, 0x73, 0x0a, 0x1a, 0x61, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x5f, 0x73, 0x65,
-	0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x18, 0x65,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69,
-	0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x48, 0x00, 0x52, 0x18, 0x61, 0x75, 0x74,
-	0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x73, 0x12, 0x4d, 0x0a, 0x0c, 0x69, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62,
-	0x69, 0x6c, 0x69, 0x74, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69,
-	0x6c, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x0c, 0x69, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69,
-	0x6c, 0x69, 0x74, 0x79, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x51, 0x0a, 0x0e,
-	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3f,
-	0x0a, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f,
-	0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22,
-	0x0e, 0x0a, 0x0c, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x75, 0x62, 0x22,
-	0x6a, 0x0a, 0x0a, 0x4c, 0x33, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x12, 0x18, 0x0a,
-	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07,
-	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x69, 0x6e, 0x62, 0x6f, 0x75,
-	0x6e, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x69, 0x6e, 0x62, 0x6f, 0x75, 0x6e,
-	0x64, 0x12, 0x28, 0x0a, 0x0f, 0x72, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x65, 0x64, 0x50,
-	0x6f, 0x72, 0x74, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x72, 0x65, 0x73, 0x74,
-	0x72, 0x69, 0x63, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x72, 0x74, 0x73, 0x22, 0x0b, 0x0a, 0x09, 0x4f,
-	0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x25, 0x0a, 0x0b, 0x47, 0x65, 0x6f, 0x4c,
-	0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x67, 0x69, 0x6f,
-	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x22,
-	0x0e, 0x0a, 0x0c, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22,
-	0xa3, 0x04, 0x0a, 0x07, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x18, 0x0a, 0x07, 0x65,
-	0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e,
-	0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x4d, 0x0a, 0x0e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x49, 0x44, 0x52, 0x0e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x57, 0x0a, 0x10, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
-	0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x63, 0x74, 0x69, 0x76,
-	0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x0f, 0x61, 0x63,
-	0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x60, 0x0a,
-	0x13, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6c, 0x6f, 0x67,
-	0x67, 0x69, 0x6e, 0x67, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x12, 0x61, 0x70, 0x70,
-	0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12,
-	0x4b, 0x0a, 0x0c, 0x62, 0x6f, 0x6f, 0x74, 0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18,
-	0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x42, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52,
-	0x0b, 0x62, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x46, 0x0a, 0x0b,
-	0x6f, 0x5f, 0x73, 0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x68, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x24, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4f, 0x53,
-	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x09, 0x6f, 0x53, 0x4c, 0x6f, 0x67,
-	0x67, 0x69, 0x6e, 0x67, 0x12, 0x57, 0x0a, 0x10, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x0f, 0x72, 0x65,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x42, 0x06, 0x0a,
-	0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x63, 0x0a, 0x06, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x12,
-	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
-	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x3f, 0x0a, 0x07, 0x53, 0x74, 0x6f,
-	0x72, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49,
-	0x44, 0x52, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0xad, 0x04, 0x0a, 0x07, 0x43,
-	0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x12, 0x51, 0x0a, 0x10, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x10, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
-	0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x12, 0x54, 0x0a, 0x0f, 0x45, 0x6e, 0x63,
-	0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45,
-	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x52, 0x0f,
-	0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x12,
-	0x54, 0x0a, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69,
-	0x6e, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67,
-	0x67, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f,
-	0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x44, 0x0a, 0x09, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e,
-	0x65, 0x72, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x48, 0x00,
-	0x52, 0x09, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x12, 0x41, 0x0a, 0x08, 0x66,
-	0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x48, 0x00, 0x52, 0x08, 0x66, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x54,
-	0x0a, 0x0f, 0x76, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x5f, 0x6d, 0x61, 0x63, 0x68, 0x69, 0x6e,
-	0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x4d, 0x61, 0x63, 0x68, 0x69,
-	0x6e, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x76, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x4d, 0x61, 0x63,
-	0x68, 0x69, 0x6e, 0x65, 0x12, 0x3c, 0x0a, 0x07, 0x77, 0x65, 0x62, 0x5f, 0x61, 0x70, 0x70, 0x18,
-	0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x57, 0x65, 0x62, 0x41, 0x70, 0x70, 0x48, 0x00, 0x52, 0x06, 0x77, 0x65, 0x62, 0x41,
-	0x70, 0x70, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xd9, 0x01, 0x0a, 0x16, 0x43,
-	0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x4f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74, 0x72,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x24, 0x0a, 0x0d, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d,
-	0x65, 0x6e, 0x74, 0x55, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x6d, 0x61,
-	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x55, 0x72, 0x6c, 0x12, 0x54, 0x0a, 0x0f, 0x52,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67,
-	0x52, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e,
-	0x67, 0x12, 0x43, 0x0a, 0x09, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x18, 0x03,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x43, 0x6f, 0x6e,
-	0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x22, 0xe9, 0x02, 0x0a, 0x11, 0x44, 0x61, 0x74, 0x61, 0x62,
-	0x61, 0x73, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4f, 0x0a, 0x0f,
-	0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0f, 0x44, 0x61,
-	0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x4f, 0x0a,
-	0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0f, 0x44,
-	0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x57,
-	0x0a, 0x10, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x63, 0x6f, 0x6e, 0x6e, 0x65,
-	0x63, 0x74, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x43, 0x6f, 0x6e,
-	0x6e, 0x65, 0x63, 0x74, 0x48, 0x00, 0x52, 0x0f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65,
-	0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x12, 0x51, 0x0a, 0x0e, 0x64, 0x61, 0x74, 0x61, 0x62,
-	0x61, 0x73, 0x65, 0x5f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x28, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x61, 0x74, 0x61,
-	0x62, 0x61, 0x73, 0x65, 0x51, 0x75, 0x65, 0x72, 0x79, 0x48, 0x00, 0x52, 0x0d, 0x64, 0x61, 0x74,
-	0x61, 0x62, 0x61, 0x73, 0x65, 0x51, 0x75, 0x65, 0x72, 0x79, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x22, 0x61, 0x0a, 0x12, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67,
-	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4b, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70,
-	0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45,
-	0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64,
-	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x13, 0x0a, 0x11, 0x48, 0x74, 0x74, 0x70, 0x43, 0x6c, 0x69,
-	0x65, 0x6e, 0x74, 0x4c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x22, 0x11, 0x0a, 0x0f, 0x41, 0x63,
-	0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x10, 0x0a,
-	0x0e, 0x44, 0x44, 0x6f, 0x53, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x22,
-	0x08, 0x0a, 0x06, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x22, 0x09, 0x0a, 0x07, 0x56, 0x4d, 0x49,
-	0x6d, 0x61, 0x67, 0x65, 0x22, 0x8c, 0x04, 0x0a, 0x0e, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c,
-	0x4d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x12, 0x49, 0x0a, 0x0c, 0x42, 0x6c, 0x6f, 0x63, 0x6b,
-	0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x25, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x49, 0x44, 0x52, 0x0c, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61,
-	0x67, 0x65, 0x12, 0x54, 0x0a, 0x0f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f,
-	0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
-	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74,
-	0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x6f, 0x0a, 0x18, 0x41, 0x75, 0x74, 0x6f,
-	0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63,
-	0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x52,
-	0x18, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69,
-	0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x12, 0x48, 0x0a, 0x0b, 0x42, 0x6f, 0x6f,
-	0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x6f, 0x6f, 0x74, 0x4c,
-	0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0b, 0x42, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67,
-	0x69, 0x6e, 0x67, 0x12, 0x5a, 0x0a, 0x11, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72,
-	0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4d, 0x61, 0x6c, 0x77, 0x61,
-	0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x11, 0x4d, 0x61,
-	0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x42, 0x0a, 0x09, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x06, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x24, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4f,
-	0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67,
-	0x69, 0x6e, 0x67, 0x22, 0xc1, 0x02, 0x0a, 0x0c, 0x41, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69,
-	0x6c, 0x69, 0x74, 0x79, 0x12, 0x3b, 0x0a, 0x06, 0x62, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x18, 0x65,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x48, 0x00, 0x52, 0x06, 0x62, 0x61, 0x63, 0x6b, 0x75,
-	0x70, 0x12, 0x56, 0x0a, 0x11, 0x64, 0x5f, 0x64, 0x6f, 0x5f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74,
-	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x44, 0x6f, 0x53, 0x50, 0x72, 0x6f,
-	0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0e, 0x64, 0x44, 0x6f, 0x53, 0x50,
-	0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4b, 0x0a, 0x0c, 0x67, 0x65, 0x6f,
-	0x5f, 0x6c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x47, 0x65, 0x6f, 0x4c,
-	0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0b, 0x67, 0x65, 0x6f, 0x4c, 0x6f,
-	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x47, 0x0a, 0x0a, 0x72, 0x65, 0x64, 0x75, 0x6e, 0x64,
-	0x61, 0x6e, 0x63, 0x79, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63,
-	0x79, 0x48, 0x00, 0x52, 0x0a, 0x72, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x42,
-	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x61, 0x0a, 0x10, 0x4e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x12, 0x4d, 0x0a, 0x0e, 0x4e,
-	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0e, 0x4e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x06, 0x0a, 0x04, 0x41, 0x42,
-	0x41, 0x43, 0x22, 0x5e, 0x0a, 0x11, 0x41, 0x63, 0x63, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x74,
-	0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x41, 0x0a, 0x08, 0x66, 0x69, 0x72, 0x65, 0x77,
-	0x61, 0x6c, 0x6c, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x48, 0x00,
-	0x52, 0x08, 0x66, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x22, 0x19, 0x0a, 0x17, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x44, 0x61,
-	0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x0d, 0x0a,
-	0x0b, 0x42, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x0d, 0x0a, 0x0b,
-	0x46, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x0f, 0x0a, 0x0d, 0x4f,
-	0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0xf8, 0x02, 0x0a,
-	0x09, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x5d, 0x0a, 0x12, 0x64, 0x61,
-	0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x11, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65,
-	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4b, 0x0a, 0x0c, 0x68, 0x74, 0x74,
-	0x70, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x00, 0x52, 0x0b, 0x68, 0x74, 0x74, 0x70, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4e, 0x0a, 0x0d, 0x6c, 0x6f, 0x67, 0x5f, 0x6f, 0x70,
-	0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4c, 0x6f, 0x67, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0c, 0x6c, 0x6f, 0x67, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x67, 0x0a, 0x16, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74,
-	0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x00, 0x52, 0x14, 0x6f, 0x62, 0x6a, 0x65, 0x63,
-	0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42,
-	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x90, 0x02, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f,
-	0x75, 0x72, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x12, 0x4a, 0x0a, 0x0b, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52,
-	0x0b, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x51, 0x0a, 0x0e,
-	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x5f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x66,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x48, 0x00,
-	0x52, 0x0d, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12,
-	0x41, 0x0a, 0x08, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x67, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x23, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x6f,
-	0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x08, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65,
-	0x6e, 0x74, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x6b, 0x0a, 0x0a, 0x48, 0x74,
-	0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x5d, 0x0a, 0x12, 0x48, 0x74, 0x74, 0x70,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61, 0x6e, 0x64,
-	0x6c, 0x65, 0x72, 0x52, 0x12, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x22, 0x50, 0x0a, 0x18, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
-	0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x1a, 0x0a,
-	0x08, 0x65, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52,
-	0x08, 0x65, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x64, 0x22, 0xb7, 0x03, 0x0a, 0x0e, 0x4e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3f, 0x0a, 0x07,
-	0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x12, 0x60, 0x0a,
-	0x13, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74,
-	0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x13, 0x54, 0x72, 0x61, 0x6e,
-	0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x4e, 0x0a, 0x0d, 0x6c, 0x6f, 0x61, 0x64, 0x5f, 0x62, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72,
-	0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x48,
-	0x00, 0x52, 0x0c, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x12,
-	0x54, 0x0a, 0x0f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x54, 0x0a, 0x0f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
-	0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61,
-	0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x73, 0x74, 0x6f,
-	0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x22, 0xaf, 0x05, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69,
-	0x63, 0x69, 0x74, 0x79, 0x12, 0x85, 0x01, 0x0a, 0x20, 0x63, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69,
-	0x63, 0x61, 0x74, 0x65, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x65,
-	0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x39, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x43, 0x65, 0x72, 0x74,
-	0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68,
-	0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x1e, 0x63, 0x65,
-	0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75,
-	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x73, 0x0a, 0x1a,
-	0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x75, 0x74, 0x68,
-	0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x33, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x6f, 0x6b,
-	0x65, 0x6e, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x18, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x61,
-	0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x5a, 0x0a, 0x11, 0x6e, 0x6f, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69,
-	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4e, 0x6f, 0x41, 0x75, 0x74, 0x68, 0x65,
-	0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x10, 0x6e, 0x6f, 0x41,
-	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x6f, 0x0a,
-	0x1a, 0x6f, 0x5f, 0x74, 0x5f, 0x70, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x64, 0x5f, 0x61, 0x75, 0x74,
-	0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x68, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x31, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4f, 0x54,
-	0x50, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x16, 0x6f, 0x54, 0x50, 0x42, 0x61, 0x73, 0x65, 0x64,
-	0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x7c,
-	0x0a, 0x1d, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x5f, 0x62, 0x61, 0x73, 0x65, 0x64,
-	0x5f, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x36, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41,
-	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52,
-	0x1b, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75,
-	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4f, 0x0a, 0x0e,
-	0x73, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x5f, 0x73, 0x69, 0x67, 0x6e, 0x5f, 0x6f, 0x6e, 0x18, 0x6a,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x53, 0x69, 0x67, 0x6e, 0x4f, 0x6e, 0x48, 0x00, 0x52,
-	0x0c, 0x73, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x53, 0x69, 0x67, 0x6e, 0x4f, 0x6e, 0x42, 0x06, 0x0a,
-	0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x0a, 0x0a, 0x08, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0x90, 0x02, 0x0a, 0x0d, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c,
-	0x69, 0x74, 0x79, 0x12, 0x4e, 0x0a, 0x0d, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x65, 0x6e, 0x64, 0x70,
-	0x6f, 0x69, 0x6e, 0x74, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f,
-	0x69, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x0c, 0x68, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f,
-	0x69, 0x6e, 0x74, 0x12, 0x61, 0x0a, 0x14, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x72, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x5f, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x18, 0x66, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x2d, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74,
-	0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72,
-	0x48, 0x00, 0x52, 0x12, 0x68, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48,
-	0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x12, 0x44, 0x0a, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48,
-	0x00, 0x52, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x06, 0x0a, 0x04,
-	0x74, 0x79, 0x70, 0x65, 0x22, 0x4c, 0x0a, 0x0c, 0x4c, 0x6f, 0x67, 0x4f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3c, 0x0a, 0x07, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x4c, 0x6f, 0x67, 0x67, 0x69,
-	0x6e, 0x67, 0x22, 0x8c, 0x01, 0x0a, 0x11, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72,
-	0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62,
-	0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
-	0x65, 0x64, 0x12, 0x5d, 0x0a, 0x12, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69,
-	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x12, 0x41,
-	0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e,
-	0x67, 0x22, 0x27, 0x0a, 0x0d, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x79, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x08, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x79, 0x22, 0xcb, 0x01, 0x0a, 0x08, 0x46,
-	0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x12, 0x48, 0x0a, 0x0b, 0x6c, 0x33, 0x5f, 0x66, 0x69,
-	0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4c, 0x33, 0x46, 0x69, 0x72, 0x65, 0x77,
-	0x61, 0x6c, 0x6c, 0x48, 0x00, 0x52, 0x0a, 0x6c, 0x33, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c,
-	0x6c, 0x12, 0x6d, 0x0a, 0x18, 0x77, 0x65, 0x62, 0x5f, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x18, 0x66, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x57, 0x65, 0x62, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x69,
-	0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x48, 0x00, 0x52, 0x16, 0x77, 0x65, 0x62, 0x41, 0x70, 0x70,
-	0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c,
-	0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x3b, 0x0a, 0x1b, 0x50, 0x61, 0x73, 0x73,
-	0x77, 0x6f, 0x72, 0x64, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74,
-	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76,
-	0x61, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x61, 0x63, 0x74, 0x69,
-	0x76, 0x61, 0x74, 0x65, 0x64, 0x22, 0x10, 0x0a, 0x0e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72,
-	0x64, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x22, 0x11, 0x0a, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x28, 0x0a, 0x0c, 0x53, 0x69,
-	0x6e, 0x67, 0x6c, 0x65, 0x53, 0x69, 0x67, 0x6e, 0x4f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e,
-	0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61,
-	0x62, 0x6c, 0x65, 0x64, 0x22, 0x13, 0x0a, 0x11, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x53,
-	0x75, 0x62, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x22, 0x0c, 0x0a, 0x0a, 0x52, 0x65, 0x64,
-	0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x22, 0x3a, 0x0a, 0x1e, 0x43, 0x65, 0x72, 0x74, 0x69,
-	0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65,
-	0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61,
-	0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62,
-	0x6c, 0x65, 0x64, 0x22, 0x05, 0x0a, 0x03, 0x4a, 0x6f, 0x62, 0x22, 0x12, 0x0a, 0x10, 0x4e, 0x6f,
-	0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x63,
-	0x0a, 0x14, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4b, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e,
-	0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64,
-	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f,
-	0x69, 0x6e, 0x74, 0x22, 0x2f, 0x0a, 0x15, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x4b,
-	0x65, 0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06,
-	0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6b, 0x65,
-	0x79, 0x55, 0x72, 0x6c, 0x22, 0x1b, 0x0a, 0x19, 0x44, 0x65, 0x76, 0x69, 0x63, 0x65, 0x50, 0x72,
-	0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x22, 0x57, 0x0a, 0x08, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x4b, 0x0a,
-	0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x52, 0x0c, 0x41, 0x75,
-	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x22, 0x16, 0x0a, 0x14, 0x4d, 0x61,
-	0x6e, 0x61, 0x67, 0x65, 0x64, 0x4b, 0x65, 0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69,
-	0x6f, 0x6e, 0x22, 0x10, 0x0a, 0x0e, 0x52, 0x6f, 0x6c, 0x65, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e,
-	0x6d, 0x65, 0x6e, 0x74, 0x22, 0x0a, 0x0a, 0x08, 0x57, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77,
-	0x22, 0x9f, 0x04, 0x0a, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x4b, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70,
-	0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f,
-	0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e,
-	0x74, 0x12, 0x5a, 0x0a, 0x11, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74,
-	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65,
-	0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x11, 0x4d, 0x61, 0x6c, 0x77,
-	0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x70, 0x0a,
-	0x19, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61,
-	0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x32, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x6f, 0x63,
-	0x75, 0x6d, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x17, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74,
-	0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
-	0x71, 0x0a, 0x1a, 0x6b, 0x65, 0x79, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x5f, 0x64, 0x61, 0x74,
-	0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x66, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x4b, 0x65, 0x79, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x17, 0x6b, 0x65, 0x79, 0x56, 0x61,
-	0x6c, 0x75, 0x65, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x12, 0x76, 0x0a, 0x1b, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c,
-	0x5f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x44, 0x61,
-	0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52,
-	0x19, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x44, 0x61, 0x74, 0x61, 0x62,
-	0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x22, 0xbf, 0x01, 0x0a, 0x12, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74,
-	0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x48, 0x0a,
-	0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
-	0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x41, 0x70, 0x70, 0x6c,
-	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4b, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45,
-	0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e,
-	0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70,
-	0x6f, 0x69, 0x6e, 0x74, 0x22, 0x1b, 0x0a, 0x19, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x61, 0x6c, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x22, 0x89, 0x01, 0x0a, 0x13, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45,
-	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x6c, 0x67,
-	0x6f, 0x72, 0x69, 0x74, 0x68, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x6c,
-	0x67, 0x6f, 0x72, 0x69, 0x74, 0x68, 0x6d, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
-	0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x64, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x64, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x08, 0x52, 0x08, 0x65, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x64, 0x12, 0x1e, 0x0a,
-	0x0a, 0x74, 0x6c, 0x73, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x0a, 0x74, 0x6c, 0x73, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x22, 0x10, 0x0a,
-	0x0e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x22,
-	0x08, 0x0a, 0x06, 0x57, 0x65, 0x62, 0x41, 0x70, 0x70, 0x22, 0x8d, 0x02, 0x0a, 0x08, 0x41, 0x75,
-	0x64, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x12, 0x5a, 0x0a, 0x11, 0x61, 0x6e, 0x6f, 0x6d, 0x61, 0x6c,
-	0x79, 0x5f, 0x64, 0x65, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x2b, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e,
-	0x6f, 0x6d, 0x61, 0x6c, 0x79, 0x44, 0x65, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00,
-	0x52, 0x10, 0x61, 0x6e, 0x6f, 0x6d, 0x61, 0x6c, 0x79, 0x44, 0x65, 0x74, 0x65, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x3e, 0x0a, 0x07, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x66, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x07, 0x6c, 0x6f, 0x67, 0x67, 0x69,
-	0x6e, 0x67, 0x12, 0x5d, 0x0a, 0x12, 0x6d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65, 0x5f, 0x70, 0x72,
-	0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4d, 0x61, 0x6c, 0x77, 0x61,
-	0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x11,
-	0x6d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x34, 0x0a, 0x18, 0x41, 0x75, 0x74,
-	0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22,
-	0xea, 0x02, 0x0a, 0x0c, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x61, 0x62, 0x6c, 0x65,
-	0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x08, 0x52, 0x09, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61, 0x74, 0x65, 0x64, 0x12, 0x4b,
-	0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x72, 0x6c, 0x12, 0x47, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69,
+	0x74, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
 	0x2e, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x52, 0x0c, 0x41,
-	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x12, 0x4e, 0x0a, 0x0d, 0x41,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0d, 0x41, 0x75,
-	0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x41, 0x0a, 0x08, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x48, 0x00, 0x52, 0x08, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x54,
-	0x0a, 0x0f, 0x72, 0x6f, 0x6c, 0x65, 0x5f, 0x61, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e,
-	0x74, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x52, 0x6f, 0x6c, 0x65, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x6d, 0x65,
-	0x6e, 0x74, 0x48, 0x00, 0x52, 0x0e, 0x72, 0x6f, 0x6c, 0x65, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e,
-	0x6d, 0x65, 0x6e, 0x74, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xe5, 0x03, 0x0a,
-	0x0a, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x12, 0x5a, 0x0a, 0x11, 0x6e,
-	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65,
-	0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66,
-	0x61, 0x63, 0x65, 0x48, 0x00, 0x52, 0x10, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x49, 0x6e,
-	0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x12, 0x67, 0x0a, 0x16, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x5f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x5f, 0x67, 0x72, 0x6f, 0x75,
-	0x70, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x63, 0x75, 0x72,
-	0x69, 0x74, 0x79, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x48, 0x00, 0x52, 0x14, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x47, 0x72, 0x6f, 0x75, 0x70,
-	0x12, 0x54, 0x0a, 0x0f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x5f, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x54, 0x0a, 0x0f, 0x76, 0x69, 0x72, 0x74, 0x75, 0x61,
-	0x6c, 0x5f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x29, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x56, 0x69, 0x72, 0x74,
-	0x75, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x48, 0x00, 0x52, 0x0e, 0x76, 0x69,
-	0x72, 0x74, 0x75, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x12, 0x5e, 0x0a, 0x13,
-	0x76, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x5f, 0x73, 0x75, 0x62, 0x5f, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x53, 0x75, 0x62,
-	0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x48, 0x00, 0x52, 0x11, 0x76, 0x69, 0x72, 0x74, 0x75,
-	0x61, 0x6c, 0x53, 0x75, 0x62, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x42, 0x06, 0x0a, 0x04,
-	0x74, 0x79, 0x70, 0x65, 0x22, 0xea, 0x03, 0x0a, 0x0f, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74,
-	0x79, 0x46, 0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x41, 0x0a, 0x08, 0x61, 0x75, 0x64, 0x69,
-	0x74, 0x69, 0x6e, 0x67, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6f, 0x77, 0x6c,
-	0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x75, 0x64, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x48,
-	0x00, 0x52, 0x08, 0x61, 0x75, 0x64, 0x69, 0x74, 0x69, 0x6e, 0x67, 0x12, 0x4d, 0x0a, 0x0c, 0x61,
-	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x18, 0x66, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x75,
-	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x0c, 0x61, 0x75,
-	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x12, 0x50, 0x0a, 0x0d, 0x61, 0x75,
-	0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x28, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x75,
-	0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0d, 0x61,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4d, 0x0a, 0x0c,
-	0x61, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x18, 0x68, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
-	0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x0c, 0x61,
-	0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x56, 0x0a, 0x0f, 0x63,
-	0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x18, 0x69,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x74, 0x79,
-	0x48, 0x00, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
-	0x69, 0x74, 0x79, 0x12, 0x44, 0x0a, 0x09, 0x69, 0x6e, 0x74, 0x65, 0x67, 0x72, 0x69, 0x74, 0x79,
-	0x18, 0x6a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x49, 0x6e, 0x74, 0x65, 0x67, 0x72, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x09,
-	0x69, 0x6e, 0x74, 0x65, 0x67, 0x72, 0x69, 0x74, 0x79, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70,
-	0x65, 0x22, 0xfe, 0x02, 0x0a, 0x0e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x3f, 0x0a, 0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x53, 0x74,
-	0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x57, 0x0a, 0x10, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73,
-	0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x61, 0x74, 0x61,
-	0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0f, 0x64,
-	0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x61,
-	0x0a, 0x14, 0x66, 0x69, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x5f, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f,
-	0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x12, 0x66,
-	0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x12, 0x67, 0x0a, 0x16, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x73, 0x74, 0x6f, 0x72,
-	0x61, 0x67, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x2f, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4f, 0x62,
-	0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x48, 0x00, 0x52, 0x14, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72,
-	0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x22, 0x10, 0x0a, 0x0e, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x4e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x22, 0xd5, 0x01, 0x0a, 0x03, 0x49, 0x6f, 0x54, 0x12, 0x76, 0x0a, 0x1b,
-	0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e,
-	0x69, 0x6e, 0x67, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x34, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x65,
-	0x76, 0x69, 0x63, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e, 0x67,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x19, 0x64, 0x65, 0x76, 0x69, 0x63,
-	0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x4e, 0x0a, 0x0d, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x69, 0x6e,
-	0x67, 0x5f, 0x68, 0x75, 0x62, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x69, 0x6e,
-	0x67, 0x48, 0x75, 0x62, 0x48, 0x00, 0x52, 0x0c, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x69, 0x6e,
-	0x67, 0x48, 0x75, 0x62, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x06, 0x0a, 0x04,
-	0x52, 0x42, 0x41, 0x43, 0x22, 0x60, 0x0a, 0x08, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74,
-	0x12, 0x54, 0x0a, 0x0f, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x46, 0x65, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x46, 0x65,
-	0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x0f, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x46,
-	0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x22, 0x28, 0x0a, 0x0c, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61,
-	0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
-	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64,
-	0x22, 0x36, 0x0a, 0x16, 0x4f, 0x54, 0x50, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68,
-	0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63,
-	0x74, 0x69, 0x76, 0x61, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x61,
-	0x63, 0x74, 0x69, 0x76, 0x61, 0x74, 0x65, 0x64, 0x22, 0xff, 0x04, 0x0a, 0x07, 0x53, 0x74, 0x6f,
-	0x72, 0x61, 0x67, 0x65, 0x12, 0x39, 0x0a, 0x06, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x18, 0x01,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x12, 0x5c, 0x0a, 0x13, 0x54,
+	0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x13, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45,
+	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x53, 0x0a, 0x10, 0x70, 0x72, 0x6f,
+	0x78, 0x69, 0x65, 0x64, 0x5f, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x65, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x78,
+	0x69, 0x65, 0x64, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x0f, 0x70,
+	0x72, 0x6f, 0x78, 0x69, 0x65, 0x64, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x42, 0x06,
+	0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xe5, 0x01, 0x0a, 0x05, 0x49, 0x6d, 0x61, 0x67, 0x65,
+	0x12, 0x44, 0x0a, 0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70,
+	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69,
+	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x50, 0x0a, 0x0f, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69,
+	0x6e, 0x65, 0x72, 0x5f, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x25, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65,
+	0x72, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69,
+	0x6e, 0x65, 0x72, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x3c, 0x0a, 0x09, 0x76, 0x5f, 0x6d, 0x5f,
+	0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x56, 0x4d, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x07, 0x76,
+	0x4d, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x8b,
+	0x04, 0x0a, 0x07, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e,
+	0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61,
+	0x62, 0x6c, 0x65, 0x64, 0x12, 0x49, 0x0a, 0x0e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52,
+	0x0e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x53, 0x0a, 0x10, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x5f, 0x6c, 0x6f, 0x67, 0x67,
+	0x69, 0x6e, 0x67, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e,
+	0x67, 0x48, 0x00, 0x52, 0x0f, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67,
+	0x67, 0x69, 0x6e, 0x67, 0x12, 0x5c, 0x0a, 0x13, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x66, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x29, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x12,
+	0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69,
+	0x6e, 0x67, 0x12, 0x47, 0x0a, 0x0c, 0x62, 0x6f, 0x6f, 0x74, 0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69,
+	0x6e, 0x67, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x42, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x0b,
+	0x62, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x42, 0x0a, 0x0b, 0x6f,
+	0x5f, 0x73, 0x5f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x20, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69,
+	0x6e, 0x67, 0x48, 0x00, 0x52, 0x09, 0x6f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12,
+	0x53, 0x0a, 0x10, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x6c, 0x6f, 0x67, 0x67,
+	0x69, 0x6e, 0x67, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e,
+	0x67, 0x48, 0x00, 0x52, 0x0f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67,
+	0x67, 0x69, 0x6e, 0x67, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xdf, 0x04, 0x0a,
+	0x07, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x35, 0x0a, 0x06, 0x42, 0x61, 0x63, 0x6b,
+	0x75, 0x70, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
 	0x2e, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x52, 0x06, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x12,
-	0x4b, 0x0a, 0x0c, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x52, 0x0c,
-	0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x45, 0x0a, 0x0a,
-	0x52, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x25, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x64,
-	0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x52, 0x0a, 0x52, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61,
-	0x6e, 0x63, 0x79, 0x12, 0x54, 0x0a, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c,
-	0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x4e, 0x0a, 0x0d, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x6c, 0x6f,
+	0x47, 0x0a, 0x0c, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x49, 0x6d,
+	0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x52, 0x0c, 0x49, 0x6d, 0x6d, 0x75,
+	0x74, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x41, 0x0a, 0x0a, 0x52, 0x65, 0x64, 0x75,
+	0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x52,
+	0x0a, 0x52, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x12, 0x50, 0x0a, 0x0f, 0x52,
+	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x52, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x4a, 0x0a,
+	0x0d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x65,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x6c, 0x6f,
 	0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0c, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x57, 0x0a, 0x10, 0x64, 0x61, 0x74,
+	0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x53, 0x0a, 0x10, 0x64, 0x61, 0x74,
 	0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x66, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x48,
-	0x00, 0x52, 0x0f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61,
-	0x67, 0x65, 0x12, 0x4b, 0x0a, 0x0c, 0x66, 0x69, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61,
-	0x67, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
-	0x48, 0x00, 0x52, 0x0b, 0x66, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12,
-	0x51, 0x0a, 0x0e, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67,
-	0x65, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67,
-	0x65, 0x48, 0x00, 0x52, 0x0d, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61,
-	0x67, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x13, 0x0a, 0x11, 0x43, 0x6f,
-	0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x22,
-	0x5a, 0x0a, 0x0b, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4b,
-	0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48,
-	0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x14, 0x0a, 0x12, 0x41,
-	0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e,
-	0x67, 0x22, 0xbf, 0x02, 0x0a, 0x10, 0x41, 0x74, 0x52, 0x65, 0x73, 0x74, 0x45, 0x6e, 0x63, 0x72,
-	0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x6c, 0x67, 0x6f, 0x72, 0x69,
-	0x74, 0x68, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x6c, 0x67, 0x6f, 0x72,
-	0x69, 0x74, 0x68, 0x6d, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x16,
-	0x0a, 0x06, 0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
-	0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x12, 0x6a, 0x0a, 0x17, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d,
-	0x65, 0x72, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f,
-	0x6e, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x30, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x45,
+	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x61, 0x74, 0x61,
+	0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0f, 0x64,
+	0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x47,
+	0x0a, 0x0c, 0x66, 0x69, 0x6c, 0x65, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x67,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x69, 0x6c,
+	0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0b, 0x66, 0x69, 0x6c, 0x65,
+	0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x4d, 0x0a, 0x0e, 0x6f, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x24, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74,
+	0x6f, 0x72, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x0d, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53,
+	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x0e,
+	0x0a, 0x0c, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x1b,
+	0x0a, 0x19, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x44, 0x61, 0x74, 0x61,
+	0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0xd1, 0x01, 0x0a, 0x16,
+	0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x4f, 0x72, 0x63, 0x68, 0x65, 0x73, 0x74,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x24, 0x0a, 0x0d, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65,
+	0x6d, 0x65, 0x6e, 0x74, 0x55, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x6d,
+	0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x55, 0x72, 0x6c, 0x12, 0x50, 0x0a, 0x0f,
+	0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x52,
+	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x3f,
+	0x0a, 0x09, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x18, 0x03, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x22,
+	0xc3, 0x01, 0x0a, 0x08, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x12, 0x44, 0x0a, 0x0b,
+	0x6c, 0x33, 0x5f, 0x66, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x18, 0x65, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x33, 0x46, 0x69, 0x72, 0x65,
+	0x77, 0x61, 0x6c, 0x6c, 0x48, 0x00, 0x52, 0x0a, 0x6c, 0x33, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61,
+	0x6c, 0x6c, 0x12, 0x69, 0x0a, 0x18, 0x77, 0x65, 0x62, 0x5f, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x18, 0x66,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x65, 0x62,
+	0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x69, 0x72, 0x65, 0x77,
+	0x61, 0x6c, 0x6c, 0x48, 0x00, 0x52, 0x16, 0x77, 0x65, 0x62, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x42, 0x06, 0x0a,
+	0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xb0, 0x02, 0x0a, 0x09, 0x46, 0x72, 0x61, 0x6d, 0x65, 0x77,
+	0x6f, 0x72, 0x6b, 0x12, 0x40, 0x0a, 0x0b, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x5f, 0x73, 0x5f, 0x64,
+	0x5f, 0x6b, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x53, 0x44, 0x4b, 0x48, 0x00, 0x52, 0x08, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x53, 0x44, 0x4b, 0x12, 0x5a, 0x0a, 0x13, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x63, 0x6c,
+	0x69, 0x65, 0x6e, 0x74, 0x5f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x18, 0x66, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x43,
+	0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x48, 0x00, 0x52, 0x11,
+	0x68, 0x74, 0x74, 0x70, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x62, 0x72, 0x61, 0x72,
+	0x79, 0x12, 0x44, 0x0a, 0x0b, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72,
+	0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74,
+	0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48,
+	0x74, 0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x48, 0x00, 0x52, 0x0a, 0x68, 0x74, 0x74,
+	0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x37, 0x0a, 0x06, 0x6c, 0x6f, 0x67, 0x67, 0x65,
+	0x72, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x48, 0x00, 0x52, 0x06, 0x6c, 0x6f, 0x67, 0x67, 0x65, 0x72,
+	0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x73, 0x0a, 0x14, 0x4f, 0x62, 0x6a, 0x65,
+	0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x74, 0x79, 0x70, 0x65, 0x12, 0x47, 0x0a, 0x0d, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74,
+	0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0d,
+	0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x3a, 0x0a,
+	0x1e, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x42, 0x61, 0x73, 0x65,
+	0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x2f, 0x0a, 0x15, 0x43, 0x75, 0x73,
+	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x22, 0x2b, 0x0a, 0x0f, 0x45, 0x6e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x12, 0x18, 0x0a,
+	0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07,
+	0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x0a, 0x0a, 0x08, 0x46, 0x75, 0x6e, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x22, 0x50, 0x0a, 0x18, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x61, 0x73, 0x65,
+	0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x66,
+	0x6f, 0x72, 0x63, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x65, 0x6e, 0x66,
+	0x6f, 0x72, 0x63, 0x65, 0x64, 0x22, 0x0f, 0x0a, 0x0d, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53,
+	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x84, 0x02, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12,
+	0x46, 0x0a, 0x0b, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70, 0x70,
+	0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0b, 0x61, 0x70, 0x70, 0x6c,
+	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4d, 0x0a, 0x0e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x5f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x24, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x52, 0x65, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0d, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x52, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x3d, 0x0a, 0x08, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65,
+	0x6e, 0x74, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x08, 0x64, 0x6f, 0x63,
+	0x75, 0x6d, 0x65, 0x6e, 0x74, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x84, 0x01,
+	0x0a, 0x0b, 0x43, 0x49, 0x43, 0x44, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2e, 0x0a,
+	0x03, 0x6a, 0x6f, 0x62, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x4a, 0x6f, 0x62, 0x48, 0x00, 0x52, 0x03, 0x6a, 0x6f, 0x62, 0x12, 0x3d, 0x0a,
+	0x08, 0x77, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x1f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77,
+	0x48, 0x00, 0x52, 0x08, 0x77, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77, 0x42, 0x06, 0x0a, 0x04,
+	0x74, 0x79, 0x70, 0x65, 0x22, 0xb4, 0x01, 0x0a, 0x0c, 0x4c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c,
+	0x61, 0x6e, 0x63, 0x65, 0x72, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c, 0x12, 0x47, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45,
+	0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69,
+	0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
+	0x12, 0x49, 0x0a, 0x0e, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x0e, 0x4e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x48, 0x0a, 0x0c, 0x4c,
+	0x6f, 0x67, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x38, 0x0a, 0x07, 0x4c,
+	0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x4c, 0x6f,
+	0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x13, 0x0a, 0x11, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c,
+	0x53, 0x75, 0x62, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x22, 0x09, 0x0a, 0x07, 0x41, 0x63,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x5f, 0x0a, 0x06, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x3b, 0x0a, 0x07, 0x53, 0x74, 0x6f,
+	0x72, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x53,
+	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x19, 0x0a, 0x17, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65,
+	0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x22, 0x16, 0x0a, 0x14, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x64, 0x4b, 0x65, 0x79, 0x45,
+	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x8b, 0x04, 0x0a, 0x0f, 0x44, 0x61,
+	0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x47, 0x0a,
+	0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x74, 0x74, 0x70,
+	0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e,
+	0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x56, 0x0a, 0x11, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72,
+	0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72,
+	0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x11, 0x4d, 0x61, 0x6c,
+	0x77, 0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x6c,
+	0x0a, 0x19, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x62,
+	0x61, 0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x65, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x2e, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65,
+	0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x48, 0x00, 0x52, 0x17, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74,
+	0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x6d, 0x0a, 0x1a,
+	0x6b, 0x65, 0x79, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61,
+	0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x2e, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x65, 0x79, 0x56, 0x61, 0x6c, 0x75,
+	0x65, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x48, 0x00, 0x52, 0x17, 0x6b, 0x65, 0x79, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x44, 0x61, 0x74, 0x61,
+	0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x72, 0x0a, 0x1b, 0x72,
+	0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61,
+	0x73, 0x65, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x30, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x61, 0x6c, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x48, 0x00, 0x52, 0x19, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c,
+	0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42,
+	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x2b, 0x0a, 0x0f, 0x44, 0x61, 0x74, 0x61, 0x62,
+	0x61, 0x73, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x53, 0x74,
+	0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x53, 0x74, 0x6f,
+	0x72, 0x61, 0x67, 0x65, 0x22, 0x10, 0x0a, 0x0e, 0x52, 0x6f, 0x6c, 0x65, 0x41, 0x73, 0x73, 0x69,
+	0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x22, 0x13, 0x0a, 0x11, 0x48, 0x74, 0x74, 0x70, 0x43, 0x6c,
+	0x69, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x22, 0x0e, 0x0a, 0x0c, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x75, 0x62, 0x22, 0x10, 0x0a, 0x0e, 0x56,
+	0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x22, 0xd9, 0x02,
+	0x0a, 0x0f, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x74,
+	0x79, 0x12, 0x57, 0x0a, 0x12, 0x61, 0x74, 0x5f, 0x72, 0x65, 0x73, 0x74, 0x5f, 0x65, 0x6e, 0x63,
+	0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x74, 0x52, 0x65, 0x73, 0x74, 0x45, 0x6e, 0x63, 0x72,
+	0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x10, 0x61, 0x74, 0x52, 0x65, 0x73, 0x74,
+	0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x54, 0x0a, 0x11, 0x65, 0x6e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x18,
+	0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x6e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x48, 0x00, 0x52,
+	0x0f, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65,
+	0x12, 0x2e, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x65, 0x79, 0x48, 0x00, 0x52, 0x03, 0x6b, 0x65, 0x79,
+	0x12, 0x5f, 0x0a, 0x14, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x5f, 0x65, 0x6e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a,
+	0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c,
+	0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74,
+	0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x13, 0x74, 0x72,
+	0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x5d, 0x0a, 0x12, 0x46, 0x69, 0x6c,
+	0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x47, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x74,
+	0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70,
+	0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x0d, 0x0a, 0x0b, 0x42, 0x6f, 0x6f, 0x74,
+	0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x0a, 0x0a, 0x08, 0x4b, 0x65, 0x79, 0x56, 0x61,
+	0x75, 0x6c, 0x74, 0x22, 0x0a, 0x0a, 0x08, 0x57, 0x6f, 0x72, 0x6b, 0x66, 0x6c, 0x6f, 0x77, 0x22,
+	0x5c, 0x0a, 0x08, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x50, 0x0a, 0x0f, 0x53,
+	0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x46, 0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x63,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x46, 0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x0f, 0x53, 0x65,
+	0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x46, 0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x22, 0x0d, 0x0a,
+	0x0b, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x06, 0x0a, 0x04,
+	0x52, 0x42, 0x41, 0x43, 0x22, 0x81, 0x02, 0x0a, 0x08, 0x41, 0x75, 0x64, 0x69, 0x74, 0x69, 0x6e,
+	0x67, 0x12, 0x56, 0x0a, 0x11, 0x61, 0x6e, 0x6f, 0x6d, 0x61, 0x6c, 0x79, 0x5f, 0x64, 0x65, 0x74,
+	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x6e, 0x6f, 0x6d, 0x61, 0x6c, 0x79, 0x44, 0x65, 0x74, 0x65,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x10, 0x61, 0x6e, 0x6f, 0x6d, 0x61, 0x6c, 0x79,
+	0x44, 0x65, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3a, 0x0a, 0x07, 0x6c, 0x6f, 0x67,
+	0x67, 0x69, 0x6e, 0x67, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x07, 0x6c, 0x6f,
+	0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x59, 0x0a, 0x12, 0x6d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65,
+	0x5f, 0x70, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72,
+	0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x11, 0x6d,
+	0x61, 0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xb1, 0x02, 0x0a, 0x0c, 0x41, 0x76, 0x61,
+	0x69, 0x6c, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x37, 0x0a, 0x06, 0x62, 0x61, 0x63,
+	0x6b, 0x75, 0x70, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x48, 0x00, 0x52, 0x06, 0x62, 0x61, 0x63, 0x6b,
+	0x75, 0x70, 0x12, 0x52, 0x0a, 0x11, 0x64, 0x5f, 0x64, 0x6f, 0x5f, 0x73, 0x5f, 0x70, 0x72, 0x6f,
+	0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x44, 0x6f, 0x53, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63,
+	0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0e, 0x64, 0x44, 0x6f, 0x53, 0x50, 0x72, 0x6f, 0x74,
+	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x47, 0x0a, 0x0c, 0x67, 0x65, 0x6f, 0x5f, 0x6c, 0x6f,
+	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x48, 0x00, 0x52, 0x0b, 0x67, 0x65, 0x6f, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x43, 0x0a, 0x0a, 0x72, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x18, 0x68, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x64, 0x75,
+	0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x48, 0x00, 0x52, 0x0a, 0x72, 0x65, 0x64, 0x75, 0x6e, 0x64,
+	0x61, 0x6e, 0x63, 0x79, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x32, 0x0a, 0x16,
+	0x57, 0x65, 0x62, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x69,
+	0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64,
+	0x22, 0x5a, 0x0a, 0x11, 0x41, 0x63, 0x63, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3d, 0x0a, 0x08, 0x66, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c,
+	0x6c, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x46, 0x69, 0x72, 0x65, 0x77, 0x61, 0x6c, 0x6c, 0x48, 0x00, 0x52, 0x08, 0x66, 0x69, 0x72, 0x65,
+	0x77, 0x61, 0x6c, 0x6c, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x67, 0x0a, 0x0a,
+	0x48, 0x74, 0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x59, 0x0a, 0x12, 0x48, 0x74,
+	0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74,
+	0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48,
+	0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65,
+	0x72, 0x52, 0x12, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61,
+	0x6e, 0x64, 0x6c, 0x65, 0x72, 0x22, 0x08, 0x0a, 0x06, 0x57, 0x65, 0x62, 0x41, 0x70, 0x70, 0x22,
+	0x91, 0x04, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x12, 0x4d, 0x0a, 0x10, 0x4e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x10, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x12, 0x50, 0x0a, 0x0f, 0x45, 0x6e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x6e, 0x63, 0x72,
+	0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x52, 0x0f, 0x45, 0x6e, 0x63,
+	0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x12, 0x50, 0x0a, 0x0f,
+	0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x52,
+	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x40,
+	0x0a, 0x09, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72, 0x18, 0x65, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x20, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69,
+	0x6e, 0x65, 0x72, 0x48, 0x00, 0x52, 0x09, 0x63, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72,
+	0x12, 0x3d, 0x0a, 0x08, 0x66, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x75, 0x6e, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x08, 0x66, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x50, 0x0a, 0x0f, 0x76, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x5f, 0x6d, 0x61, 0x63, 0x68, 0x69,
+	0x6e, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x4d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x48,
+	0x00, 0x52, 0x0e, 0x76, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x4d, 0x61, 0x63, 0x68, 0x69, 0x6e,
+	0x65, 0x12, 0x38, 0x0a, 0x07, 0x77, 0x65, 0x62, 0x5f, 0x61, 0x70, 0x70, 0x18, 0x68, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x65, 0x62, 0x41, 0x70,
+	0x70, 0x48, 0x00, 0x52, 0x06, 0x77, 0x65, 0x62, 0x41, 0x70, 0x70, 0x42, 0x06, 0x0a, 0x04, 0x74,
+	0x79, 0x70, 0x65, 0x22, 0x28, 0x0a, 0x0c, 0x49, 0x6d, 0x6d, 0x75, 0x74, 0x61, 0x62, 0x69, 0x6c,
+	0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x0c, 0x0a,
+	0x0a, 0x52, 0x65, 0x64, 0x75, 0x6e, 0x64, 0x61, 0x6e, 0x63, 0x79, 0x22, 0xe8, 0x02, 0x0a, 0x09,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x59, 0x0a, 0x12, 0x64, 0x61, 0x74,
+	0x61, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x61,
+	0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48,
+	0x00, 0x52, 0x11, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x47, 0x0a, 0x0c, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x72, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x00,
+	0x52, 0x0b, 0x68, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4a, 0x0a,
+	0x0d, 0x6c, 0x6f, 0x67, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x0c, 0x6c, 0x6f, 0x67,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x63, 0x0a, 0x16, 0x6f, 0x62, 0x6a,
+	0x65, 0x63, 0x74, 0x5f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x5f, 0x72, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x00, 0x52, 0x14, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74,
+	0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42, 0x06,
+	0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xf4, 0x03, 0x0a, 0x0e, 0x56, 0x69, 0x72, 0x74, 0x75,
+	0x61, 0x6c, 0x4d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x12, 0x45, 0x0a, 0x0c, 0x42, 0x6c, 0x6f,
+	0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x49, 0x44, 0x52, 0x0c, 0x42, 0x6c, 0x6f, 0x63, 0x6b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
+	0x12, 0x50, 0x0a, 0x0f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67,
+	0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e,
+	0x67, 0x52, 0x0f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67, 0x69,
+	0x6e, 0x67, 0x12, 0x6b, 0x0a, 0x18, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53,
+	0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74,
+	0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x73, 0x52, 0x18, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63,
+	0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x12,
+	0x44, 0x0a, 0x0b, 0x42, 0x6f, 0x6f, 0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x6f, 0x6f,
+	0x74, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x0b, 0x42, 0x6f, 0x6f, 0x74, 0x4c, 0x6f,
+	0x67, 0x67, 0x69, 0x6e, 0x67, 0x12, 0x56, 0x0a, 0x11, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65,
+	0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x61, 0x6c, 0x77, 0x61, 0x72, 0x65,
+	0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x11, 0x4d, 0x61, 0x6c, 0x77,
+	0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3e, 0x0a,
+	0x09, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x20, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69,
+	0x6e, 0x67, 0x52, 0x09, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x10, 0x0a,
+	0x0e, 0x44, 0x44, 0x6f, 0x53, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x22,
+	0x0b, 0x0a, 0x09, 0x4f, 0x53, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0x35, 0x0a, 0x0f,
+	0x50, 0x72, 0x6f, 0x78, 0x69, 0x65, 0x64, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x12,
+	0x22, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f,
+	0x69, 0x6e, 0x74, 0x22, 0x34, 0x0a, 0x18, 0x41, 0x75, 0x74, 0x6f, 0x6d, 0x61, 0x74, 0x69, 0x63,
+	0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x73, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x22, 0x88, 0x01, 0x0a, 0x11, 0x4d, 0x61,
+	0x6c, 0x77, 0x61, 0x72, 0x65, 0x50, 0x72, 0x6f, 0x74, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12, 0x59, 0x0a, 0x12, 0x41, 0x70, 0x70,
+	0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f,
+	0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70,
+	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67,
+	0x52, 0x12, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67,
+	0x67, 0x69, 0x6e, 0x67, 0x22, 0x09, 0x0a, 0x07, 0x56, 0x4d, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x22,
+	0xde, 0x01, 0x0a, 0x0d, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x34, 0x0a, 0x07, 0x61, 0x5f, 0x62, 0x5f, 0x61, 0x5f, 0x63, 0x18, 0x65, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x42, 0x41, 0x43, 0x48,
+	0x00, 0x52, 0x04, 0x61, 0x42, 0x41, 0x43, 0x12, 0x59, 0x0a, 0x12, 0x61, 0x63, 0x63, 0x65, 0x73,
+	0x73, 0x5f, 0x72, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x63, 0x63, 0x65,
+	0x73, 0x73, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52,
+	0x11, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x34, 0x0a, 0x07, 0x72, 0x5f, 0x62, 0x5f, 0x61, 0x5f, 0x63, 0x18, 0x67, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x42, 0x41, 0x43,
+	0x48, 0x00, 0x52, 0x04, 0x72, 0x42, 0x41, 0x43, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65,
+	0x22, 0x27, 0x0a, 0x0d, 0x44, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x79, 0x22, 0x3b, 0x0a, 0x1b, 0x50, 0x61, 0x73,
+	0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x61, 0x73, 0x65, 0x64, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e,
+	0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x63, 0x74, 0x69,
+	0x76, 0x61, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x61, 0x63, 0x74,
+	0x69, 0x76, 0x61, 0x74, 0x65, 0x64, 0x22, 0x28, 0x0a, 0x0c, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65,
+	0x53, 0x69, 0x67, 0x6e, 0x4f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64,
+	0x22, 0x87, 0x01, 0x0a, 0x10, 0x41, 0x6e, 0x6f, 0x6d, 0x61, 0x6c, 0x79, 0x44, 0x65, 0x74, 0x65,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x64, 0x12,
+	0x59, 0x0a, 0x12, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x6f,
+	0x67, 0x67, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c,
+	0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x52, 0x12, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x22, 0xc8, 0x01, 0x0a, 0x0b, 0x41,
+	0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x30, 0x0a, 0x13, 0x70, 0x72,
+	0x6f, 0x67, 0x72, 0x61, 0x6d, 0x6d, 0x69, 0x6e, 0x67, 0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x13, 0x70, 0x72, 0x6f, 0x67, 0x72, 0x61, 0x6d,
+	0x6d, 0x69, 0x6e, 0x67, 0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x12, 0x4a, 0x0a, 0x0d,
+	0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e,
+	0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x75, 0x6e, 0x63,
+	0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x52, 0x0d, 0x46, 0x75, 0x6e, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x3b, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70,
+	0x75, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07, 0x43, 0x6f,
+	0x6d, 0x70, 0x75, 0x74, 0x65, 0x22, 0x53, 0x0a, 0x08, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x12, 0x47, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74,
+	0x79, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69,
+	0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x52, 0x0c, 0x41, 0x75,
+	0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x69, 0x74, 0x79, 0x22, 0x12, 0x0a, 0x10, 0x4e, 0x6f,
+	0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x10,
+	0x0a, 0x0e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79,
+	0x22, 0x11, 0x0a, 0x0f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x4c, 0x6f, 0x67, 0x67,
+	0x69, 0x6e, 0x67, 0x22, 0x13, 0x0a, 0x11, 0x43, 0x6f, 0x6e, 0x74, 0x61, 0x69, 0x6e, 0x65, 0x72,
+	0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x22, 0x56, 0x0a, 0x0b, 0x48, 0x74, 0x74, 0x70,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x47, 0x0a, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45,
+	0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f,
+	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69,
+	0x6e, 0x74, 0x52, 0x0c, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
+	0x22, 0x84, 0x02, 0x0a, 0x0d, 0x46, 0x75, 0x6e, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x69,
+	0x74, 0x79, 0x12, 0x4a, 0x0a, 0x0d, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x65, 0x6e, 0x64, 0x70, 0x6f,
+	0x69, 0x6e, 0x74, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x48, 0x00,
+	0x52, 0x0c, 0x68, 0x74, 0x74, 0x70, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x5d,
+	0x0a, 0x14, 0x68, 0x74, 0x74, 0x70, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x5f, 0x68,
+	0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x74, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x48, 0x00, 0x52, 0x12, 0x68, 0x74, 0x74, 0x70, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x72, 0x12, 0x40, 0x0a,
+	0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x20, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x48, 0x00, 0x52, 0x09, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
+	0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0xa3, 0x03, 0x0a, 0x0e, 0x4e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3b, 0x0a, 0x07, 0x43, 0x6f,
+	0x6d, 0x70, 0x75, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x44, 0x52, 0x07,
+	0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x12, 0x5c, 0x0a, 0x13, 0x54, 0x72, 0x61, 0x6e, 0x73,
+	0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72,
+	0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x72, 0x61,
+	0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x13, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4a, 0x0a, 0x0d, 0x6c, 0x6f, 0x61, 0x64, 0x5f, 0x62, 0x61,
+	0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65,
+	0x72, 0x48, 0x00, 0x52, 0x0c, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65,
+	0x72, 0x12, 0x50, 0x0a, 0x0f, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x5f, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x63, 0x6c, 0x6f,
+	0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x48, 0x00, 0x52, 0x0e, 0x6c, 0x6f, 0x67, 0x67, 0x69, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x12, 0x50, 0x0a, 0x0f, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x5f, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x63,
+	0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x48, 0x00, 0x52, 0x0e, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x06, 0x0a,
+	0x04, 0x41, 0x42, 0x41, 0x43, 0x22, 0xb7, 0x02, 0x0a, 0x10, 0x41, 0x74, 0x52, 0x65, 0x73, 0x74,
+	0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x0a, 0x09, 0x61, 0x6c,
+	0x67, 0x6f, 0x72, 0x69, 0x74, 0x68, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61,
+	0x6c, 0x67, 0x6f, 0x72, 0x69, 0x74, 0x68, 0x6d, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62,
+	0x6c, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
+	0x65, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x6b, 0x65, 0x79, 0x55, 0x72, 0x6c, 0x12, 0x66, 0x0a, 0x17, 0x63, 0x75,
+	0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x65, 0x6e, 0x63, 0x72, 0x79,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x63, 0x6c,
+	0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f, 0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x45,
 	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x15, 0x63, 0x75, 0x73,
 	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x67, 0x0a, 0x16, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x64, 0x5f, 0x6b, 0x65,
+	0x6f, 0x6e, 0x12, 0x63, 0x0a, 0x16, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x64, 0x5f, 0x6b, 0x65,
 	0x79, 0x5f, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x66, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4d,
-	0x61, 0x6e, 0x61, 0x67, 0x65, 0x64, 0x4b, 0x65, 0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74,
-	0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x14, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x64, 0x4b, 0x65,
-	0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x06, 0x0a, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x22, 0xe9, 0x02, 0x0a, 0x0f, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x61, 0x6c, 0x69, 0x74, 0x79, 0x12, 0x5b, 0x0a, 0x12, 0x61, 0x74, 0x5f, 0x72, 0x65,
-	0x73, 0x74, 0x5f, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x65, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x41, 0x74, 0x52, 0x65, 0x73, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x48, 0x00, 0x52, 0x10, 0x61, 0x74, 0x52, 0x65, 0x73, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x58, 0x0a, 0x11, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69,
-	0x6f, 0x6e, 0x5f, 0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x18, 0x66, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x2a, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f,
-	0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6e, 0x63, 0x72,
-	0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x48, 0x00, 0x52, 0x0f, 0x65,
-	0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x55, 0x73, 0x65, 0x12, 0x32,
-	0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6f, 0x77,
-	0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4b, 0x65, 0x79, 0x48, 0x00, 0x52, 0x03, 0x6b,
-	0x65, 0x79, 0x12, 0x63, 0x0a, 0x14, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x5f,
-	0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x2e, 0x2e, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x48, 0x00, 0x52, 0x13, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x70, 0x6f, 0x72, 0x74, 0x45, 0x6e, 0x63,
+	0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x6f,
+	0x6e, 0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x61, 0x6e, 0x61, 0x67,
+	0x65, 0x64, 0x4b, 0x65, 0x79, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x48,
+	0x00, 0x52, 0x14, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x64, 0x4b, 0x65, 0x79, 0x45, 0x6e, 0x63,
 	0x72, 0x79, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x06, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x42,
-	0x12, 0x5a, 0x10, 0x61, 0x70, 0x69, 0x2f, 0x6f, 0x77, 0x6c, 0x32, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x25, 0x5a, 0x23, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2e, 0x69, 0x6f, 0x2f,
+	0x63, 0x6c, 0x6f, 0x75, 0x64, 0x69, 0x74, 0x6f, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6f, 0x6e,
+	0x74, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -7520,258 +7484,258 @@ func file_api_ontology_proto_rawDescGZIP() []byte {
 
 var file_api_ontology_proto_msgTypes = make([]protoimpl.MessageInfo, 103)
 var file_api_ontology_proto_goTypes = []interface{}{
-	(*ResourceID)(nil),                     // 0: owl2protobuf.owl2protobuf.ResourceID
-	(*NetworkSecurityGroup)(nil),           // 1: owl2protobuf.owl2protobuf.NetworkSecurityGroup
-	(*Account)(nil),                        // 2: owl2protobuf.owl2protobuf.Account
-	(*CloudResource)(nil),                  // 3: owl2protobuf.owl2protobuf.CloudResource
-	(*Framework)(nil),                      // 4: owl2protobuf.owl2protobuf.Framework
-	(*Image)(nil),                          // 5: owl2protobuf.owl2protobuf.Image
-	(*KeyValueDatabaseService)(nil),        // 6: owl2protobuf.owl2protobuf.KeyValueDatabaseService
-	(*DatabaseStorage)(nil),                // 7: owl2protobuf.owl2protobuf.DatabaseStorage
-	(*LoadBalancer)(nil),                   // 8: owl2protobuf.owl2protobuf.LoadBalancer
-	(*WebApplicationFirewall)(nil),         // 9: owl2protobuf.owl2protobuf.WebApplicationFirewall
-	(*AnomalyDetection)(nil),               // 10: owl2protobuf.owl2protobuf.AnomalyDetection
-	(*Key)(nil),                            // 11: owl2protobuf.owl2protobuf.Key
-	(*Application)(nil),                    // 12: owl2protobuf.owl2protobuf.Application
-	(*ObjectStorageRequest)(nil),           // 13: owl2protobuf.owl2protobuf.ObjectStorageRequest
-	(*ResourceGroup)(nil),                  // 14: owl2protobuf.owl2protobuf.ResourceGroup
-	(*Authorization)(nil),                  // 15: owl2protobuf.owl2protobuf.Authorization
-	(*EncryptionInUse)(nil),                // 16: owl2protobuf.owl2protobuf.EncryptionInUse
-	(*CICDService)(nil),                    // 17: owl2protobuf.owl2protobuf.CICDService
-	(*CloudSDK)(nil),                       // 18: owl2protobuf.owl2protobuf.CloudSDK
-	(*Container)(nil),                      // 19: owl2protobuf.owl2protobuf.Container
-	(*KeyVault)(nil),                       // 20: owl2protobuf.owl2protobuf.KeyVault
-	(*ProxiedEndpoint)(nil),                // 21: owl2protobuf.owl2protobuf.ProxiedEndpoint
-	(*DatabaseConnect)(nil),                // 22: owl2protobuf.owl2protobuf.DatabaseConnect
-	(*HttpEndpoint)(nil),                   // 23: owl2protobuf.owl2protobuf.HttpEndpoint
-	(*Integrity)(nil),                      // 24: owl2protobuf.owl2protobuf.Integrity
-	(*LoggingService)(nil),                 // 25: owl2protobuf.owl2protobuf.LoggingService
-	(*MessagingHub)(nil),                   // 26: owl2protobuf.owl2protobuf.MessagingHub
-	(*L3Firewall)(nil),                     // 27: owl2protobuf.owl2protobuf.L3Firewall
-	(*OSLogging)(nil),                      // 28: owl2protobuf.owl2protobuf.OSLogging
-	(*GeoLocation)(nil),                    // 29: owl2protobuf.owl2protobuf.GeoLocation
-	(*BlockStorage)(nil),                   // 30: owl2protobuf.owl2protobuf.BlockStorage
-	(*Logging)(nil),                        // 31: owl2protobuf.owl2protobuf.Logging
-	(*Backup)(nil),                         // 32: owl2protobuf.owl2protobuf.Backup
-	(*Compute)(nil),                        // 33: owl2protobuf.owl2protobuf.Compute
-	(*ContainerOrchestration)(nil),         // 34: owl2protobuf.owl2protobuf.ContainerOrchestration
-	(*DatabaseOperation)(nil),              // 35: owl2protobuf.owl2protobuf.DatabaseOperation
-	(*FileStorageService)(nil),             // 36: owl2protobuf.owl2protobuf.FileStorageService
-	(*HttpClientLibrary)(nil),              // 37: owl2protobuf.owl2protobuf.HttpClientLibrary
-	(*ActivityLogging)(nil),                // 38: owl2protobuf.owl2protobuf.ActivityLogging
-	(*DDoSProtection)(nil),                 // 39: owl2protobuf.owl2protobuf.DDoSProtection
-	(*Logger)(nil),                         // 40: owl2protobuf.owl2protobuf.Logger
-	(*VMImage)(nil),                        // 41: owl2protobuf.owl2protobuf.VMImage
-	(*VirtualMachine)(nil),                 // 42: owl2protobuf.owl2protobuf.VirtualMachine
-	(*Availability)(nil),                   // 43: owl2protobuf.owl2protobuf.Availability
-	(*NetworkInterface)(nil),               // 44: owl2protobuf.owl2protobuf.NetworkInterface
-	(*ABAC)(nil),                           // 45: owl2protobuf.owl2protobuf.ABAC
-	(*AccessRestriction)(nil),              // 46: owl2protobuf.owl2protobuf.AccessRestriction
-	(*DocumentDatabaseService)(nil),        // 47: owl2protobuf.owl2protobuf.DocumentDatabaseService
-	(*BootLogging)(nil),                    // 48: owl2protobuf.owl2protobuf.BootLogging
-	(*FileStorage)(nil),                    // 49: owl2protobuf.owl2protobuf.FileStorage
-	(*ObjectStorage)(nil),                  // 50: owl2protobuf.owl2protobuf.ObjectStorage
-	(*Operation)(nil),                      // 51: owl2protobuf.owl2protobuf.Operation
-	(*Resource)(nil),                       // 52: owl2protobuf.owl2protobuf.Resource
-	(*HttpServer)(nil),                     // 53: owl2protobuf.owl2protobuf.HttpServer
-	(*TokenBasedAuthentication)(nil),       // 54: owl2protobuf.owl2protobuf.TokenBasedAuthentication
-	(*NetworkService)(nil),                 // 55: owl2protobuf.owl2protobuf.NetworkService
-	(*Authenticity)(nil),                   // 56: owl2protobuf.owl2protobuf.Authenticity
-	(*Function)(nil),                       // 57: owl2protobuf.owl2protobuf.Function
-	(*Functionality)(nil),                  // 58: owl2protobuf.owl2protobuf.Functionality
-	(*LogOperation)(nil),                   // 59: owl2protobuf.owl2protobuf.LogOperation
-	(*MalwareProtection)(nil),              // 60: owl2protobuf.owl2protobuf.MalwareProtection
-	(*DatabaseQuery)(nil),                  // 61: owl2protobuf.owl2protobuf.DatabaseQuery
-	(*Firewall)(nil),                       // 62: owl2protobuf.owl2protobuf.Firewall
-	(*PasswordBasedAuthentication)(nil),    // 63: owl2protobuf.owl2protobuf.PasswordBasedAuthentication
-	(*PasswordPolicy)(nil),                 // 64: owl2protobuf.owl2protobuf.PasswordPolicy
-	(*ResourceLogging)(nil),                // 65: owl2protobuf.owl2protobuf.ResourceLogging
-	(*SingleSignOn)(nil),                   // 66: owl2protobuf.owl2protobuf.SingleSignOn
-	(*VirtualSubNetwork)(nil),              // 67: owl2protobuf.owl2protobuf.VirtualSubNetwork
-	(*Redundancy)(nil),                     // 68: owl2protobuf.owl2protobuf.Redundancy
-	(*CertificateBasedAuthentication)(nil), // 69: owl2protobuf.owl2protobuf.CertificateBasedAuthentication
-	(*Job)(nil),                            // 70: owl2protobuf.owl2protobuf.Job
-	(*NoAuthentication)(nil),               // 71: owl2protobuf.owl2protobuf.NoAuthentication
-	(*ObjectStorageService)(nil),           // 72: owl2protobuf.owl2protobuf.ObjectStorageService
-	(*CustomerKeyEncryption)(nil),          // 73: owl2protobuf.owl2protobuf.CustomerKeyEncryption
-	(*DeviceProvisioningService)(nil),      // 74: owl2protobuf.owl2protobuf.DeviceProvisioningService
-	(*Identity)(nil),                       // 75: owl2protobuf.owl2protobuf.Identity
-	(*ManagedKeyEncryption)(nil),           // 76: owl2protobuf.owl2protobuf.ManagedKeyEncryption
-	(*RoleAssignment)(nil),                 // 77: owl2protobuf.owl2protobuf.RoleAssignment
-	(*Workflow)(nil),                       // 78: owl2protobuf.owl2protobuf.Workflow
-	(*DatabaseService)(nil),                // 79: owl2protobuf.owl2protobuf.DatabaseService
-	(*HttpRequestHandler)(nil),             // 80: owl2protobuf.owl2protobuf.HttpRequestHandler
-	(*RelationalDatabaseService)(nil),      // 81: owl2protobuf.owl2protobuf.RelationalDatabaseService
-	(*TransportEncryption)(nil),            // 82: owl2protobuf.owl2protobuf.TransportEncryption
-	(*ContainerImage)(nil),                 // 83: owl2protobuf.owl2protobuf.ContainerImage
-	(*WebApp)(nil),                         // 84: owl2protobuf.owl2protobuf.WebApp
-	(*Auditing)(nil),                       // 85: owl2protobuf.owl2protobuf.Auditing
-	(*AutomaticSecurityUpdates)(nil),       // 86: owl2protobuf.owl2protobuf.AutomaticSecurityUpdates
-	(*Identifiable)(nil),                   // 87: owl2protobuf.owl2protobuf.Identifiable
-	(*Networking)(nil),                     // 88: owl2protobuf.owl2protobuf.Networking
-	(*SecurityFeature)(nil),                // 89: owl2protobuf.owl2protobuf.SecurityFeature
-	(*StorageService)(nil),                 // 90: owl2protobuf.owl2protobuf.StorageService
-	(*VirtualNetwork)(nil),                 // 91: owl2protobuf.owl2protobuf.VirtualNetwork
-	(*IoT)(nil),                            // 92: owl2protobuf.owl2protobuf.IoT
-	(*RBAC)(nil),                           // 93: owl2protobuf.owl2protobuf.RBAC
-	(*Document)(nil),                       // 94: owl2protobuf.owl2protobuf.Document
-	(*Immutability)(nil),                   // 95: owl2protobuf.owl2protobuf.Immutability
-	(*OTPBasedAuthentication)(nil),         // 96: owl2protobuf.owl2protobuf.OTPBasedAuthentication
-	(*Storage)(nil),                        // 97: owl2protobuf.owl2protobuf.Storage
-	(*ContainerRegistry)(nil),              // 98: owl2protobuf.owl2protobuf.ContainerRegistry
-	(*HttpRequest)(nil),                    // 99: owl2protobuf.owl2protobuf.HttpRequest
-	(*ApplicationLogging)(nil),             // 100: owl2protobuf.owl2protobuf.ApplicationLogging
-	(*AtRestEncryption)(nil),               // 101: owl2protobuf.owl2protobuf.AtRestEncryption
-	(*Confidentiality)(nil),                // 102: owl2protobuf.owl2protobuf.Confidentiality
+	(*ResourceID)(nil),                     // 0: clouditor.ontology.v1.ResourceID
+	(*ResourceGroup)(nil),                  // 1: clouditor.ontology.v1.ResourceGroup
+	(*Identifiable)(nil),                   // 2: clouditor.ontology.v1.Identifiable
+	(*NetworkSecurityGroup)(nil),           // 3: clouditor.ontology.v1.NetworkSecurityGroup
+	(*Networking)(nil),                     // 4: clouditor.ontology.v1.Networking
+	(*StorageService)(nil),                 // 5: clouditor.ontology.v1.StorageService
+	(*HttpRequestHandler)(nil),             // 6: clouditor.ontology.v1.HttpRequestHandler
+	(*Job)(nil),                            // 7: clouditor.ontology.v1.Job
+	(*Logger)(nil),                         // 8: clouditor.ontology.v1.Logger
+	(*ObjectStorageService)(nil),           // 9: clouditor.ontology.v1.ObjectStorageService
+	(*TransportEncryption)(nil),            // 10: clouditor.ontology.v1.TransportEncryption
+	(*Authenticity)(nil),                   // 11: clouditor.ontology.v1.Authenticity
+	(*DatabaseConnect)(nil),                // 12: clouditor.ontology.v1.DatabaseConnect
+	(*CloudSDK)(nil),                       // 13: clouditor.ontology.v1.CloudSDK
+	(*ContainerImage)(nil),                 // 14: clouditor.ontology.v1.ContainerImage
+	(*IoT)(nil),                            // 15: clouditor.ontology.v1.IoT
+	(*ResourceLogging)(nil),                // 16: clouditor.ontology.v1.ResourceLogging
+	(*SecurityFeature)(nil),                // 17: clouditor.ontology.v1.SecurityFeature
+	(*CloudResource)(nil),                  // 18: clouditor.ontology.v1.CloudResource
+	(*NetworkInterface)(nil),               // 19: clouditor.ontology.v1.NetworkInterface
+	(*Integrity)(nil),                      // 20: clouditor.ontology.v1.Integrity
+	(*Key)(nil),                            // 21: clouditor.ontology.v1.Key
+	(*KeyValueDatabaseService)(nil),        // 22: clouditor.ontology.v1.KeyValueDatabaseService
+	(*ApplicationLogging)(nil),             // 23: clouditor.ontology.v1.ApplicationLogging
+	(*Container)(nil),                      // 24: clouditor.ontology.v1.Container
+	(*L3Firewall)(nil),                     // 25: clouditor.ontology.v1.L3Firewall
+	(*LoggingService)(nil),                 // 26: clouditor.ontology.v1.LoggingService
+	(*OTPBasedAuthentication)(nil),         // 27: clouditor.ontology.v1.OTPBasedAuthentication
+	(*DatabaseOperation)(nil),              // 28: clouditor.ontology.v1.DatabaseOperation
+	(*GeoLocation)(nil),                    // 29: clouditor.ontology.v1.GeoLocation
+	(*DeviceProvisioningService)(nil),      // 30: clouditor.ontology.v1.DeviceProvisioningService
+	(*HttpEndpoint)(nil),                   // 31: clouditor.ontology.v1.HttpEndpoint
+	(*Image)(nil),                          // 32: clouditor.ontology.v1.Image
+	(*Logging)(nil),                        // 33: clouditor.ontology.v1.Logging
+	(*Storage)(nil),                        // 34: clouditor.ontology.v1.Storage
+	(*BlockStorage)(nil),                   // 35: clouditor.ontology.v1.BlockStorage
+	(*RelationalDatabaseService)(nil),      // 36: clouditor.ontology.v1.RelationalDatabaseService
+	(*ContainerOrchestration)(nil),         // 37: clouditor.ontology.v1.ContainerOrchestration
+	(*Firewall)(nil),                       // 38: clouditor.ontology.v1.Firewall
+	(*Framework)(nil),                      // 39: clouditor.ontology.v1.Framework
+	(*ObjectStorageRequest)(nil),           // 40: clouditor.ontology.v1.ObjectStorageRequest
+	(*CertificateBasedAuthentication)(nil), // 41: clouditor.ontology.v1.CertificateBasedAuthentication
+	(*CustomerKeyEncryption)(nil),          // 42: clouditor.ontology.v1.CustomerKeyEncryption
+	(*EncryptionInUse)(nil),                // 43: clouditor.ontology.v1.EncryptionInUse
+	(*Function)(nil),                       // 44: clouditor.ontology.v1.Function
+	(*TokenBasedAuthentication)(nil),       // 45: clouditor.ontology.v1.TokenBasedAuthentication
+	(*ObjectStorage)(nil),                  // 46: clouditor.ontology.v1.ObjectStorage
+	(*Resource)(nil),                       // 47: clouditor.ontology.v1.Resource
+	(*CICDService)(nil),                    // 48: clouditor.ontology.v1.CICDService
+	(*LoadBalancer)(nil),                   // 49: clouditor.ontology.v1.LoadBalancer
+	(*LogOperation)(nil),                   // 50: clouditor.ontology.v1.LogOperation
+	(*VirtualSubNetwork)(nil),              // 51: clouditor.ontology.v1.VirtualSubNetwork
+	(*Account)(nil),                        // 52: clouditor.ontology.v1.Account
+	(*Backup)(nil),                         // 53: clouditor.ontology.v1.Backup
+	(*DocumentDatabaseService)(nil),        // 54: clouditor.ontology.v1.DocumentDatabaseService
+	(*ManagedKeyEncryption)(nil),           // 55: clouditor.ontology.v1.ManagedKeyEncryption
+	(*DatabaseService)(nil),                // 56: clouditor.ontology.v1.DatabaseService
+	(*DatabaseStorage)(nil),                // 57: clouditor.ontology.v1.DatabaseStorage
+	(*RoleAssignment)(nil),                 // 58: clouditor.ontology.v1.RoleAssignment
+	(*HttpClientLibrary)(nil),              // 59: clouditor.ontology.v1.HttpClientLibrary
+	(*MessagingHub)(nil),                   // 60: clouditor.ontology.v1.MessagingHub
+	(*VirtualNetwork)(nil),                 // 61: clouditor.ontology.v1.VirtualNetwork
+	(*Confidentiality)(nil),                // 62: clouditor.ontology.v1.Confidentiality
+	(*FileStorageService)(nil),             // 63: clouditor.ontology.v1.FileStorageService
+	(*BootLogging)(nil),                    // 64: clouditor.ontology.v1.BootLogging
+	(*KeyVault)(nil),                       // 65: clouditor.ontology.v1.KeyVault
+	(*Workflow)(nil),                       // 66: clouditor.ontology.v1.Workflow
+	(*Document)(nil),                       // 67: clouditor.ontology.v1.Document
+	(*FileStorage)(nil),                    // 68: clouditor.ontology.v1.FileStorage
+	(*RBAC)(nil),                           // 69: clouditor.ontology.v1.RBAC
+	(*Auditing)(nil),                       // 70: clouditor.ontology.v1.Auditing
+	(*Availability)(nil),                   // 71: clouditor.ontology.v1.Availability
+	(*WebApplicationFirewall)(nil),         // 72: clouditor.ontology.v1.WebApplicationFirewall
+	(*AccessRestriction)(nil),              // 73: clouditor.ontology.v1.AccessRestriction
+	(*HttpServer)(nil),                     // 74: clouditor.ontology.v1.HttpServer
+	(*WebApp)(nil),                         // 75: clouditor.ontology.v1.WebApp
+	(*Compute)(nil),                        // 76: clouditor.ontology.v1.Compute
+	(*Immutability)(nil),                   // 77: clouditor.ontology.v1.Immutability
+	(*Redundancy)(nil),                     // 78: clouditor.ontology.v1.Redundancy
+	(*Operation)(nil),                      // 79: clouditor.ontology.v1.Operation
+	(*VirtualMachine)(nil),                 // 80: clouditor.ontology.v1.VirtualMachine
+	(*DDoSProtection)(nil),                 // 81: clouditor.ontology.v1.DDoSProtection
+	(*OSLogging)(nil),                      // 82: clouditor.ontology.v1.OSLogging
+	(*ProxiedEndpoint)(nil),                // 83: clouditor.ontology.v1.ProxiedEndpoint
+	(*AutomaticSecurityUpdates)(nil),       // 84: clouditor.ontology.v1.AutomaticSecurityUpdates
+	(*MalwareProtection)(nil),              // 85: clouditor.ontology.v1.MalwareProtection
+	(*VMImage)(nil),                        // 86: clouditor.ontology.v1.VMImage
+	(*Authorization)(nil),                  // 87: clouditor.ontology.v1.Authorization
+	(*DatabaseQuery)(nil),                  // 88: clouditor.ontology.v1.DatabaseQuery
+	(*PasswordBasedAuthentication)(nil),    // 89: clouditor.ontology.v1.PasswordBasedAuthentication
+	(*SingleSignOn)(nil),                   // 90: clouditor.ontology.v1.SingleSignOn
+	(*AnomalyDetection)(nil),               // 91: clouditor.ontology.v1.AnomalyDetection
+	(*Application)(nil),                    // 92: clouditor.ontology.v1.Application
+	(*Identity)(nil),                       // 93: clouditor.ontology.v1.Identity
+	(*NoAuthentication)(nil),               // 94: clouditor.ontology.v1.NoAuthentication
+	(*PasswordPolicy)(nil),                 // 95: clouditor.ontology.v1.PasswordPolicy
+	(*ActivityLogging)(nil),                // 96: clouditor.ontology.v1.ActivityLogging
+	(*ContainerRegistry)(nil),              // 97: clouditor.ontology.v1.ContainerRegistry
+	(*HttpRequest)(nil),                    // 98: clouditor.ontology.v1.HttpRequest
+	(*Functionality)(nil),                  // 99: clouditor.ontology.v1.Functionality
+	(*NetworkService)(nil),                 // 100: clouditor.ontology.v1.NetworkService
+	(*ABAC)(nil),                           // 101: clouditor.ontology.v1.ABAC
+	(*AtRestEncryption)(nil),               // 102: clouditor.ontology.v1.AtRestEncryption
 }
 var file_api_ontology_proto_depIdxs = []int32{
-	29,  // 0: owl2protobuf.owl2protobuf.CloudResource.GeoLocation:type_name -> owl2protobuf.owl2protobuf.GeoLocation
-	2,   // 1: owl2protobuf.owl2protobuf.CloudResource.account:type_name -> owl2protobuf.owl2protobuf.Account
-	17,  // 2: owl2protobuf.owl2protobuf.CloudResource.c_i_c_d_service:type_name -> owl2protobuf.owl2protobuf.CICDService
-	33,  // 3: owl2protobuf.owl2protobuf.CloudResource.compute:type_name -> owl2protobuf.owl2protobuf.Compute
-	34,  // 4: owl2protobuf.owl2protobuf.CloudResource.container_orchestration:type_name -> owl2protobuf.owl2protobuf.ContainerOrchestration
-	98,  // 5: owl2protobuf.owl2protobuf.CloudResource.container_registry:type_name -> owl2protobuf.owl2protobuf.ContainerRegistry
-	87,  // 6: owl2protobuf.owl2protobuf.CloudResource.identifiable:type_name -> owl2protobuf.owl2protobuf.Identifiable
-	5,   // 7: owl2protobuf.owl2protobuf.CloudResource.image:type_name -> owl2protobuf.owl2protobuf.Image
-	92,  // 8: owl2protobuf.owl2protobuf.CloudResource.io_t:type_name -> owl2protobuf.owl2protobuf.IoT
-	20,  // 9: owl2protobuf.owl2protobuf.CloudResource.key_vault:type_name -> owl2protobuf.owl2protobuf.KeyVault
-	88,  // 10: owl2protobuf.owl2protobuf.CloudResource.networking:type_name -> owl2protobuf.owl2protobuf.Networking
-	64,  // 11: owl2protobuf.owl2protobuf.CloudResource.password_policy:type_name -> owl2protobuf.owl2protobuf.PasswordPolicy
-	14,  // 12: owl2protobuf.owl2protobuf.CloudResource.resource_group:type_name -> owl2protobuf.owl2protobuf.ResourceGroup
-	97,  // 13: owl2protobuf.owl2protobuf.CloudResource.storage:type_name -> owl2protobuf.owl2protobuf.Storage
-	18,  // 14: owl2protobuf.owl2protobuf.Framework.cloud_s_d_k:type_name -> owl2protobuf.owl2protobuf.CloudSDK
-	37,  // 15: owl2protobuf.owl2protobuf.Framework.http_client_library:type_name -> owl2protobuf.owl2protobuf.HttpClientLibrary
-	53,  // 16: owl2protobuf.owl2protobuf.Framework.http_server:type_name -> owl2protobuf.owl2protobuf.HttpServer
-	40,  // 17: owl2protobuf.owl2protobuf.Framework.logger:type_name -> owl2protobuf.owl2protobuf.Logger
-	12,  // 18: owl2protobuf.owl2protobuf.Image.Application:type_name -> owl2protobuf.owl2protobuf.Application
-	83,  // 19: owl2protobuf.owl2protobuf.Image.container_image:type_name -> owl2protobuf.owl2protobuf.ContainerImage
-	41,  // 20: owl2protobuf.owl2protobuf.Image.v_m_image:type_name -> owl2protobuf.owl2protobuf.VMImage
-	23,  // 21: owl2protobuf.owl2protobuf.LoadBalancer.HttpEndpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	0,   // 22: owl2protobuf.owl2protobuf.LoadBalancer.NetworkService:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	100, // 23: owl2protobuf.owl2protobuf.AnomalyDetection.ApplicationLogging:type_name -> owl2protobuf.owl2protobuf.ApplicationLogging
-	58,  // 24: owl2protobuf.owl2protobuf.Application.Functionality:type_name -> owl2protobuf.owl2protobuf.Functionality
-	0,   // 25: owl2protobuf.owl2protobuf.Application.Compute:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	0,   // 26: owl2protobuf.owl2protobuf.ObjectStorageRequest.ObjectStorage:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	45,  // 27: owl2protobuf.owl2protobuf.Authorization.a_b_a_c:type_name -> owl2protobuf.owl2protobuf.ABAC
-	46,  // 28: owl2protobuf.owl2protobuf.Authorization.access_restriction:type_name -> owl2protobuf.owl2protobuf.AccessRestriction
-	93,  // 29: owl2protobuf.owl2protobuf.Authorization.r_b_a_c:type_name -> owl2protobuf.owl2protobuf.RBAC
-	70,  // 30: owl2protobuf.owl2protobuf.CICDService.job:type_name -> owl2protobuf.owl2protobuf.Job
-	78,  // 31: owl2protobuf.owl2protobuf.CICDService.workflow:type_name -> owl2protobuf.owl2protobuf.Workflow
-	0,   // 32: owl2protobuf.owl2protobuf.Container.Image:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	56,  // 33: owl2protobuf.owl2protobuf.HttpEndpoint.Authenticity:type_name -> owl2protobuf.owl2protobuf.Authenticity
-	82,  // 34: owl2protobuf.owl2protobuf.HttpEndpoint.TransportEncryption:type_name -> owl2protobuf.owl2protobuf.TransportEncryption
-	21,  // 35: owl2protobuf.owl2protobuf.HttpEndpoint.proxied_endpoint:type_name -> owl2protobuf.owl2protobuf.ProxiedEndpoint
-	86,  // 36: owl2protobuf.owl2protobuf.Integrity.automatic_security_updates:type_name -> owl2protobuf.owl2protobuf.AutomaticSecurityUpdates
-	95,  // 37: owl2protobuf.owl2protobuf.Integrity.immutability:type_name -> owl2protobuf.owl2protobuf.Immutability
-	0,   // 38: owl2protobuf.owl2protobuf.LoggingService.Storage:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	0,   // 39: owl2protobuf.owl2protobuf.Logging.LoggingService:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	38,  // 40: owl2protobuf.owl2protobuf.Logging.activity_logging:type_name -> owl2protobuf.owl2protobuf.ActivityLogging
-	100, // 41: owl2protobuf.owl2protobuf.Logging.application_logging:type_name -> owl2protobuf.owl2protobuf.ApplicationLogging
-	48,  // 42: owl2protobuf.owl2protobuf.Logging.boot_logging:type_name -> owl2protobuf.owl2protobuf.BootLogging
-	28,  // 43: owl2protobuf.owl2protobuf.Logging.o_s_logging:type_name -> owl2protobuf.owl2protobuf.OSLogging
-	65,  // 44: owl2protobuf.owl2protobuf.Logging.resource_logging:type_name -> owl2protobuf.owl2protobuf.ResourceLogging
-	0,   // 45: owl2protobuf.owl2protobuf.Backup.Storage:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	0,   // 46: owl2protobuf.owl2protobuf.Compute.NetworkInterface:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	16,  // 47: owl2protobuf.owl2protobuf.Compute.EncryptionInUse:type_name -> owl2protobuf.owl2protobuf.EncryptionInUse
-	65,  // 48: owl2protobuf.owl2protobuf.Compute.ResourceLogging:type_name -> owl2protobuf.owl2protobuf.ResourceLogging
-	19,  // 49: owl2protobuf.owl2protobuf.Compute.container:type_name -> owl2protobuf.owl2protobuf.Container
-	57,  // 50: owl2protobuf.owl2protobuf.Compute.function:type_name -> owl2protobuf.owl2protobuf.Function
-	42,  // 51: owl2protobuf.owl2protobuf.Compute.virtual_machine:type_name -> owl2protobuf.owl2protobuf.VirtualMachine
-	84,  // 52: owl2protobuf.owl2protobuf.Compute.web_app:type_name -> owl2protobuf.owl2protobuf.WebApp
-	65,  // 53: owl2protobuf.owl2protobuf.ContainerOrchestration.ResourceLogging:type_name -> owl2protobuf.owl2protobuf.ResourceLogging
-	0,   // 54: owl2protobuf.owl2protobuf.ContainerOrchestration.Container:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	0,   // 55: owl2protobuf.owl2protobuf.DatabaseOperation.DatabaseStorage:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	0,   // 56: owl2protobuf.owl2protobuf.DatabaseOperation.DatabaseService:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	22,  // 57: owl2protobuf.owl2protobuf.DatabaseOperation.database_connect:type_name -> owl2protobuf.owl2protobuf.DatabaseConnect
-	61,  // 58: owl2protobuf.owl2protobuf.DatabaseOperation.database_query:type_name -> owl2protobuf.owl2protobuf.DatabaseQuery
-	23,  // 59: owl2protobuf.owl2protobuf.FileStorageService.HttpEndpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	0,   // 60: owl2protobuf.owl2protobuf.VirtualMachine.BlockStorage:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	38,  // 61: owl2protobuf.owl2protobuf.VirtualMachine.ActivityLogging:type_name -> owl2protobuf.owl2protobuf.ActivityLogging
-	86,  // 62: owl2protobuf.owl2protobuf.VirtualMachine.AutomaticSecurityUpdates:type_name -> owl2protobuf.owl2protobuf.AutomaticSecurityUpdates
-	48,  // 63: owl2protobuf.owl2protobuf.VirtualMachine.BootLogging:type_name -> owl2protobuf.owl2protobuf.BootLogging
-	60,  // 64: owl2protobuf.owl2protobuf.VirtualMachine.MalwareProtection:type_name -> owl2protobuf.owl2protobuf.MalwareProtection
-	28,  // 65: owl2protobuf.owl2protobuf.VirtualMachine.OSLogging:type_name -> owl2protobuf.owl2protobuf.OSLogging
-	32,  // 66: owl2protobuf.owl2protobuf.Availability.backup:type_name -> owl2protobuf.owl2protobuf.Backup
-	39,  // 67: owl2protobuf.owl2protobuf.Availability.d_do_s_protection:type_name -> owl2protobuf.owl2protobuf.DDoSProtection
-	29,  // 68: owl2protobuf.owl2protobuf.Availability.geo_location:type_name -> owl2protobuf.owl2protobuf.GeoLocation
-	68,  // 69: owl2protobuf.owl2protobuf.Availability.redundancy:type_name -> owl2protobuf.owl2protobuf.Redundancy
-	0,   // 70: owl2protobuf.owl2protobuf.NetworkInterface.NetworkService:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	62,  // 71: owl2protobuf.owl2protobuf.AccessRestriction.firewall:type_name -> owl2protobuf.owl2protobuf.Firewall
-	35,  // 72: owl2protobuf.owl2protobuf.Operation.database_operation:type_name -> owl2protobuf.owl2protobuf.DatabaseOperation
-	99,  // 73: owl2protobuf.owl2protobuf.Operation.http_request:type_name -> owl2protobuf.owl2protobuf.HttpRequest
-	59,  // 74: owl2protobuf.owl2protobuf.Operation.log_operation:type_name -> owl2protobuf.owl2protobuf.LogOperation
-	13,  // 75: owl2protobuf.owl2protobuf.Operation.object_storage_request:type_name -> owl2protobuf.owl2protobuf.ObjectStorageRequest
-	12,  // 76: owl2protobuf.owl2protobuf.Resource.application:type_name -> owl2protobuf.owl2protobuf.Application
-	3,   // 77: owl2protobuf.owl2protobuf.Resource.cloud_resource:type_name -> owl2protobuf.owl2protobuf.CloudResource
-	94,  // 78: owl2protobuf.owl2protobuf.Resource.document:type_name -> owl2protobuf.owl2protobuf.Document
-	80,  // 79: owl2protobuf.owl2protobuf.HttpServer.HttpRequestHandler:type_name -> owl2protobuf.owl2protobuf.HttpRequestHandler
-	0,   // 80: owl2protobuf.owl2protobuf.NetworkService.Compute:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	82,  // 81: owl2protobuf.owl2protobuf.NetworkService.TransportEncryption:type_name -> owl2protobuf.owl2protobuf.TransportEncryption
-	8,   // 82: owl2protobuf.owl2protobuf.NetworkService.load_balancer:type_name -> owl2protobuf.owl2protobuf.LoadBalancer
-	25,  // 83: owl2protobuf.owl2protobuf.NetworkService.logging_service:type_name -> owl2protobuf.owl2protobuf.LoggingService
-	90,  // 84: owl2protobuf.owl2protobuf.NetworkService.storage_service:type_name -> owl2protobuf.owl2protobuf.StorageService
-	69,  // 85: owl2protobuf.owl2protobuf.Authenticity.certificate_based_authentication:type_name -> owl2protobuf.owl2protobuf.CertificateBasedAuthentication
-	54,  // 86: owl2protobuf.owl2protobuf.Authenticity.token_based_authentication:type_name -> owl2protobuf.owl2protobuf.TokenBasedAuthentication
-	71,  // 87: owl2protobuf.owl2protobuf.Authenticity.no_authentication:type_name -> owl2protobuf.owl2protobuf.NoAuthentication
-	96,  // 88: owl2protobuf.owl2protobuf.Authenticity.o_t_p_based_authentication:type_name -> owl2protobuf.owl2protobuf.OTPBasedAuthentication
-	63,  // 89: owl2protobuf.owl2protobuf.Authenticity.password_based_authentication:type_name -> owl2protobuf.owl2protobuf.PasswordBasedAuthentication
-	66,  // 90: owl2protobuf.owl2protobuf.Authenticity.single_sign_on:type_name -> owl2protobuf.owl2protobuf.SingleSignOn
-	23,  // 91: owl2protobuf.owl2protobuf.Functionality.http_endpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	80,  // 92: owl2protobuf.owl2protobuf.Functionality.http_request_handler:type_name -> owl2protobuf.owl2protobuf.HttpRequestHandler
-	51,  // 93: owl2protobuf.owl2protobuf.Functionality.operation:type_name -> owl2protobuf.owl2protobuf.Operation
-	31,  // 94: owl2protobuf.owl2protobuf.LogOperation.Logging:type_name -> owl2protobuf.owl2protobuf.Logging
-	100, // 95: owl2protobuf.owl2protobuf.MalwareProtection.ApplicationLogging:type_name -> owl2protobuf.owl2protobuf.ApplicationLogging
-	27,  // 96: owl2protobuf.owl2protobuf.Firewall.l3_firewall:type_name -> owl2protobuf.owl2protobuf.L3Firewall
-	9,   // 97: owl2protobuf.owl2protobuf.Firewall.web_application_firewall:type_name -> owl2protobuf.owl2protobuf.WebApplicationFirewall
-	23,  // 98: owl2protobuf.owl2protobuf.ObjectStorageService.HttpEndpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	56,  // 99: owl2protobuf.owl2protobuf.Identity.Authenticity:type_name -> owl2protobuf.owl2protobuf.Authenticity
-	23,  // 100: owl2protobuf.owl2protobuf.DatabaseService.HttpEndpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	60,  // 101: owl2protobuf.owl2protobuf.DatabaseService.MalwareProtection:type_name -> owl2protobuf.owl2protobuf.MalwareProtection
-	47,  // 102: owl2protobuf.owl2protobuf.DatabaseService.document_database_service:type_name -> owl2protobuf.owl2protobuf.DocumentDatabaseService
-	6,   // 103: owl2protobuf.owl2protobuf.DatabaseService.key_value_database_service:type_name -> owl2protobuf.owl2protobuf.KeyValueDatabaseService
-	81,  // 104: owl2protobuf.owl2protobuf.DatabaseService.relational_database_service:type_name -> owl2protobuf.owl2protobuf.RelationalDatabaseService
-	12,  // 105: owl2protobuf.owl2protobuf.HttpRequestHandler.Application:type_name -> owl2protobuf.owl2protobuf.Application
-	23,  // 106: owl2protobuf.owl2protobuf.HttpRequestHandler.HttpEndpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	10,  // 107: owl2protobuf.owl2protobuf.Auditing.anomaly_detection:type_name -> owl2protobuf.owl2protobuf.AnomalyDetection
-	31,  // 108: owl2protobuf.owl2protobuf.Auditing.logging:type_name -> owl2protobuf.owl2protobuf.Logging
-	60,  // 109: owl2protobuf.owl2protobuf.Auditing.malware_protection:type_name -> owl2protobuf.owl2protobuf.MalwareProtection
-	56,  // 110: owl2protobuf.owl2protobuf.Identifiable.Authenticity:type_name -> owl2protobuf.owl2protobuf.Authenticity
-	15,  // 111: owl2protobuf.owl2protobuf.Identifiable.Authorization:type_name -> owl2protobuf.owl2protobuf.Authorization
-	75,  // 112: owl2protobuf.owl2protobuf.Identifiable.identity:type_name -> owl2protobuf.owl2protobuf.Identity
-	77,  // 113: owl2protobuf.owl2protobuf.Identifiable.role_assignment:type_name -> owl2protobuf.owl2protobuf.RoleAssignment
-	44,  // 114: owl2protobuf.owl2protobuf.Networking.network_interface:type_name -> owl2protobuf.owl2protobuf.NetworkInterface
-	1,   // 115: owl2protobuf.owl2protobuf.Networking.network_security_group:type_name -> owl2protobuf.owl2protobuf.NetworkSecurityGroup
-	55,  // 116: owl2protobuf.owl2protobuf.Networking.network_service:type_name -> owl2protobuf.owl2protobuf.NetworkService
-	91,  // 117: owl2protobuf.owl2protobuf.Networking.virtual_network:type_name -> owl2protobuf.owl2protobuf.VirtualNetwork
-	67,  // 118: owl2protobuf.owl2protobuf.Networking.virtual_sub_network:type_name -> owl2protobuf.owl2protobuf.VirtualSubNetwork
-	85,  // 119: owl2protobuf.owl2protobuf.SecurityFeature.auditing:type_name -> owl2protobuf.owl2protobuf.Auditing
-	56,  // 120: owl2protobuf.owl2protobuf.SecurityFeature.authenticity:type_name -> owl2protobuf.owl2protobuf.Authenticity
-	15,  // 121: owl2protobuf.owl2protobuf.SecurityFeature.authorization:type_name -> owl2protobuf.owl2protobuf.Authorization
-	43,  // 122: owl2protobuf.owl2protobuf.SecurityFeature.availability:type_name -> owl2protobuf.owl2protobuf.Availability
-	102, // 123: owl2protobuf.owl2protobuf.SecurityFeature.confidentiality:type_name -> owl2protobuf.owl2protobuf.Confidentiality
-	24,  // 124: owl2protobuf.owl2protobuf.SecurityFeature.integrity:type_name -> owl2protobuf.owl2protobuf.Integrity
-	0,   // 125: owl2protobuf.owl2protobuf.StorageService.Storage:type_name -> owl2protobuf.owl2protobuf.ResourceID
-	79,  // 126: owl2protobuf.owl2protobuf.StorageService.database_service:type_name -> owl2protobuf.owl2protobuf.DatabaseService
-	36,  // 127: owl2protobuf.owl2protobuf.StorageService.file_storage_service:type_name -> owl2protobuf.owl2protobuf.FileStorageService
-	72,  // 128: owl2protobuf.owl2protobuf.StorageService.object_storage_service:type_name -> owl2protobuf.owl2protobuf.ObjectStorageService
-	74,  // 129: owl2protobuf.owl2protobuf.IoT.device_provisioning_service:type_name -> owl2protobuf.owl2protobuf.DeviceProvisioningService
-	26,  // 130: owl2protobuf.owl2protobuf.IoT.messaging_hub:type_name -> owl2protobuf.owl2protobuf.MessagingHub
-	89,  // 131: owl2protobuf.owl2protobuf.Document.SecurityFeature:type_name -> owl2protobuf.owl2protobuf.SecurityFeature
-	32,  // 132: owl2protobuf.owl2protobuf.Storage.Backup:type_name -> owl2protobuf.owl2protobuf.Backup
-	95,  // 133: owl2protobuf.owl2protobuf.Storage.Immutability:type_name -> owl2protobuf.owl2protobuf.Immutability
-	68,  // 134: owl2protobuf.owl2protobuf.Storage.Redundancy:type_name -> owl2protobuf.owl2protobuf.Redundancy
-	65,  // 135: owl2protobuf.owl2protobuf.Storage.ResourceLogging:type_name -> owl2protobuf.owl2protobuf.ResourceLogging
-	30,  // 136: owl2protobuf.owl2protobuf.Storage.block_storage:type_name -> owl2protobuf.owl2protobuf.BlockStorage
-	7,   // 137: owl2protobuf.owl2protobuf.Storage.database_storage:type_name -> owl2protobuf.owl2protobuf.DatabaseStorage
-	49,  // 138: owl2protobuf.owl2protobuf.Storage.file_storage:type_name -> owl2protobuf.owl2protobuf.FileStorage
-	50,  // 139: owl2protobuf.owl2protobuf.Storage.object_storage:type_name -> owl2protobuf.owl2protobuf.ObjectStorage
-	23,  // 140: owl2protobuf.owl2protobuf.HttpRequest.HttpEndpoint:type_name -> owl2protobuf.owl2protobuf.HttpEndpoint
-	73,  // 141: owl2protobuf.owl2protobuf.AtRestEncryption.customer_key_encryption:type_name -> owl2protobuf.owl2protobuf.CustomerKeyEncryption
-	76,  // 142: owl2protobuf.owl2protobuf.AtRestEncryption.managed_key_encryption:type_name -> owl2protobuf.owl2protobuf.ManagedKeyEncryption
-	101, // 143: owl2protobuf.owl2protobuf.Confidentiality.at_rest_encryption:type_name -> owl2protobuf.owl2protobuf.AtRestEncryption
-	16,  // 144: owl2protobuf.owl2protobuf.Confidentiality.encryption_in_use:type_name -> owl2protobuf.owl2protobuf.EncryptionInUse
-	11,  // 145: owl2protobuf.owl2protobuf.Confidentiality.key:type_name -> owl2protobuf.owl2protobuf.Key
-	82,  // 146: owl2protobuf.owl2protobuf.Confidentiality.transport_encryption:type_name -> owl2protobuf.owl2protobuf.TransportEncryption
+	11,  // 0: clouditor.ontology.v1.Identifiable.Authenticity:type_name -> clouditor.ontology.v1.Authenticity
+	87,  // 1: clouditor.ontology.v1.Identifiable.Authorization:type_name -> clouditor.ontology.v1.Authorization
+	93,  // 2: clouditor.ontology.v1.Identifiable.identity:type_name -> clouditor.ontology.v1.Identity
+	58,  // 3: clouditor.ontology.v1.Identifiable.role_assignment:type_name -> clouditor.ontology.v1.RoleAssignment
+	19,  // 4: clouditor.ontology.v1.Networking.network_interface:type_name -> clouditor.ontology.v1.NetworkInterface
+	3,   // 5: clouditor.ontology.v1.Networking.network_security_group:type_name -> clouditor.ontology.v1.NetworkSecurityGroup
+	100, // 6: clouditor.ontology.v1.Networking.network_service:type_name -> clouditor.ontology.v1.NetworkService
+	61,  // 7: clouditor.ontology.v1.Networking.virtual_network:type_name -> clouditor.ontology.v1.VirtualNetwork
+	51,  // 8: clouditor.ontology.v1.Networking.virtual_sub_network:type_name -> clouditor.ontology.v1.VirtualSubNetwork
+	0,   // 9: clouditor.ontology.v1.StorageService.Storage:type_name -> clouditor.ontology.v1.ResourceID
+	56,  // 10: clouditor.ontology.v1.StorageService.database_service:type_name -> clouditor.ontology.v1.DatabaseService
+	63,  // 11: clouditor.ontology.v1.StorageService.file_storage_service:type_name -> clouditor.ontology.v1.FileStorageService
+	9,   // 12: clouditor.ontology.v1.StorageService.object_storage_service:type_name -> clouditor.ontology.v1.ObjectStorageService
+	92,  // 13: clouditor.ontology.v1.HttpRequestHandler.Application:type_name -> clouditor.ontology.v1.Application
+	31,  // 14: clouditor.ontology.v1.HttpRequestHandler.HttpEndpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	31,  // 15: clouditor.ontology.v1.ObjectStorageService.HttpEndpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	41,  // 16: clouditor.ontology.v1.Authenticity.certificate_based_authentication:type_name -> clouditor.ontology.v1.CertificateBasedAuthentication
+	45,  // 17: clouditor.ontology.v1.Authenticity.token_based_authentication:type_name -> clouditor.ontology.v1.TokenBasedAuthentication
+	94,  // 18: clouditor.ontology.v1.Authenticity.no_authentication:type_name -> clouditor.ontology.v1.NoAuthentication
+	27,  // 19: clouditor.ontology.v1.Authenticity.o_t_p_based_authentication:type_name -> clouditor.ontology.v1.OTPBasedAuthentication
+	89,  // 20: clouditor.ontology.v1.Authenticity.password_based_authentication:type_name -> clouditor.ontology.v1.PasswordBasedAuthentication
+	90,  // 21: clouditor.ontology.v1.Authenticity.single_sign_on:type_name -> clouditor.ontology.v1.SingleSignOn
+	30,  // 22: clouditor.ontology.v1.IoT.device_provisioning_service:type_name -> clouditor.ontology.v1.DeviceProvisioningService
+	60,  // 23: clouditor.ontology.v1.IoT.messaging_hub:type_name -> clouditor.ontology.v1.MessagingHub
+	70,  // 24: clouditor.ontology.v1.SecurityFeature.auditing:type_name -> clouditor.ontology.v1.Auditing
+	11,  // 25: clouditor.ontology.v1.SecurityFeature.authenticity:type_name -> clouditor.ontology.v1.Authenticity
+	87,  // 26: clouditor.ontology.v1.SecurityFeature.authorization:type_name -> clouditor.ontology.v1.Authorization
+	71,  // 27: clouditor.ontology.v1.SecurityFeature.availability:type_name -> clouditor.ontology.v1.Availability
+	62,  // 28: clouditor.ontology.v1.SecurityFeature.confidentiality:type_name -> clouditor.ontology.v1.Confidentiality
+	20,  // 29: clouditor.ontology.v1.SecurityFeature.integrity:type_name -> clouditor.ontology.v1.Integrity
+	29,  // 30: clouditor.ontology.v1.CloudResource.GeoLocation:type_name -> clouditor.ontology.v1.GeoLocation
+	52,  // 31: clouditor.ontology.v1.CloudResource.account:type_name -> clouditor.ontology.v1.Account
+	48,  // 32: clouditor.ontology.v1.CloudResource.c_i_c_d_service:type_name -> clouditor.ontology.v1.CICDService
+	76,  // 33: clouditor.ontology.v1.CloudResource.compute:type_name -> clouditor.ontology.v1.Compute
+	37,  // 34: clouditor.ontology.v1.CloudResource.container_orchestration:type_name -> clouditor.ontology.v1.ContainerOrchestration
+	97,  // 35: clouditor.ontology.v1.CloudResource.container_registry:type_name -> clouditor.ontology.v1.ContainerRegistry
+	2,   // 36: clouditor.ontology.v1.CloudResource.identifiable:type_name -> clouditor.ontology.v1.Identifiable
+	32,  // 37: clouditor.ontology.v1.CloudResource.image:type_name -> clouditor.ontology.v1.Image
+	15,  // 38: clouditor.ontology.v1.CloudResource.io_t:type_name -> clouditor.ontology.v1.IoT
+	65,  // 39: clouditor.ontology.v1.CloudResource.key_vault:type_name -> clouditor.ontology.v1.KeyVault
+	4,   // 40: clouditor.ontology.v1.CloudResource.networking:type_name -> clouditor.ontology.v1.Networking
+	95,  // 41: clouditor.ontology.v1.CloudResource.password_policy:type_name -> clouditor.ontology.v1.PasswordPolicy
+	1,   // 42: clouditor.ontology.v1.CloudResource.resource_group:type_name -> clouditor.ontology.v1.ResourceGroup
+	34,  // 43: clouditor.ontology.v1.CloudResource.storage:type_name -> clouditor.ontology.v1.Storage
+	0,   // 44: clouditor.ontology.v1.NetworkInterface.NetworkService:type_name -> clouditor.ontology.v1.ResourceID
+	84,  // 45: clouditor.ontology.v1.Integrity.automatic_security_updates:type_name -> clouditor.ontology.v1.AutomaticSecurityUpdates
+	77,  // 46: clouditor.ontology.v1.Integrity.immutability:type_name -> clouditor.ontology.v1.Immutability
+	0,   // 47: clouditor.ontology.v1.Container.Image:type_name -> clouditor.ontology.v1.ResourceID
+	0,   // 48: clouditor.ontology.v1.LoggingService.Storage:type_name -> clouditor.ontology.v1.ResourceID
+	0,   // 49: clouditor.ontology.v1.DatabaseOperation.DatabaseStorage:type_name -> clouditor.ontology.v1.ResourceID
+	0,   // 50: clouditor.ontology.v1.DatabaseOperation.DatabaseService:type_name -> clouditor.ontology.v1.ResourceID
+	12,  // 51: clouditor.ontology.v1.DatabaseOperation.database_connect:type_name -> clouditor.ontology.v1.DatabaseConnect
+	88,  // 52: clouditor.ontology.v1.DatabaseOperation.database_query:type_name -> clouditor.ontology.v1.DatabaseQuery
+	11,  // 53: clouditor.ontology.v1.HttpEndpoint.Authenticity:type_name -> clouditor.ontology.v1.Authenticity
+	10,  // 54: clouditor.ontology.v1.HttpEndpoint.TransportEncryption:type_name -> clouditor.ontology.v1.TransportEncryption
+	83,  // 55: clouditor.ontology.v1.HttpEndpoint.proxied_endpoint:type_name -> clouditor.ontology.v1.ProxiedEndpoint
+	92,  // 56: clouditor.ontology.v1.Image.Application:type_name -> clouditor.ontology.v1.Application
+	14,  // 57: clouditor.ontology.v1.Image.container_image:type_name -> clouditor.ontology.v1.ContainerImage
+	86,  // 58: clouditor.ontology.v1.Image.v_m_image:type_name -> clouditor.ontology.v1.VMImage
+	0,   // 59: clouditor.ontology.v1.Logging.LoggingService:type_name -> clouditor.ontology.v1.ResourceID
+	96,  // 60: clouditor.ontology.v1.Logging.activity_logging:type_name -> clouditor.ontology.v1.ActivityLogging
+	23,  // 61: clouditor.ontology.v1.Logging.application_logging:type_name -> clouditor.ontology.v1.ApplicationLogging
+	64,  // 62: clouditor.ontology.v1.Logging.boot_logging:type_name -> clouditor.ontology.v1.BootLogging
+	82,  // 63: clouditor.ontology.v1.Logging.o_s_logging:type_name -> clouditor.ontology.v1.OSLogging
+	16,  // 64: clouditor.ontology.v1.Logging.resource_logging:type_name -> clouditor.ontology.v1.ResourceLogging
+	53,  // 65: clouditor.ontology.v1.Storage.Backup:type_name -> clouditor.ontology.v1.Backup
+	77,  // 66: clouditor.ontology.v1.Storage.Immutability:type_name -> clouditor.ontology.v1.Immutability
+	78,  // 67: clouditor.ontology.v1.Storage.Redundancy:type_name -> clouditor.ontology.v1.Redundancy
+	16,  // 68: clouditor.ontology.v1.Storage.ResourceLogging:type_name -> clouditor.ontology.v1.ResourceLogging
+	35,  // 69: clouditor.ontology.v1.Storage.block_storage:type_name -> clouditor.ontology.v1.BlockStorage
+	57,  // 70: clouditor.ontology.v1.Storage.database_storage:type_name -> clouditor.ontology.v1.DatabaseStorage
+	68,  // 71: clouditor.ontology.v1.Storage.file_storage:type_name -> clouditor.ontology.v1.FileStorage
+	46,  // 72: clouditor.ontology.v1.Storage.object_storage:type_name -> clouditor.ontology.v1.ObjectStorage
+	16,  // 73: clouditor.ontology.v1.ContainerOrchestration.ResourceLogging:type_name -> clouditor.ontology.v1.ResourceLogging
+	0,   // 74: clouditor.ontology.v1.ContainerOrchestration.Container:type_name -> clouditor.ontology.v1.ResourceID
+	25,  // 75: clouditor.ontology.v1.Firewall.l3_firewall:type_name -> clouditor.ontology.v1.L3Firewall
+	72,  // 76: clouditor.ontology.v1.Firewall.web_application_firewall:type_name -> clouditor.ontology.v1.WebApplicationFirewall
+	13,  // 77: clouditor.ontology.v1.Framework.cloud_s_d_k:type_name -> clouditor.ontology.v1.CloudSDK
+	59,  // 78: clouditor.ontology.v1.Framework.http_client_library:type_name -> clouditor.ontology.v1.HttpClientLibrary
+	74,  // 79: clouditor.ontology.v1.Framework.http_server:type_name -> clouditor.ontology.v1.HttpServer
+	8,   // 80: clouditor.ontology.v1.Framework.logger:type_name -> clouditor.ontology.v1.Logger
+	0,   // 81: clouditor.ontology.v1.ObjectStorageRequest.ObjectStorage:type_name -> clouditor.ontology.v1.ResourceID
+	92,  // 82: clouditor.ontology.v1.Resource.application:type_name -> clouditor.ontology.v1.Application
+	18,  // 83: clouditor.ontology.v1.Resource.cloud_resource:type_name -> clouditor.ontology.v1.CloudResource
+	67,  // 84: clouditor.ontology.v1.Resource.document:type_name -> clouditor.ontology.v1.Document
+	7,   // 85: clouditor.ontology.v1.CICDService.job:type_name -> clouditor.ontology.v1.Job
+	66,  // 86: clouditor.ontology.v1.CICDService.workflow:type_name -> clouditor.ontology.v1.Workflow
+	31,  // 87: clouditor.ontology.v1.LoadBalancer.HttpEndpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	0,   // 88: clouditor.ontology.v1.LoadBalancer.NetworkService:type_name -> clouditor.ontology.v1.ResourceID
+	33,  // 89: clouditor.ontology.v1.LogOperation.Logging:type_name -> clouditor.ontology.v1.Logging
+	0,   // 90: clouditor.ontology.v1.Backup.Storage:type_name -> clouditor.ontology.v1.ResourceID
+	31,  // 91: clouditor.ontology.v1.DatabaseService.HttpEndpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	85,  // 92: clouditor.ontology.v1.DatabaseService.MalwareProtection:type_name -> clouditor.ontology.v1.MalwareProtection
+	54,  // 93: clouditor.ontology.v1.DatabaseService.document_database_service:type_name -> clouditor.ontology.v1.DocumentDatabaseService
+	22,  // 94: clouditor.ontology.v1.DatabaseService.key_value_database_service:type_name -> clouditor.ontology.v1.KeyValueDatabaseService
+	36,  // 95: clouditor.ontology.v1.DatabaseService.relational_database_service:type_name -> clouditor.ontology.v1.RelationalDatabaseService
+	102, // 96: clouditor.ontology.v1.Confidentiality.at_rest_encryption:type_name -> clouditor.ontology.v1.AtRestEncryption
+	43,  // 97: clouditor.ontology.v1.Confidentiality.encryption_in_use:type_name -> clouditor.ontology.v1.EncryptionInUse
+	21,  // 98: clouditor.ontology.v1.Confidentiality.key:type_name -> clouditor.ontology.v1.Key
+	10,  // 99: clouditor.ontology.v1.Confidentiality.transport_encryption:type_name -> clouditor.ontology.v1.TransportEncryption
+	31,  // 100: clouditor.ontology.v1.FileStorageService.HttpEndpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	17,  // 101: clouditor.ontology.v1.Document.SecurityFeature:type_name -> clouditor.ontology.v1.SecurityFeature
+	91,  // 102: clouditor.ontology.v1.Auditing.anomaly_detection:type_name -> clouditor.ontology.v1.AnomalyDetection
+	33,  // 103: clouditor.ontology.v1.Auditing.logging:type_name -> clouditor.ontology.v1.Logging
+	85,  // 104: clouditor.ontology.v1.Auditing.malware_protection:type_name -> clouditor.ontology.v1.MalwareProtection
+	53,  // 105: clouditor.ontology.v1.Availability.backup:type_name -> clouditor.ontology.v1.Backup
+	81,  // 106: clouditor.ontology.v1.Availability.d_do_s_protection:type_name -> clouditor.ontology.v1.DDoSProtection
+	29,  // 107: clouditor.ontology.v1.Availability.geo_location:type_name -> clouditor.ontology.v1.GeoLocation
+	78,  // 108: clouditor.ontology.v1.Availability.redundancy:type_name -> clouditor.ontology.v1.Redundancy
+	38,  // 109: clouditor.ontology.v1.AccessRestriction.firewall:type_name -> clouditor.ontology.v1.Firewall
+	6,   // 110: clouditor.ontology.v1.HttpServer.HttpRequestHandler:type_name -> clouditor.ontology.v1.HttpRequestHandler
+	0,   // 111: clouditor.ontology.v1.Compute.NetworkInterface:type_name -> clouditor.ontology.v1.ResourceID
+	43,  // 112: clouditor.ontology.v1.Compute.EncryptionInUse:type_name -> clouditor.ontology.v1.EncryptionInUse
+	16,  // 113: clouditor.ontology.v1.Compute.ResourceLogging:type_name -> clouditor.ontology.v1.ResourceLogging
+	24,  // 114: clouditor.ontology.v1.Compute.container:type_name -> clouditor.ontology.v1.Container
+	44,  // 115: clouditor.ontology.v1.Compute.function:type_name -> clouditor.ontology.v1.Function
+	80,  // 116: clouditor.ontology.v1.Compute.virtual_machine:type_name -> clouditor.ontology.v1.VirtualMachine
+	75,  // 117: clouditor.ontology.v1.Compute.web_app:type_name -> clouditor.ontology.v1.WebApp
+	28,  // 118: clouditor.ontology.v1.Operation.database_operation:type_name -> clouditor.ontology.v1.DatabaseOperation
+	98,  // 119: clouditor.ontology.v1.Operation.http_request:type_name -> clouditor.ontology.v1.HttpRequest
+	50,  // 120: clouditor.ontology.v1.Operation.log_operation:type_name -> clouditor.ontology.v1.LogOperation
+	40,  // 121: clouditor.ontology.v1.Operation.object_storage_request:type_name -> clouditor.ontology.v1.ObjectStorageRequest
+	0,   // 122: clouditor.ontology.v1.VirtualMachine.BlockStorage:type_name -> clouditor.ontology.v1.ResourceID
+	96,  // 123: clouditor.ontology.v1.VirtualMachine.ActivityLogging:type_name -> clouditor.ontology.v1.ActivityLogging
+	84,  // 124: clouditor.ontology.v1.VirtualMachine.AutomaticSecurityUpdates:type_name -> clouditor.ontology.v1.AutomaticSecurityUpdates
+	64,  // 125: clouditor.ontology.v1.VirtualMachine.BootLogging:type_name -> clouditor.ontology.v1.BootLogging
+	85,  // 126: clouditor.ontology.v1.VirtualMachine.MalwareProtection:type_name -> clouditor.ontology.v1.MalwareProtection
+	82,  // 127: clouditor.ontology.v1.VirtualMachine.OSLogging:type_name -> clouditor.ontology.v1.OSLogging
+	23,  // 128: clouditor.ontology.v1.MalwareProtection.ApplicationLogging:type_name -> clouditor.ontology.v1.ApplicationLogging
+	101, // 129: clouditor.ontology.v1.Authorization.a_b_a_c:type_name -> clouditor.ontology.v1.ABAC
+	73,  // 130: clouditor.ontology.v1.Authorization.access_restriction:type_name -> clouditor.ontology.v1.AccessRestriction
+	69,  // 131: clouditor.ontology.v1.Authorization.r_b_a_c:type_name -> clouditor.ontology.v1.RBAC
+	23,  // 132: clouditor.ontology.v1.AnomalyDetection.ApplicationLogging:type_name -> clouditor.ontology.v1.ApplicationLogging
+	99,  // 133: clouditor.ontology.v1.Application.Functionality:type_name -> clouditor.ontology.v1.Functionality
+	0,   // 134: clouditor.ontology.v1.Application.Compute:type_name -> clouditor.ontology.v1.ResourceID
+	11,  // 135: clouditor.ontology.v1.Identity.Authenticity:type_name -> clouditor.ontology.v1.Authenticity
+	31,  // 136: clouditor.ontology.v1.HttpRequest.HttpEndpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	31,  // 137: clouditor.ontology.v1.Functionality.http_endpoint:type_name -> clouditor.ontology.v1.HttpEndpoint
+	6,   // 138: clouditor.ontology.v1.Functionality.http_request_handler:type_name -> clouditor.ontology.v1.HttpRequestHandler
+	79,  // 139: clouditor.ontology.v1.Functionality.operation:type_name -> clouditor.ontology.v1.Operation
+	0,   // 140: clouditor.ontology.v1.NetworkService.Compute:type_name -> clouditor.ontology.v1.ResourceID
+	10,  // 141: clouditor.ontology.v1.NetworkService.TransportEncryption:type_name -> clouditor.ontology.v1.TransportEncryption
+	49,  // 142: clouditor.ontology.v1.NetworkService.load_balancer:type_name -> clouditor.ontology.v1.LoadBalancer
+	26,  // 143: clouditor.ontology.v1.NetworkService.logging_service:type_name -> clouditor.ontology.v1.LoggingService
+	5,   // 144: clouditor.ontology.v1.NetworkService.storage_service:type_name -> clouditor.ontology.v1.StorageService
+	42,  // 145: clouditor.ontology.v1.AtRestEncryption.customer_key_encryption:type_name -> clouditor.ontology.v1.CustomerKeyEncryption
+	55,  // 146: clouditor.ontology.v1.AtRestEncryption.managed_key_encryption:type_name -> clouditor.ontology.v1.ManagedKeyEncryption
 	147, // [147:147] is the sub-list for method output_type
 	147, // [147:147] is the sub-list for method input_type
 	147, // [147:147] is the sub-list for extension type_name
@@ -7798,162 +7762,6 @@ func file_api_ontology_proto_init() {
 			}
 		}
 		file_api_ontology_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NetworkSecurityGroup); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Account); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CloudResource); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Framework); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Image); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*KeyValueDatabaseService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DatabaseStorage); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoadBalancer); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WebApplicationFirewall); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AnomalyDetection); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Key); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Application); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ObjectStorageRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ResourceGroup); i {
 			case 0:
 				return &v.state
@@ -7965,8 +7773,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Authorization); i {
+		file_api_ontology_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Identifiable); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7977,8 +7785,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EncryptionInUse); i {
+		file_api_ontology_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NetworkSecurityGroup); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7989,8 +7797,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CICDService); i {
+		file_api_ontology_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Networking); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8001,8 +7809,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CloudSDK); i {
+		file_api_ontology_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StorageService); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8013,8 +7821,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Container); i {
+		file_api_ontology_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HttpRequestHandler); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8025,8 +7833,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*KeyVault); i {
+		file_api_ontology_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Job); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8037,8 +7845,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProxiedEndpoint); i {
+		file_api_ontology_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Logger); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8049,7 +7857,43 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+		file_api_ontology_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ObjectStorageService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TransportEncryption); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Authenticity); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DatabaseConnect); i {
 			case 0:
 				return &v.state
@@ -8061,8 +7905,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpEndpoint); i {
+		file_api_ontology_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CloudSDK); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8073,7 +7917,79 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+		file_api_ontology_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ContainerImage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*IoT); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ResourceLogging); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SecurityFeature); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CloudResource); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NetworkInterface); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Integrity); i {
 			case 0:
 				return &v.state
@@ -8085,31 +8001,55 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
+		file_api_ontology_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Key); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*KeyValueDatabaseService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ApplicationLogging); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Container); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 		file_api_ontology_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoggingService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MessagingHub); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*L3Firewall); i {
 			case 0:
 				return &v.state
@@ -8121,8 +8061,32 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
+		file_api_ontology_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LoggingService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OTPBasedAuthentication); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 		file_api_ontology_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OSLogging); i {
+			switch v := v.(*DatabaseOperation); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8146,534 +8110,6 @@ func file_api_ontology_proto_init() {
 			}
 		}
 		file_api_ontology_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BlockStorage); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Logging); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Backup); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Compute); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ContainerOrchestration); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DatabaseOperation); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FileStorageService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpClientLibrary); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ActivityLogging); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DDoSProtection); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[40].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Logger); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[41].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*VMImage); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[42].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*VirtualMachine); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[43].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Availability); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[44].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NetworkInterface); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[45].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ABAC); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[46].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AccessRestriction); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[47].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocumentDatabaseService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BootLogging); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[49].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FileStorage); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ObjectStorage); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Operation); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Resource); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpServer); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TokenBasedAuthentication); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[55].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NetworkService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[56].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Authenticity); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Function); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[58].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Functionality); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[59].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LogOperation); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MalwareProtection); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[61].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DatabaseQuery); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[62].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Firewall); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PasswordBasedAuthentication); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[64].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PasswordPolicy); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[65].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ResourceLogging); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[66].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SingleSignOn); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[67].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*VirtualSubNetwork); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[68].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Redundancy); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[69].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CertificateBasedAuthentication); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[70].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Job); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[71].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NoAuthentication); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[72].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ObjectStorageService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[73].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CustomerKeyEncryption); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[74].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeviceProvisioningService); i {
 			case 0:
 				return &v.state
@@ -8685,8 +8121,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[75].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Identity); i {
+		file_api_ontology_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HttpEndpoint); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8697,8 +8133,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[76].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ManagedKeyEncryption); i {
+		file_api_ontology_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Image); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8709,8 +8145,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RoleAssignment); i {
+		file_api_ontology_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Logging); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8721,235 +8157,7 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Workflow); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DatabaseService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[80].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpRequestHandler); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[81].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RelationalDatabaseService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[82].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TransportEncryption); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[83].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ContainerImage); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[84].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WebApp); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[85].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Auditing); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[86].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AutomaticSecurityUpdates); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[87].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Identifiable); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[88].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Networking); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[89].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SecurityFeature); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[90].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StorageService); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[91].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*VirtualNetwork); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[92].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*IoT); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[93].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RBAC); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[94].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Document); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[95].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Immutability); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[96].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OTPBasedAuthentication); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_api_ontology_proto_msgTypes[97].Exporter = func(v interface{}, i int) interface{} {
+		file_api_ontology_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Storage); i {
 			case 0:
 				return &v.state
@@ -8961,8 +8169,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[98].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ContainerRegistry); i {
+		file_api_ontology_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BlockStorage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8973,8 +8181,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[99].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HttpRequest); i {
+		file_api_ontology_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RelationalDatabaseService); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8985,8 +8193,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[100].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ApplicationLogging); i {
+		file_api_ontology_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ContainerOrchestration); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8997,8 +8205,8 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[101].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AtRestEncryption); i {
+		file_api_ontology_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Firewall); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9009,7 +8217,283 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
-		file_api_ontology_proto_msgTypes[102].Exporter = func(v interface{}, i int) interface{} {
+		file_api_ontology_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Framework); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[40].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ObjectStorageRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[41].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CertificateBasedAuthentication); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[42].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CustomerKeyEncryption); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[43].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EncryptionInUse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[44].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Function); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[45].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TokenBasedAuthentication); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[46].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ObjectStorage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[47].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Resource); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CICDService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[49].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LoadBalancer); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LogOperation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VirtualSubNetwork); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Account); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Backup); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DocumentDatabaseService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[55].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ManagedKeyEncryption); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[56].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DatabaseService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DatabaseStorage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[58].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RoleAssignment); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[59].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HttpClientLibrary); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MessagingHub); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[61].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VirtualNetwork); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[62].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Confidentiality); i {
 			case 0:
 				return &v.state
@@ -9021,8 +8505,524 @@ func file_api_ontology_proto_init() {
 				return nil
 			}
 		}
+		file_api_ontology_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FileStorageService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[64].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BootLogging); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[65].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*KeyVault); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[66].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Workflow); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[67].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Document); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[68].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FileStorage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[69].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RBAC); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[70].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Auditing); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[71].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Availability); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[72].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WebApplicationFirewall); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[73].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AccessRestriction); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[74].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HttpServer); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[75].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WebApp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[76].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Compute); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Immutability); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Redundancy); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Operation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[80].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VirtualMachine); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[81].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DDoSProtection); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[82].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OSLogging); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[83].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProxiedEndpoint); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[84].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AutomaticSecurityUpdates); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[85].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MalwareProtection); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[86].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VMImage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[87].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Authorization); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[88].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DatabaseQuery); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[89].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PasswordBasedAuthentication); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[90].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SingleSignOn); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[91].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AnomalyDetection); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[92].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Application); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[93].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Identity); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[94].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NoAuthentication); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[95].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PasswordPolicy); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[96].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ActivityLogging); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[97].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ContainerRegistry); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[98].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HttpRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[99].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Functionality); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[100].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NetworkService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[101].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ABAC); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_ontology_proto_msgTypes[102].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AtRestEncryption); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
-	file_api_ontology_proto_msgTypes[3].OneofWrappers = []interface{}{
+	file_api_ontology_proto_msgTypes[2].OneofWrappers = []interface{}{
+		(*Identifiable_Identity)(nil),
+		(*Identifiable_RoleAssignment)(nil),
+	}
+	file_api_ontology_proto_msgTypes[4].OneofWrappers = []interface{}{
+		(*Networking_NetworkInterface)(nil),
+		(*Networking_NetworkSecurityGroup)(nil),
+		(*Networking_NetworkService)(nil),
+		(*Networking_VirtualNetwork)(nil),
+		(*Networking_VirtualSubNetwork)(nil),
+	}
+	file_api_ontology_proto_msgTypes[5].OneofWrappers = []interface{}{
+		(*StorageService_DatabaseService)(nil),
+		(*StorageService_FileStorageService)(nil),
+		(*StorageService_ObjectStorageService)(nil),
+	}
+	file_api_ontology_proto_msgTypes[11].OneofWrappers = []interface{}{
+		(*Authenticity_CertificateBasedAuthentication)(nil),
+		(*Authenticity_TokenBasedAuthentication)(nil),
+		(*Authenticity_NoAuthentication)(nil),
+		(*Authenticity_OTPBasedAuthentication)(nil),
+		(*Authenticity_PasswordBasedAuthentication)(nil),
+		(*Authenticity_SingleSignOn)(nil),
+	}
+	file_api_ontology_proto_msgTypes[15].OneofWrappers = []interface{}{
+		(*IoT_DeviceProvisioningService)(nil),
+		(*IoT_MessagingHub)(nil),
+	}
+	file_api_ontology_proto_msgTypes[17].OneofWrappers = []interface{}{
+		(*SecurityFeature_Auditing)(nil),
+		(*SecurityFeature_Authenticity)(nil),
+		(*SecurityFeature_Authorization)(nil),
+		(*SecurityFeature_Availability)(nil),
+		(*SecurityFeature_Confidentiality)(nil),
+		(*SecurityFeature_Integrity)(nil),
+	}
+	file_api_ontology_proto_msgTypes[18].OneofWrappers = []interface{}{
 		(*CloudResource_Account)(nil),
 		(*CloudResource_CICDService)(nil),
 		(*CloudResource_Compute)(nil),
@@ -9037,144 +9037,108 @@ func file_api_ontology_proto_init() {
 		(*CloudResource_ResourceGroup)(nil),
 		(*CloudResource_Storage)(nil),
 	}
-	file_api_ontology_proto_msgTypes[4].OneofWrappers = []interface{}{
-		(*Framework_CloudSDK)(nil),
-		(*Framework_HttpClientLibrary)(nil),
-		(*Framework_HttpServer)(nil),
-		(*Framework_Logger)(nil),
-	}
-	file_api_ontology_proto_msgTypes[5].OneofWrappers = []interface{}{
-		(*Image_ContainerImage)(nil),
-		(*Image_VMImage)(nil),
-	}
-	file_api_ontology_proto_msgTypes[15].OneofWrappers = []interface{}{
-		(*Authorization_ABAC)(nil),
-		(*Authorization_AccessRestriction)(nil),
-		(*Authorization_RBAC)(nil),
-	}
-	file_api_ontology_proto_msgTypes[17].OneofWrappers = []interface{}{
-		(*CICDService_Job)(nil),
-		(*CICDService_Workflow)(nil),
-	}
-	file_api_ontology_proto_msgTypes[23].OneofWrappers = []interface{}{
-		(*HttpEndpoint_ProxiedEndpoint)(nil),
-	}
-	file_api_ontology_proto_msgTypes[24].OneofWrappers = []interface{}{
+	file_api_ontology_proto_msgTypes[20].OneofWrappers = []interface{}{
 		(*Integrity_AutomaticSecurityUpdates)(nil),
 		(*Integrity_Immutability)(nil),
 	}
+	file_api_ontology_proto_msgTypes[28].OneofWrappers = []interface{}{
+		(*DatabaseOperation_DatabaseConnect)(nil),
+		(*DatabaseOperation_DatabaseQuery)(nil),
+	}
 	file_api_ontology_proto_msgTypes[31].OneofWrappers = []interface{}{
+		(*HttpEndpoint_ProxiedEndpoint)(nil),
+	}
+	file_api_ontology_proto_msgTypes[32].OneofWrappers = []interface{}{
+		(*Image_ContainerImage)(nil),
+		(*Image_VMImage)(nil),
+	}
+	file_api_ontology_proto_msgTypes[33].OneofWrappers = []interface{}{
 		(*Logging_ActivityLogging)(nil),
 		(*Logging_ApplicationLogging)(nil),
 		(*Logging_BootLogging)(nil),
 		(*Logging_OSLogging)(nil),
 		(*Logging_ResourceLogging)(nil),
 	}
-	file_api_ontology_proto_msgTypes[33].OneofWrappers = []interface{}{
-		(*Compute_Container)(nil),
-		(*Compute_Function)(nil),
-		(*Compute_VirtualMachine)(nil),
-		(*Compute_WebApp)(nil),
-	}
-	file_api_ontology_proto_msgTypes[35].OneofWrappers = []interface{}{
-		(*DatabaseOperation_DatabaseConnect)(nil),
-		(*DatabaseOperation_DatabaseQuery)(nil),
-	}
-	file_api_ontology_proto_msgTypes[43].OneofWrappers = []interface{}{
-		(*Availability_Backup)(nil),
-		(*Availability_DDoSProtection)(nil),
-		(*Availability_GeoLocation)(nil),
-		(*Availability_Redundancy)(nil),
-	}
-	file_api_ontology_proto_msgTypes[46].OneofWrappers = []interface{}{
-		(*AccessRestriction_Firewall)(nil),
-	}
-	file_api_ontology_proto_msgTypes[51].OneofWrappers = []interface{}{
-		(*Operation_DatabaseOperation)(nil),
-		(*Operation_HttpRequest)(nil),
-		(*Operation_LogOperation)(nil),
-		(*Operation_ObjectStorageRequest)(nil),
-	}
-	file_api_ontology_proto_msgTypes[52].OneofWrappers = []interface{}{
-		(*Resource_Application)(nil),
-		(*Resource_CloudResource)(nil),
-		(*Resource_Document)(nil),
-	}
-	file_api_ontology_proto_msgTypes[55].OneofWrappers = []interface{}{
-		(*NetworkService_LoadBalancer)(nil),
-		(*NetworkService_LoggingService)(nil),
-		(*NetworkService_StorageService)(nil),
-	}
-	file_api_ontology_proto_msgTypes[56].OneofWrappers = []interface{}{
-		(*Authenticity_CertificateBasedAuthentication)(nil),
-		(*Authenticity_TokenBasedAuthentication)(nil),
-		(*Authenticity_NoAuthentication)(nil),
-		(*Authenticity_OTPBasedAuthentication)(nil),
-		(*Authenticity_PasswordBasedAuthentication)(nil),
-		(*Authenticity_SingleSignOn)(nil),
-	}
-	file_api_ontology_proto_msgTypes[58].OneofWrappers = []interface{}{
-		(*Functionality_HttpEndpoint)(nil),
-		(*Functionality_HttpRequestHandler)(nil),
-		(*Functionality_Operation)(nil),
-	}
-	file_api_ontology_proto_msgTypes[62].OneofWrappers = []interface{}{
-		(*Firewall_L3Firewall)(nil),
-		(*Firewall_WebApplicationFirewall)(nil),
-	}
-	file_api_ontology_proto_msgTypes[79].OneofWrappers = []interface{}{
-		(*DatabaseService_DocumentDatabaseService)(nil),
-		(*DatabaseService_KeyValueDatabaseService)(nil),
-		(*DatabaseService_RelationalDatabaseService)(nil),
-	}
-	file_api_ontology_proto_msgTypes[85].OneofWrappers = []interface{}{
-		(*Auditing_AnomalyDetection)(nil),
-		(*Auditing_Logging)(nil),
-		(*Auditing_MalwareProtection)(nil),
-	}
-	file_api_ontology_proto_msgTypes[87].OneofWrappers = []interface{}{
-		(*Identifiable_Identity)(nil),
-		(*Identifiable_RoleAssignment)(nil),
-	}
-	file_api_ontology_proto_msgTypes[88].OneofWrappers = []interface{}{
-		(*Networking_NetworkInterface)(nil),
-		(*Networking_NetworkSecurityGroup)(nil),
-		(*Networking_NetworkService)(nil),
-		(*Networking_VirtualNetwork)(nil),
-		(*Networking_VirtualSubNetwork)(nil),
-	}
-	file_api_ontology_proto_msgTypes[89].OneofWrappers = []interface{}{
-		(*SecurityFeature_Auditing)(nil),
-		(*SecurityFeature_Authenticity)(nil),
-		(*SecurityFeature_Authorization)(nil),
-		(*SecurityFeature_Availability)(nil),
-		(*SecurityFeature_Confidentiality)(nil),
-		(*SecurityFeature_Integrity)(nil),
-	}
-	file_api_ontology_proto_msgTypes[90].OneofWrappers = []interface{}{
-		(*StorageService_DatabaseService)(nil),
-		(*StorageService_FileStorageService)(nil),
-		(*StorageService_ObjectStorageService)(nil),
-	}
-	file_api_ontology_proto_msgTypes[92].OneofWrappers = []interface{}{
-		(*IoT_DeviceProvisioningService)(nil),
-		(*IoT_MessagingHub)(nil),
-	}
-	file_api_ontology_proto_msgTypes[97].OneofWrappers = []interface{}{
+	file_api_ontology_proto_msgTypes[34].OneofWrappers = []interface{}{
 		(*Storage_BlockStorage)(nil),
 		(*Storage_DatabaseStorage)(nil),
 		(*Storage_FileStorage)(nil),
 		(*Storage_ObjectStorage)(nil),
 	}
-	file_api_ontology_proto_msgTypes[101].OneofWrappers = []interface{}{
-		(*AtRestEncryption_CustomerKeyEncryption)(nil),
-		(*AtRestEncryption_ManagedKeyEncryption)(nil),
+	file_api_ontology_proto_msgTypes[38].OneofWrappers = []interface{}{
+		(*Firewall_L3Firewall)(nil),
+		(*Firewall_WebApplicationFirewall)(nil),
 	}
-	file_api_ontology_proto_msgTypes[102].OneofWrappers = []interface{}{
+	file_api_ontology_proto_msgTypes[39].OneofWrappers = []interface{}{
+		(*Framework_CloudSDK)(nil),
+		(*Framework_HttpClientLibrary)(nil),
+		(*Framework_HttpServer)(nil),
+		(*Framework_Logger)(nil),
+	}
+	file_api_ontology_proto_msgTypes[47].OneofWrappers = []interface{}{
+		(*Resource_Application)(nil),
+		(*Resource_CloudResource)(nil),
+		(*Resource_Document)(nil),
+	}
+	file_api_ontology_proto_msgTypes[48].OneofWrappers = []interface{}{
+		(*CICDService_Job)(nil),
+		(*CICDService_Workflow)(nil),
+	}
+	file_api_ontology_proto_msgTypes[56].OneofWrappers = []interface{}{
+		(*DatabaseService_DocumentDatabaseService)(nil),
+		(*DatabaseService_KeyValueDatabaseService)(nil),
+		(*DatabaseService_RelationalDatabaseService)(nil),
+	}
+	file_api_ontology_proto_msgTypes[62].OneofWrappers = []interface{}{
 		(*Confidentiality_AtRestEncryption)(nil),
 		(*Confidentiality_EncryptionInUse)(nil),
 		(*Confidentiality_Key)(nil),
 		(*Confidentiality_TransportEncryption)(nil),
+	}
+	file_api_ontology_proto_msgTypes[70].OneofWrappers = []interface{}{
+		(*Auditing_AnomalyDetection)(nil),
+		(*Auditing_Logging)(nil),
+		(*Auditing_MalwareProtection)(nil),
+	}
+	file_api_ontology_proto_msgTypes[71].OneofWrappers = []interface{}{
+		(*Availability_Backup)(nil),
+		(*Availability_DDoSProtection)(nil),
+		(*Availability_GeoLocation)(nil),
+		(*Availability_Redundancy)(nil),
+	}
+	file_api_ontology_proto_msgTypes[73].OneofWrappers = []interface{}{
+		(*AccessRestriction_Firewall)(nil),
+	}
+	file_api_ontology_proto_msgTypes[76].OneofWrappers = []interface{}{
+		(*Compute_Container)(nil),
+		(*Compute_Function)(nil),
+		(*Compute_VirtualMachine)(nil),
+		(*Compute_WebApp)(nil),
+	}
+	file_api_ontology_proto_msgTypes[79].OneofWrappers = []interface{}{
+		(*Operation_DatabaseOperation)(nil),
+		(*Operation_HttpRequest)(nil),
+		(*Operation_LogOperation)(nil),
+		(*Operation_ObjectStorageRequest)(nil),
+	}
+	file_api_ontology_proto_msgTypes[87].OneofWrappers = []interface{}{
+		(*Authorization_ABAC)(nil),
+		(*Authorization_AccessRestriction)(nil),
+		(*Authorization_RBAC)(nil),
+	}
+	file_api_ontology_proto_msgTypes[99].OneofWrappers = []interface{}{
+		(*Functionality_HttpEndpoint)(nil),
+		(*Functionality_HttpRequestHandler)(nil),
+		(*Functionality_Operation)(nil),
+	}
+	file_api_ontology_proto_msgTypes[100].OneofWrappers = []interface{}{
+		(*NetworkService_LoadBalancer)(nil),
+		(*NetworkService_LoggingService)(nil),
+		(*NetworkService_StorageService)(nil),
+	}
+	file_api_ontology_proto_msgTypes[102].OneofWrappers = []interface{}{
+		(*AtRestEncryption_CustomerKeyEncryption)(nil),
+		(*AtRestEncryption_ManagedKeyEncryption)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

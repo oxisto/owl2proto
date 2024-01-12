@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"strings"
 
+	"github.com/oxisto/owl2protobuf/internal/fileHeaders"
+	"github.com/oxisto/owl2protobuf/internal/util"
 	"github.com/oxisto/owl2protobuf/pkg/owl"
+	"github.com/oxisto/owl2protobuf/pkg/protobuf"
 
 	"github.com/lmittmann/tint"
 )
@@ -16,34 +18,42 @@ import (
 // - get label instead of iri for the name fields
 // - add comments
 // - add relationsships
+// - add ObjectSomeValuesFrom
+// - add ObjectHasValue
 
 var (
 	file string
 )
 
-func prepareOntology(o owl.Ontology) owl.OntologyPrepared {
-	preparedOntology := owl.OntologyPrepared{
-		Resources:           make(map[string]*owl.Resource),
+const (
+	DefaultRootResourceName = "http://graph.clouditor.io/classes/CloudResource"
+	DefaultOutputFile       = "output/ontology.proto"
+)
+
+// prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
+func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
+	preparedOntology := protobuf.OntologyPrepared{
+		Resources:           make(map[string]*protobuf.Resource),
 		SubClasses:          make(map[string]owl.SubClassOf),
 		AnnotationAssertion: make(map[string]owl.AnnotationAssertion),
 	}
 
-	// Add classes
-	// We set the name extracted from the IRI and the IRI and if a name label exists we will change the name later
+	// Prepare ontology classes
+	// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
 	for _, c := range o.Declarations {
 		if c.Class.IRI != "" {
-			preparedOntology.Resources[c.Class.IRI] = &owl.Resource{
+			preparedOntology.Resources[c.Class.IRI] = &protobuf.Resource{
 				Iri:  c.Class.IRI,
-				Name: getNameFromIri(c.Class.IRI),
+				Name: util.GetNameFromIri(c.Class.IRI),
 			}
 		}
 	}
 
-	// prepare resources map with  and name
+	// Prepare name and comment
 	for _, aa := range o.AnnotationAssertion {
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
 			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-				preparedOntology.Resources[aa.IRI].Name = cleanString(aa.Literal)
+				preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
 
 			}
 		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
@@ -57,29 +67,49 @@ func prepareOntology(o owl.Ontology) owl.OntologyPrepared {
 	}
 
 	// Prepare SubClasses
+	// There are 3 different structures of SubClasses. All Class properties are IRIs:
+	// - 2 Classes: The second Class is the parent of the first Class
+	// - Class and DataSomeValuesFrom: Class is the current resource and DataSomeValuesFrom contains the Datatype (e.g., xsd:string) and the corresponding DataProperty/variable name as IRI or abbreviatedIRI (e.g., filename as IRI or prop:enabeld as abbreviatedIRI)
+	// - Class and ObjectSomeValuesFrom: Class is the current resource and ObjectSomeValuesFrom contains the ObjectProperty (e.g., prop:hasMultiple) and the linked resource (Class)
 	for _, sc := range o.SubClasses {
 		if len(sc.Class) == 2 {
 
+			// "owl.Thing" is the root of the ontology and is not needed for the protobuf files
 			if sc.Class[1].IRI != "owl.Thing" {
-				r := &owl.Resource{
+				// Create resource that has a parent. All resources directly under "owl.Thing" are alread created before (via the Declarations)
+				r := &protobuf.Resource{
 					Iri:     sc.Class[0].IRI,
 					Name:    preparedOntology.Resources[sc.Class[0].IRI].Name,
 					Parent:  sc.Class[1].IRI,
 					Comment: preparedOntology.Resources[sc.Class[0].IRI].Comment,
 				}
 
+				// Add subresources to the parent resource
 				if val, ok := preparedOntology.Resources[sc.Class[1].IRI]; ok {
 					if val.SubResources == nil {
-						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*owl.Resource, 0)
+						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*protobuf.Resource, 0)
 					}
 					preparedOntology.Resources[sc.Class[1].IRI].SubResources = append(preparedOntology.Resources[sc.Class[1].IRI].SubResources, r)
 				}
+
+				// Add parent IRI to resource (not subresource!). We couldn't do this beforehand (Declarations) because we only get the information here,
+				preparedOntology.Resources[sc.Class[0].IRI].Parent = sc.Class[1].IRI
 			}
 		} else if sc.DataSomeValuesFrom != nil {
+			// Add data values, e.g. "enabled xsd:bool"
 			for _, v := range sc.DataSomeValuesFrom {
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &owl.Relationship{
-					Typ:   getGoType(v.Datatype.AbbreviatedIRI),
-					Value: getDataPropertyName(v.DataProperty.AbbreviatedIRI),
+				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &protobuf.Relationship{
+					Typ:   util.GetGoType(v.Datatype.AbbreviatedIRI),
+					Value: util.GetDataPropertyName(v.DataProperty.AbbreviatedIRI),
+				})
+			}
+		} else if sc.ObjectSomeValuesFrom != nil {
+			// Add object values, e.g., "offers ResourceLogging"
+			for _, v := range sc.ObjectSomeValuesFrom {
+				preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &protobuf.ObjectRelationship{
+					ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
+					Class:          v.Class.IRI,
+					Name:           preparedOntology.Resources[v.Class.IRI].Name,
 				})
 			}
 		}
@@ -88,151 +118,95 @@ func prepareOntology(o owl.Ontology) owl.OntologyPrepared {
 	return preparedOntology
 }
 
-func getGoType(s string) string {
-	switch s {
-	case "xsd:string":
-		return "string"
-	case "xsd:boolean":
-		return "boolean"
-	case "xsd:java.time.Duration":
-		return "time.duration"
-	case "xsd:java.util.Map&lt;String, String&gt;":
-		return "map[string]string"
-	default:
-		return s
-	}
-}
-
-// getNameFromIri gets the last part of the IRI
-func getNameFromIri(s string) string {
-	if s == "" {
-		return ""
-	}
-	split := strings.Split(s, "/")
-
-	return split[4]
-}
-
-func getDataPropertyName(s string) string {
-	if s == "" {
-		return ""
-	}
-
-	split := strings.Split(s, ":")
-
-	return split[1]
-}
-
-// cleanString deletes spaces and /.
-func cleanString(s string) string {
-	s = strings.ReplaceAll(s, " ", "")
-	s = strings.ReplaceAll(s, "/", "")
-	s = strings.ReplaceAll(s, "-", "")
-
-	return s
-}
-
-// toSnakeCase converts camel case to snake case and deletes spaces
-// TODO(all): FIx "CI/CD Service" to CICDService and cicd_service
-func toSnakeCase(s string) string {
-	var result string
-
-	s = cleanString(s)
-
-	for i, char := range s {
-		if i > 0 && char >= 'A' && char <= 'Z' {
-			result += "_"
-		}
-
-		result += string(char)
-	}
-
-	return strings.ToLower(result)
-}
-
-func createProtoFile(preparedOntology owl.OntologyPrepared) string {
+// createProtoFile creates the protobuf file
+func createProtoFile(preparedOntology protobuf.OntologyPrepared) string {
 	output := ""
 
-	//Add header and imports
-	output = `
-// Copyright 2024 Fraunhofer AISEC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-//           $$\                           $$\ $$\   $$\
-//           $$ |                          $$ |\__|  $$ |
-//  $$$$$$$\ $$ | $$$$$$\  $$\   $$\  $$$$$$$ |$$\ $$$$$$\    $$$$$$\   $$$$$$\
-// $$  _____|$$ |$$  __$$\ $$ |  $$ |$$  __$$ |$$ |\_$$  _|  $$  __$$\ $$  __$$\
-// $$ /      $$ |$$ /  $$ |$$ |  $$ |$$ /  $$ |$$ |  $$ |    $$ /  $$ |$$ | \__|
-// $$ |      $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$\ $$ |  $$ |$$ |
-// \$$$$$$\  $$ |\$$$$$   |\$$$$$   |\$$$$$$  |$$ |  \$$$   |\$$$$$   |$$ |
-//  \_______|\__| \______/  \______/  \_______|\__|   \____/  \______/ \__|
-//
-// This file is part of Clouditor Community Edition.
+	//Add header
+	// TODO(all): Another header for other tools?
+	output += fileHeaders.GetClouditorProtobufFileDetails()
 
-syntax = "proto3";
-
-package clouditor.discovery.v1;
-
-import "google/api/annotations.proto";
-import "google/protobuf/struct.proto";
-import "tagger/tagger.proto";
-import "validate/validate.proto";
-
-option go_package = "api/discovery";
-`
-
-	// Add proto messages
-	for k, v := range preparedOntology.Resources {
-		// The resources with owl:Thing as parent can be skipped
-		// We decided to let the key empty instead of adding "owl:Thing"
-		if k == "" {
-			continue
-		}
+	// Create proto messages with comments
+	for _, v := range preparedOntology.Resources {
+		// is the counter for the message field numbers
+		i := 0
 
 		// Add comment
 		for _, v := range v.Comment {
 			output += "\n// " + v
 		}
 
-		// Create message
+		// Start message
 		output += fmt.Sprintf("\nmessage %s {", v.Name)
 
-		// Add properties
+		// Add data properties
 		for _, r := range v.Relationship {
 			if r.Typ != "" && r.Value != "" {
-				output += fmt.Sprintf("\n\t%s %s", r.Value, r.Typ)
+				i += 1
+				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Value, r.Typ, i)
 			}
 		}
 
-		// Add subresources to proto resource message if present
-		i := 100
-		if len(v.SubResources) > 0 {
-			output += "\n\toneof type {"
-			for _, v2 := range v.SubResources {
+		// Add object properties
+		for _, o := range v.ObjectRelationship {
+			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
+				value, typ := util.GetObjectDetail(o.ObjectProperty, DefaultRootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
+				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, o.Name, typ, i)
+			}
+		}
 
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, toSnakeCase(v2.Name), i)
+		// Add subresources if present
+		// Important
+		if len(v.SubResources) > 0 {
+			// j is the counter for the oneof field numbers
+			j := 0
+			output += "\n\n\toneof type {"
+			for _, v2 := range v.SubResources {
+				j += 1
+
+				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
 
 			}
 			output += "\n\t}"
 		}
 
+		// Close message
 		output += "\n}\n"
 	}
 
 	return output
 
+}
+
+func writeProtofileToStorage(s string) error {
+	var err error
+
+	// Create storage file
+	f, err := os.Create(DefaultOutputFile)
+	if err != nil {
+		err = fmt.Errorf("error creating file: %v", err)
+		slog.Error(err.Error())
+	}
+
+	// Write output string to file
+	_, err = f.WriteString(s)
+	if err != nil {
+		err = fmt.Errorf("error writing output to file: %v", err)
+		slog.Error(err.Error())
+		f.Close()
+		return err
+	}
+
+	// Close storage file
+	err = f.Close()
+	if err != nil {
+		err = fmt.Errorf("error closing file: %v", err)
+		slog.Error(err.Error())
+		return err
+	}
+
+	return nil
 }
 
 func main() {
@@ -271,21 +245,10 @@ func main() {
 	// Generate protobuf file
 	output := createProtoFile(preparedOntology)
 
-	// Write protobuf file
-	f, err := os.Create("output/ontology.proto")
+	err = writeProtofileToStorage(output)
 	if err != nil {
-		slog.Error("error creating file: %v", err)
+		slog.Error("error writing protobuf file to storage", tint.Err(err))
 	}
 
-	_, err = f.WriteString(output)
-	if err != nil {
-		slog.Error("error writing output to file: %v", err)
-		f.Close()
-		return
-	}
-	err = f.Close()
-	if err != nil {
-		slog.Error("", tint.Err(err))
-		return
-	}
+	slog.Info("protobuf file written to storage", slog.String("output folder", DefaultOutputFile))
 }

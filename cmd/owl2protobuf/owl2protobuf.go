@@ -23,6 +23,7 @@ import (
 var (
 	owlFile          string
 	headerFile       string
+	outputFile       string
 	rootResourceName string
 )
 
@@ -186,11 +187,12 @@ message ResourceID {
 
 }
 
-func writeProtofileToStorage(s string) error {
+func writeProtofileToStorage(outputFile, s string) error {
 	var err error
 
+	// TODO(all):Create folder if not exists
 	// Create storage file
-	f, err := os.Create(DefaultOutputFile)
+	f, err := os.Create(outputFile)
 	if err != nil {
 		err = fmt.Errorf("error creating file: %v", err)
 		slog.Error(err.Error())
@@ -223,14 +225,21 @@ func main() {
 		o   owl.Ontology
 	)
 
-	if len(os.Args) != 4 {
-		slog.Error("not enough command line arguments given", slog.String("arguments needed", "owl file location, header file location and root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource)"))
+	if len(os.Args) < 4 {
+		slog.Error("not enough command line arguments given", slog.String("arguments needed", "owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource) and output file location (optional, default is 'api/ontology.proto'"))
 
 		return
 	}
 	owlFile = os.Args[1]
 	headerFile = os.Args[2]
 	rootResourceName = os.Args[3]
+
+	// Check if output folder is given as argument
+	if len(os.Args) >= 5 {
+		outputFile = os.Args[4]
+	} else {
+		outputFile = DefaultOutputFile
+	}
 
 	// Set up logging
 	slog.SetDefault(slog.New(
@@ -265,7 +274,7 @@ func main() {
 	output := createProtoFile(preparedOntology, string(b))
 
 	// Write proto content to file
-	err = writeProtofileToStorage(output)
+	err = writeProtofileToStorage(outputFile, output)
 	if err != nil {
 		slog.Error("error writing proto file to storage", tint.Err(err))
 	}

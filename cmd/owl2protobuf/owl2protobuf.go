@@ -16,9 +16,8 @@ import (
 // TODOs
 // - get label instead of iri for the name fields
 // - add data/object property comments
-// - add relationsships
-// - add ObjectSomeValuesFrom
 // - add ObjectHasValue
+// - add cli
 
 var (
 	owlFile          string

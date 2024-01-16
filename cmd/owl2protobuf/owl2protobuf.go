@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/oxisto/owl2protobuf/internal/util"
-	"github.com/oxisto/owl2protobuf/pkg/owl"
-	"github.com/oxisto/owl2protobuf/pkg/protobuf"
+	"github.com/oxisto/owl2protobuf/ontology"
+	"github.com/oxisto/owl2protobuf/owl"
 
 	"github.com/lmittmann/tint"
 )
@@ -31,9 +31,9 @@ const (
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
-func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
-	preparedOntology := protobuf.OntologyPrepared{
-		Resources:           make(map[string]*protobuf.Resource),
+func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
+	preparedOntology := ontology.OntologyPrepared{
+		Resources:           make(map[string]*ontology.Resource),
 		SubClasses:          make(map[string]owl.SubClassOf),
 		AnnotationAssertion: make(map[string]owl.AnnotationAssertion),
 	}
@@ -42,7 +42,7 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 	// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
 	for _, c := range o.Declarations {
 		if c.Class.IRI != "" {
-			preparedOntology.Resources[c.Class.IRI] = &protobuf.Resource{
+			preparedOntology.Resources[c.Class.IRI] = &ontology.Resource{
 				Iri:  c.Class.IRI,
 				Name: util.GetNameFromIri(c.Class.IRI),
 			}
@@ -77,7 +77,7 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 			// "owl.Thing" is the root of the ontology and is not needed for the protobuf files
 			if sc.Class[1].IRI != "owl.Thing" {
 				// Create resource that has a parent. All resources directly under "owl.Thing" are alread created before (via the Declarations)
-				r := &protobuf.Resource{
+				r := &ontology.Resource{
 					Iri:     sc.Class[0].IRI,
 					Name:    preparedOntology.Resources[sc.Class[0].IRI].Name,
 					Parent:  sc.Class[1].IRI,
@@ -87,7 +87,7 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 				// Add subresources to the parent resource
 				if val, ok := preparedOntology.Resources[sc.Class[1].IRI]; ok {
 					if val.SubResources == nil {
-						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*protobuf.Resource, 0)
+						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*ontology.Resource, 0)
 					}
 					preparedOntology.Resources[sc.Class[1].IRI].SubResources = append(preparedOntology.Resources[sc.Class[1].IRI].SubResources, r)
 				}
@@ -98,7 +98,7 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 		} else if sc.DataSomeValuesFrom != nil {
 			// Add data values, e.g. "enabled xsd:bool"
 			for _, v := range sc.DataSomeValuesFrom {
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &protobuf.Relationship{
+				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					Typ:   util.GetGoType(v.Datatype.AbbreviatedIRI),
 					Value: util.GetDataPropertyName(v.DataProperty.AbbreviatedIRI),
 				})
@@ -106,7 +106,7 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
-				preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &protobuf.ObjectRelationship{
+				preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
 					ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
 					Class:          v.Class.IRI,
 					Name:           preparedOntology.Resources[v.Class.IRI].Name,
@@ -119,7 +119,7 @@ func prepareOntology(o owl.Ontology) protobuf.OntologyPrepared {
 }
 
 // createProtoFile creates the protobuf file
-func createProtoFile(preparedOntology protobuf.OntologyPrepared, header string) string {
+func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) string {
 	output := ""
 
 	//Add header
@@ -225,7 +225,10 @@ func main() {
 	)
 
 	if len(os.Args) < 4 {
-		slog.Error("not enough command line arguments given", slog.String("arguments needed", "owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource) and output path (optional, default is 'api/ontology.proto'"))
+		slog.Error("not enough command line arguments given",
+			slog.String("arguments needed",
+				"owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource) and output path (optional, default is 'api/ontology.proto'"),
+		)
 
 		return
 	}
@@ -253,6 +256,7 @@ func main() {
 		slog.Error("error reading ontology file", "location", owlFile, tint.Err(err))
 		return
 	}
+
 	err = xml.Unmarshal(b, &o)
 	if err != nil {
 		slog.Error("error while unmarshalling XML", tint.Err(err))

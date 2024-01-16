@@ -3,7 +3,7 @@ package util
 import (
 	"strings"
 
-	"github.com/oxisto/owl2protobuf/pkg/protobuf"
+	"github.com/oxisto/owl2protobuf/ontology"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 )
 
 // GetObjectDetail returns the object type
-func GetObjectDetail(s, rootResourceName string, resource *protobuf.Resource, preparedOntology protobuf.OntologyPrepared) (string, string) {
+func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (string, string) {
 	var (
 		value string
 	)
@@ -40,7 +40,7 @@ func GetObjectDetail(s, rootResourceName string, resource *protobuf.Resource, pr
 }
 
 // isResourceAboveX checks if a resource above the given resource has the name of rootResourceName
-func isResourceAboveX(resource *protobuf.Resource, preparedOntology protobuf.OntologyPrepared, rootResourceName string) bool {
+func isResourceAboveX(resource *ontology.Resource, preparedOntology ontology.OntologyPrepared, rootResourceName string) bool {
 	if resource == nil {
 		return false
 	}

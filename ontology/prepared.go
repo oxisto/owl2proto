@@ -1,6 +1,6 @@
-package protobuf
+package ontology
 
-import "github.com/oxisto/owl2protobuf/pkg/owl"
+import "github.com/oxisto/owl2protobuf/owl"
 
 type OntologyPrepared struct {
 	Resources           map[string]*Resource

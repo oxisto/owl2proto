@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/oxisto/owl2protobuf/internal/util"
 	"github.com/oxisto/owl2protobuf/ontology"
@@ -35,41 +36,60 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 	preparedOntology := ontology.OntologyPrepared{
 		Resources:           make(map[string]*ontology.Resource),
 		SubClasses:          make(map[string]owl.SubClassOf),
-		AnnotationAssertion: make(map[string]owl.AnnotationAssertion),
+		AnnotationAssertion: make(map[string]*ontology.AnnotationAssertion),
 	}
 
-	// Prepare ontology classes
-	// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
 	for _, c := range o.Declarations {
+		// Prepare ontology classes
+		// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
 		if c.Class.IRI != "" {
 			preparedOntology.Resources[c.Class.IRI] = &ontology.Resource{
 				Iri:  c.Class.IRI,
-				Name: util.GetNameFromIri(c.Class.IRI),
+				Name: util.CleanString(util.GetNameFromIri(c.Class.IRI)),
+			}
+		}
+
+		// Prepare ontology data properties
+		if c.DataProperty.IRI != "" {
+			preparedOntology.AnnotationAssertion[c.DataProperty.IRI] = &ontology.AnnotationAssertion{
+				IRI:  c.DataProperty.IRI,
+				Name: util.CleanString(util.GetNameFromIri(c.DataProperty.IRI)),
+			}
+		} else if c.DataProperty.AbbreviatedIRI != "" {
+			preparedOntology.AnnotationAssertion[c.DataProperty.AbbreviatedIRI] = &ontology.AnnotationAssertion{
+				IRI:  c.DataProperty.AbbreviatedIRI,
+				Name: util.CleanString(util.GetDataPropertyAbbreviatedIriName(c.DataProperty.AbbreviatedIRI)),
 			}
 		}
 	}
 
 	// Prepare name and comment
 	for _, aa := range o.AnnotationAssertion {
-		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
-			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-				preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
-
-			}
-		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
+		// if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
+		// 	if _, ok := preparedOntology.Resources[aa.IRI]; ok {
+		// 		preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
+		// 	} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
+		// 		preparedOntology.Resources[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
+		// 	}
+		// } else
+		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
 			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
 				c := preparedOntology.Resources[aa.IRI].Comment
 				c = append(c, aa.Literal)
 				preparedOntology.Resources[aa.IRI].Comment = c
-
+			} else if _, ok := preparedOntology.AnnotationAssertion[aa.IRI]; ok {
+				c := preparedOntology.AnnotationAssertion[aa.IRI].Comment
+				c = append(c, aa.Literal)
+				preparedOntology.AnnotationAssertion[aa.IRI].Comment = c
 			}
 		}
 	}
 
 	// Prepare SubClasses
-	// There are 3 different structures of SubClasses. All Class properties are IRIs:
+	// There are 4 different structures of SubClasses. All Class properties are IRIs:
 	// - 2 Classes: The second Class is the parent of the first Class
 	// - Class and DataSomeValuesFrom: Class is the current resource and DataSomeValuesFrom contains the Datatype (e.g., xsd:string) and the corresponding DataProperty/variable name as IRI or abbreviatedIRI (e.g., filename as IRI or prop:enabeld as abbreviatedIRI)
+	// - Class and DataHasValue: Class is the current resource and DataHasValue is the same as DataSomeValuesFrom except, that no Datatype exists in the Ontology, but an Literal (Literal is a string, that is not used as an Ontology object/property).
 	// - Class and ObjectSomeValuesFrom: Class is the current resource and ObjectSomeValuesFrom contains the ObjectProperty (e.g., prop:hasMultiple) and the linked resource (Class)
 	for _, sc := range o.SubClasses {
 		if len(sc.Class) == 2 {
@@ -96,12 +116,51 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				preparedOntology.Resources[sc.Class[0].IRI].Parent = sc.Class[1].IRI
 			}
 		} else if sc.DataSomeValuesFrom != nil {
-			// Add data values, e.g. "enabled xsd:bool"
+			// Add data values, e.g. "enabled xsd:bool" ("enabled" is a data property and "xsd:bool" is a datatype) or
 			for _, v := range sc.DataSomeValuesFrom {
+				var (
+					comment string
+				)
+				// Check if comment is available
+				if val, ok := preparedOntology.AnnotationAssertion[v.DataProperty.IRI]; ok {
+					comment = strings.Join(val.Comment[:], "\n\t ")
+				}
+
 				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
-					Typ:   util.GetGoType(v.Datatype.AbbreviatedIRI),
-					Value: util.GetDataPropertyName(v.DataProperty.AbbreviatedIRI),
+					IRI:     v.DataProperty.IRI,
+					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
+					Value:   util.GetDataPropertyIRIName(v.DataProperty),
+					Comment: comment,
 				})
+
+			}
+		} else if sc.DataHasValue != nil {
+			// Add data values, e.g. "interval xsd:java.time.Duration" ("interval" is a data property and "xsd:java.time.Duration" is Literal/string)
+			for _, v := range sc.DataHasValue {
+				var (
+					comment    string
+					identifier string
+				)
+
+				// Get IRI or abbreviatedIRI from DataProperty
+				if v.DataProperty.AbbreviatedIRI != "" {
+					identifier = v.DataProperty.AbbreviatedIRI
+				} else if v.DataProperty.IRI != "" {
+					identifier = v.DataProperty.IRI
+				}
+
+				// Check if comment is available
+				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+					comment = strings.Join(val.Comment[:], "\n\t ")
+				}
+
+				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
+					IRI:     identifier,
+					Typ:     util.GetProtoType(v.Literal),
+					Value:   util.GetDataPropertyIRIName(v.DataProperty),
+					Comment: comment,
+				})
+
 			}
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
@@ -150,6 +209,10 @@ message ResourceID {
 		for _, r := range v.Relationship {
 			if r.Typ != "" && r.Value != "" {
 				i += 1
+				// Add data property comment if available
+				if r.Comment != "" {
+					output += fmt.Sprintf("\n\t// %s", r.Comment)
+				}
 				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, r.Value, i)
 			}
 		}

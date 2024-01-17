@@ -65,14 +65,13 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 
 	// Prepare name and comment
 	for _, aa := range o.AnnotationAssertion {
-		// if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
-		// 	if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-		// 		preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
-		// 	} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
-		// 		preparedOntology.Resources[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
-		// 	}
-		// } else
-		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
+		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
+			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
+				preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
+			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
+				preparedOntology.Resources[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
+			}
+		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
 			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
 				c := preparedOntology.Resources[aa.IRI].Comment
 				c = append(c, aa.Literal)
@@ -126,10 +125,12 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
+				// Get DataProperty name
+
 				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					IRI:     v.DataProperty.IRI,
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
-					Value:   util.GetDataPropertyIRIName(v.DataProperty),
+					Value:   util.GetDataPropertyIRIName(v.DataProperty, preparedOntology),
 					Comment: comment,
 				})
 
@@ -157,7 +158,7 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					IRI:     identifier,
 					Typ:     util.GetProtoType(v.Literal),
-					Value:   util.GetDataPropertyIRIName(v.DataProperty),
+					Value:   util.GetDataPropertyIRIName(v.DataProperty, preparedOntology),
 					Comment: comment,
 				})
 
@@ -194,6 +195,9 @@ message ResourceID {
 
 	// Create proto messages with comments
 	for _, v := range preparedOntology.Resources {
+		if v.Iri == "http://graph.clouditor.io/classes/ApplicationLog" {
+			fmt.Println("Stop here")
+		}
 		// is the counter for the message field numbers
 		i := 0
 

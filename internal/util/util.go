@@ -100,11 +100,20 @@ func GetNameFromIri(s string) string {
 }
 
 // GetDataPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
-func GetDataPropertyIRIName(prop owl.DataProperty) string {
+func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.OntologyPrepared) string {
+	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
 	if prop.AbbreviatedIRI != "" {
-		return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
+			return val.Name
+		} else {
+			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+		}
 	} else if prop.IRI != "" {
-		return GetNameFromIri(prop.IRI)
+		if val, ok := preparedOntology.Resources[prop.IRI]; ok {
+			return val.Name
+		} else {
+			return GetNameFromIri(prop.IRI)
+		}
 	}
 
 	return ""

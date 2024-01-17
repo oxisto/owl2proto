@@ -202,8 +202,9 @@ message ResourceID {
 		i := 0
 
 		// Add comment
-		for _, v := range v.Comment {
-			output += "\n// " + v
+		for _, w := range v.Comment {
+			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", v.Name)
+			output += "\n// " + w
 		}
 
 		// Start message
@@ -217,7 +218,7 @@ message ResourceID {
 				if r.Comment != "" {
 					output += fmt.Sprintf("\n\t// %s", r.Comment)
 				}
-				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, r.Value, i)
+				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
 			}
 		}
 
@@ -226,7 +227,7 @@ message ResourceID {
 			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
 				value, typ := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
-				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, o.Name, i)
+				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(o.Name), i)
 			}
 		}
 

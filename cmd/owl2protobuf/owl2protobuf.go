@@ -195,9 +195,6 @@ message ResourceID {
 
 	// Create proto messages with comments
 	for _, v := range preparedOntology.Resources {
-		if v.Iri == "http://graph.clouditor.io/classes/ApplicationLog" {
-			fmt.Println("Stop here")
-		}
 		// is the counter for the message field numbers
 		i := 0
 

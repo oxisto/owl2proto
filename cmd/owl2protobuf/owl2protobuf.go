@@ -227,7 +227,9 @@ message ResourceID {
 			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
 				value, typ := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
-				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(o.Name), i)
+				if value != "" && typ != "" {
+					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(o.Name), i)
+				}
 			}
 		}
 

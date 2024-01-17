@@ -26,8 +26,10 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 		value = Repeated
 	case "prop:offersInterface":
 		value = ""
-	case "prop:proxyTarget", "prop:parent":
+	case "prop:proxyTarget":
 		return "string", ""
+	case "prop:parent":
+		return "", ""
 	default:
 		return s, ""
 	}

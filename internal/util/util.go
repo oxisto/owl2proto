@@ -67,9 +67,9 @@ func GetProtoType(s string) string {
 		return "bool"
 	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration":
 		return "string"
-	case "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>":
+	case "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
 		return "repeated string"
-	case "xsd:integer":
+	case "xsd:integer", "xsd:int":
 		return "int32"
 	case "xsd:Short":
 		return "uint32"
@@ -79,7 +79,7 @@ func GetProtoType(s string) string {
 		return "int64"
 	case "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
-	case "xsd:java.util.ArrayList<Short>": // TODO(oxisto): Do we want to use here maps, as in the CPG?
+	case "xsd:java.util.ArrayList<Short>":
 		return "repeated uint32"
 	case "xsd:java.util.Map<String, String>": // TODO(oxisto): Do we want to use here maps, as in the CPG?
 		return "repeated string"

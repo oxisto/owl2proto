@@ -13,33 +13,30 @@ const (
 )
 
 // GetObjectDetail returns the object type
-func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (string, string) {
-	var (
-		value string
-	)
-
+func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (rep, typ, name string) {
 	switch s {
 	case "prop:hasMultiple", "prop:offersMultiple":
-		value = Repeated
+		rep = Repeated
 	case "prop:has", "prop:runsOn", "prop:to", "prop:offers", "prop:storage":
-		value = ""
+		rep = ""
 	case "prop:collectionOf":
-		value = Repeated
+		rep = Repeated
 	case "prop:offersInterface":
-		value = ""
+		rep = ""
 	case "prop:proxyTarget":
-		return "string", ""
+		return "string", "", resource.Name
 	case "prop:parent":
-		return "", ""
+		return "", "", ""
 	default:
-		return s, ""
+		rep = ""
 	}
 
+	// If the object is a kind of the rootResourceName, the type is string and "_id" is added to the name to show that an ID is stored in the string.
 	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
-		return value, "ResourceID"
+		return rep, "string", resource.Name + "_id"
 	}
 
-	return value, resource.Name
+	return rep, resource.Name, resource.Name
 
 }
 

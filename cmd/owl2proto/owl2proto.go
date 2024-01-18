@@ -182,8 +182,11 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) string {
 	output := ""
 
+	// Add "auto-generated" header
+	output += "// Auto-generated code by owl2proto (https://github.com/oxisto/owl2proto)"
+
 	//Add header
-	output += header
+	output += "\n\n" + header
 
 	// Create proto message for ResourceID
 	output += `

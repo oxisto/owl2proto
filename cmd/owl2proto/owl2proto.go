@@ -189,21 +189,25 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	output += "\n\n" + header
 
 	// Create proto messages with comments
-	for _, v := range preparedOntology.Resources {
+	// Sort map keys
+	resources := util.SortMap(preparedOntology.Resources)
+
+	for _, v := range resources {
 		// is the counter for the message field numbers
 		i := 0
 
 		// Add comment
-		for _, w := range v.Comment {
-			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", v.Name)
+		for _, w := range preparedOntology.Resources[v].Comment {
+			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[v].Name)
 			output += "\n// " + w
 		}
 
 		// Start message
-		output += fmt.Sprintf("\nmessage %s {", v.Name)
+		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[v].Name)
 
 		// Add data properties
-		for _, r := range v.Relationship {
+		// Sort map keys
+		for _, r := range preparedOntology.Resources[v].Relationship {
 			if r.Typ != "" && r.Value != "" {
 				i += 1
 				// Add data property comment if available
@@ -215,7 +219,7 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 		}
 
 		// Add object properties
-		for _, o := range v.ObjectRelationship {
+		for _, o := range preparedOntology.Resources[v].ObjectRelationship {
 			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
 				value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
@@ -227,11 +231,11 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 		// Add subresources if present
 		// Important
-		if len(v.SubResources) > 0 {
+		if len(preparedOntology.Resources[v].SubResources) > 0 {
 			// j is the counter for the oneof field numbers
 			j := 100
 			output += "\n\n\toneof type {"
-			for _, v2 := range v.SubResources {
+			for _, v2 := range preparedOntology.Resources[v].SubResources {
 				j += 1
 
 				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)

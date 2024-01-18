@@ -3,7 +3,7 @@ package util
 import (
 	"strings"
 
-	"github.com/oxisto/owl2protobuf/ontology"
+	"github.com/oxisto/owl2proto/ontology"
 )
 
 const (

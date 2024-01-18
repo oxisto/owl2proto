@@ -1,4 +1,4 @@
-module github.com/oxisto/owl2protobuf
+module github.com/oxisto/owl2proto
 
 go 1.21.5
 

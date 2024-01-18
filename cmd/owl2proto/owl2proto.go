@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/oxisto/owl2protobuf/internal/util"
-	"github.com/oxisto/owl2protobuf/ontology"
-	"github.com/oxisto/owl2protobuf/owl"
+	"github.com/oxisto/owl2proto/internal/util"
+	"github.com/oxisto/owl2proto/ontology"
+	"github.com/oxisto/owl2proto/owl"
 
 	"github.com/lmittmann/tint"
 )

@@ -185,14 +185,6 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	//Add header
 	output += header
 
-	// Create proto message for ResourceID
-	output += `
-
-message ResourceID {
-	repeated string resource_id = 1;
-}
-`
-
 	// Create proto messages with comments
 	for _, v := range preparedOntology.Resources {
 		// is the counter for the message field numbers
@@ -223,9 +215,9 @@ message ResourceID {
 		for _, o := range v.ObjectRelationship {
 			if o.Name != "" && o.ObjectProperty != "" {
 				i += 1
-				value, typ := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
+				value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 				if value != "" && typ != "" {
-					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(o.Name), i)
+					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
 				}
 			}
 		}

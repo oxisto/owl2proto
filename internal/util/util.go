@@ -154,8 +154,10 @@ func ToSnakeCase(s string) string {
 	return strings.ToLower(snake)
 }
 
-func SortMap(m map[string]*ontology.Resource) []string {
+// SortMapKeys sorts the keys of the map
+func SortMapKeys[V *ontology.Resource](m map[string]V) []string {
 	resources := make([]string, 0, len(m))
+
 	for k := range m {
 		resources = append(resources, k)
 	}

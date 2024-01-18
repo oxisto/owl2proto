@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/oxisto/owl2proto/internal/util"
@@ -190,11 +191,11 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 	// Create proto messages with comments
 	// Sort map keys
-	resources := util.SortMap(preparedOntology.Resources)
+	resources := util.SortMapKeys(preparedOntology.Resources)
 
 	for _, v := range resources {
 		// is the counter for the message field numbers
-		i := 0
+		i := 1
 
 		// Add comment
 		for _, w := range preparedOntology.Resources[v].Comment {
@@ -206,38 +207,53 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[v].Name)
 
 		// Add data properties
-		// Sort map keys
+		// Sort slice of data properties
+		sort.Slice(preparedOntology.Resources[v].Relationship, func(i, j int) bool {
+			a := preparedOntology.Resources[v].Relationship[i]
+			b := preparedOntology.Resources[v].Relationship[j]
+			return a.Value < b.Value
+		})
 		for _, r := range preparedOntology.Resources[v].Relationship {
 			if r.Typ != "" && r.Value != "" {
-				i += 1
 				// Add data property comment if available
 				if r.Comment != "" {
 					output += fmt.Sprintf("\n\t// %s", r.Comment)
 				}
 				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
+				i += 1
 			}
 		}
 
 		// Add object properties
+		// Sort slice of object properties
+		sort.Slice(preparedOntology.Resources[v].ObjectRelationship, func(i, j int) bool {
+			a := preparedOntology.Resources[v].ObjectRelationship[i]
+			b := preparedOntology.Resources[v].ObjectRelationship[j]
+			return a.Name > b.Name
+		})
 		for _, o := range preparedOntology.Resources[v].ObjectRelationship {
 			if o.Name != "" && o.ObjectProperty != "" {
-				i += 1
 				value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 				if value != "" && typ != "" {
 					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
+					i += 1
 				}
 			}
 		}
 
 		// Add subresources if present
-		// Important
 		if len(preparedOntology.Resources[v].SubResources) > 0 {
 			// j is the counter for the oneof field numbers
 			j := 100
 			output += "\n\n\toneof type {"
+			// Sort slice of sub-resources
+			sort.Slice(preparedOntology.Resources[v].SubResources, func(i, j int) bool {
+				a := preparedOntology.Resources[v].SubResources[i]
+				b := preparedOntology.Resources[v].SubResources[j]
+				return a.Name < b.Name
+			})
 			for _, v2 := range preparedOntology.Resources[v].SubResources {
 				j += 1
-
 				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
 
 			}

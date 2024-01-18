@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/oxisto/owl2proto/ontology"
+	"github.com/oxisto/owl2proto/owl"
 )
 
 const (
@@ -25,8 +26,10 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 		value = Repeated
 	case "prop:offersInterface":
 		value = ""
-	case "prop:proxyTarget", "prop:parent":
+	case "prop:proxyTarget":
 		return "string", ""
+	case "prop:parent":
+		return "", ""
 	default:
 		return s, ""
 	}
@@ -59,21 +62,29 @@ func isResourceAboveX(resource *ontology.Resource, preparedOntology ontology.Ont
 	return false
 }
 
-// GetGoType converts Ontology type to golang type
-func GetGoType(s string) string {
+// GetProtoType converts Ontology type to golang type
+func GetProtoType(s string) string {
 	switch s {
-	case "xsd:string":
-		return "string"
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:dateTime":
-		return "time.duration"
-	case "xsd:integer":
-		return "int"
+	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration":
+		return "string"
+	case "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
+		return "repeated string"
+	case "xsd:integer", "xsd:int":
+		return "int32"
+	case "xsd:Short":
+		return "uint32"
 	case "xsd:float":
-		return "float32"
-	case "xsd:java.time.Duration":
-		return "time.duration"
+		return "float"
+	case "xsd:java.time.Duration", "xsd:dateTime":
+		return "int64"
+	case "xsd:java.time.ZonedDateTime":
+		return "google.protobuf.Timestamp"
+	case "xsd:java.util.ArrayList<Short>":
+		return "repeated uint32"
+	case "xsd:java.util.Map<String, String>": // TODO(oxisto): Do we want to use here maps, as in the CPG?
+		return "map<string, string>"
 	default:
 		return s
 	}
@@ -90,7 +101,28 @@ func GetNameFromIri(s string) string {
 	return split[4]
 }
 
-func GetDataPropertyName(s string) string {
+// GetDataPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
+func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.OntologyPrepared) string {
+	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
+	if prop.AbbreviatedIRI != "" {
+		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
+			return val.Name
+		} else {
+			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+		}
+	} else if prop.IRI != "" {
+		if val, ok := preparedOntology.Resources[prop.IRI]; ok {
+			return val.Name
+		} else {
+			return GetNameFromIri(prop.IRI)
+		}
+	}
+
+	return ""
+}
+
+// GetDataPropertyAbbreviatedIriName returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
+func GetDataPropertyAbbreviatedIriName(s string) string {
 	if s == "" {
 		return ""
 	}

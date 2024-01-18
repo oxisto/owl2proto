@@ -17,6 +17,7 @@ type Declaration struct {
 type AnnotationAssertion struct {
 	AnnotationProperty AnnotationProperty `xml:"AnnotationProperty"`
 	IRI                string             `xml:"IRI"`
+	AbbreviatedIRI     string             `xml:"attr"`
 	Literal            string             `xml:"Literal"`
 }
 
@@ -51,6 +52,7 @@ type SubClassOf struct {
 	ObjectSomeValuesFrom []ObjectSomeValuesFrom `xml:"ObjectSomeValuesFrom"`
 	DataSomeValuesFrom   []DataSomeValuesFrom   `xml:"DataSomeValuesFrom"`
 	ObjectHasValue       []ObjectHasValue       `xml:"ObjectHasValue"`
+	DataHasValue         []DataHasValue         `xml:"DataHasValue"`
 }
 
 type ObjectSomeValuesFrom struct {
@@ -61,6 +63,11 @@ type ObjectSomeValuesFrom struct {
 type DataSomeValuesFrom struct {
 	DataProperty DataProperty `xml:"DataProperty"`
 	Datatype     Datatype     `xml:"Datatype"`
+}
+
+type DataHasValue struct {
+	DataProperty DataProperty `xml:"DataProperty"`
+	Literal      string       `xml:"Literal"`
 }
 
 type Datatype struct {

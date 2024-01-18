@@ -1,4 +1,3 @@
-package owl2protobuf
+package owl2proto
 
 //go:generate buf generate
-//go:generate buf generate --template buf.openapi.gen.yaml --path api/ -o openapi/

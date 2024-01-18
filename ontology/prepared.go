@@ -1,6 +1,6 @@
 package ontology
 
-import "github.com/oxisto/owl2protobuf/owl"
+import "github.com/oxisto/owl2proto/owl"
 
 type OntologyPrepared struct {
 	Resources           map[string]*Resource

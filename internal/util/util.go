@@ -1,6 +1,7 @@
 package util
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/oxisto/owl2proto/ontology"
@@ -112,17 +113,13 @@ func CleanString(s string) string {
 // ToSnakeCase converts camel case to snake case and deletes spaces
 // TODO(all): FIx "CI/CD Service" to CICDService and cicd_service
 func ToSnakeCase(s string) string {
-	var result string
+	var (
+		matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+		matchAllCap   = regexp.MustCompile("([a-z0-9])([A-Z])")
+	)
 
 	s = CleanString(s)
-
-	for i, char := range s {
-		if i > 0 && char >= 'A' && char <= 'Z' {
-			result += "_"
-		}
-
-		result += string(char)
-	}
-
-	return strings.ToLower(result)
+	snake := matchFirstCap.ReplaceAllString(s, "${1}_${2}")
+	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
+	return strings.ToLower(snake)
 }

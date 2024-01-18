@@ -5,7 +5,7 @@ import "github.com/oxisto/owl2proto/owl"
 type OntologyPrepared struct {
 	Resources           map[string]*Resource
 	SubClasses          map[string]owl.SubClassOf
-	AnnotationAssertion map[string]owl.AnnotationAssertion
+	AnnotationAssertion map[string]*AnnotationAssertion
 }
 
 type Resource struct {
@@ -19,12 +19,21 @@ type Resource struct {
 }
 
 type Relationship struct {
-	Typ   string
-	Value string
+	IRI     string
+	Typ     string
+	Value   string
+	Comment string
 }
 
 type ObjectRelationship struct {
 	ObjectProperty string
 	Class          string // IRI
 	Name           string // Name of Class IRI
+	Comment        string // Comment of the property
+}
+
+type AnnotationAssertion struct {
+	IRI     string
+	Name    string
+	Comment []string
 }

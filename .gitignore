@@ -19,5 +19,5 @@
 
 # Go workspace file
 go.work
-owl2proto
-proto.go
+owl2protobuf
+

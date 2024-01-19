@@ -191,29 +191,29 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 	// Create proto messages with comments
 	// Sort map keys
-	resources := util.SortMapKeys(preparedOntology.Resources)
+	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
 
-	for _, v := range resources {
+	for _, rmk := range resourceMapKeys {
 		// is the counter for the message field numbers
 		i := 1
 
 		// Add comment
-		for _, w := range preparedOntology.Resources[v].Comment {
-			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[v].Name)
+		for _, w := range preparedOntology.Resources[rmk].Comment {
+			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
 			output += "\n// " + w
 		}
 
 		// Start message
-		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[v].Name)
+		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[rmk].Name)
 
 		// Add data properties
 		// Sort slice of data properties
-		sort.Slice(preparedOntology.Resources[v].Relationship, func(i, j int) bool {
-			a := preparedOntology.Resources[v].Relationship[i]
-			b := preparedOntology.Resources[v].Relationship[j]
+		sort.Slice(preparedOntology.Resources[rmk].Relationship, func(i, j int) bool {
+			a := preparedOntology.Resources[rmk].Relationship[i]
+			b := preparedOntology.Resources[rmk].Relationship[j]
 			return a.Value < b.Value
 		})
-		for _, r := range preparedOntology.Resources[v].Relationship {
+		for _, r := range preparedOntology.Resources[rmk].Relationship {
 			if r.Typ != "" && r.Value != "" {
 				// Add data property comment if available
 				if r.Comment != "" {
@@ -226,12 +226,12 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 		// Add object properties
 		// Sort slice of object properties
-		sort.Slice(preparedOntology.Resources[v].ObjectRelationship, func(i, j int) bool {
-			a := preparedOntology.Resources[v].ObjectRelationship[i]
-			b := preparedOntology.Resources[v].ObjectRelationship[j]
+		sort.Slice(preparedOntology.Resources[rmk].ObjectRelationship, func(i, j int) bool {
+			a := preparedOntology.Resources[rmk].ObjectRelationship[i]
+			b := preparedOntology.Resources[rmk].ObjectRelationship[j]
 			return a.Name > b.Name
 		})
-		for _, o := range preparedOntology.Resources[v].ObjectRelationship {
+		for _, o := range preparedOntology.Resources[rmk].ObjectRelationship {
 			if o.Name != "" && o.ObjectProperty != "" {
 				value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 				if value != "" && typ != "" {
@@ -242,17 +242,17 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 		}
 
 		// Add subresources if present
-		if len(preparedOntology.Resources[v].SubResources) > 0 {
+		if len(preparedOntology.Resources[rmk].SubResources) > 0 {
 			// j is the counter for the oneof field numbers
 			j := 100
 			output += "\n\n\toneof type {"
 			// Sort slice of sub-resources
-			sort.Slice(preparedOntology.Resources[v].SubResources, func(i, j int) bool {
-				a := preparedOntology.Resources[v].SubResources[i]
-				b := preparedOntology.Resources[v].SubResources[j]
+			sort.Slice(preparedOntology.Resources[rmk].SubResources, func(i, j int) bool {
+				a := preparedOntology.Resources[rmk].SubResources[i]
+				b := preparedOntology.Resources[rmk].SubResources[j]
 				return a.Name < b.Name
 			})
-			for _, v2 := range preparedOntology.Resources[v].SubResources {
+			for _, v2 := range preparedOntology.Resources[rmk].SubResources {
 				j += 1
 				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
 

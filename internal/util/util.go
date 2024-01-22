@@ -68,7 +68,7 @@ func GetProtoType(s string) string {
 		return "bool"
 	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration":
 		return "string"
-	case "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
+	case "xsd:listString", "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
 		return "repeated string"
 	case "xsd:integer", "xsd:int":
 		return "int32"

@@ -82,7 +82,7 @@ func GetProtoType(s string) string {
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
 		return "repeated uint32"
-	case "xsd:java.util.Map<String, String>": // TODO(oxisto): Do we want to use here maps, as in the CPG?
+	case "xsd:java.util.Map<String, String>":
 		return "map<string, string>"
 	default:
 		return s

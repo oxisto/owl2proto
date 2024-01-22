@@ -242,6 +242,9 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 				if value != "" && typ != "" {
 					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
 					i += 1
+				} else if typ != "" && name != "" {
+					output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), i)
+					i += 1
 				}
 			}
 		}

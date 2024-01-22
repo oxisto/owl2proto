@@ -81,6 +81,10 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				c := preparedOntology.AnnotationAssertion[aa.IRI].Comment
 				c = append(c, aa.Literal)
 				preparedOntology.AnnotationAssertion[aa.IRI].Comment = c
+			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
+				c := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment
+				c = append(c, aa.Literal)
+				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment = c
 			}
 		}
 	}
@@ -124,10 +128,11 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				// Check if comment is available
 				if val, ok := preparedOntology.AnnotationAssertion[v.DataProperty.IRI]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
+				} else if val, ok := preparedOntology.AnnotationAssertion[v.DataProperty.AbbreviatedIRI]; ok {
+					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
 				// Get DataProperty name
-
 				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					IRI:     v.DataProperty.IRI,
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),

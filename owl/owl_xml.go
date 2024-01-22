@@ -17,7 +17,7 @@ type Declaration struct {
 type AnnotationAssertion struct {
 	AnnotationProperty AnnotationProperty `xml:"AnnotationProperty"`
 	IRI                string             `xml:"IRI"`
-	AbbreviatedIRI     string             `xml:"attr"`
+	AbbreviatedIRI     string             `xml:"AbbreviatedIRI"`
 	Literal            string             `xml:"Literal"`
 }
 

@@ -70,7 +70,7 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
 				preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
 			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
-				preparedOntology.Resources[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
+				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
 			}
 		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
 			if _, ok := preparedOntology.Resources[aa.IRI]; ok {

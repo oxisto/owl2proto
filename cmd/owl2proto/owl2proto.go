@@ -211,15 +211,12 @@ enum ResourceType {
 	RESOURCE_TYPE_UNSPECIFIED = 0;`
 
 	// Add all resource type entries
-	// i is the counter for the enum field numbers
-	i := 1
 	for _, rmk := range resourceMapKeys {
-		i += 1
 		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
 
 		// For examle, ABAC has the resource types "ABAC,Authorization,SecurityFeature" and is presented as RESOURCE_ABAC_AUTHORIZATION_SECURITYFEATURE.
 		// TODO(all): Or do we want instead RESOURCE_ABAC_AUTHORIZATION_SECURITY_FEATURE?
-		output += fmt.Sprintf("\n\tRESOURCE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), i, strings.Join(resourceTypeList, ","))
+		output += fmt.Sprintf("\n\tRESOURCE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), util.GetFieldNumber(resourceTypeList...), strings.Join(resourceTypeList, ","))
 	}
 
 	// Close ResourceType enum
@@ -227,9 +224,6 @@ enum ResourceType {
 
 	// Create proto messages with comments
 	for _, rmk := range resourceMapKeys {
-		// is the counter for the message field numbers
-		i := 1
-
 		// Add comment
 		for _, w := range preparedOntology.Resources[rmk].Comment {
 			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
@@ -252,8 +246,7 @@ enum ResourceType {
 				if r.Comment != "" {
 					output += fmt.Sprintf("\n\t// %s", r.Comment)
 				}
-				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
-				i += 1
+				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), util.GetFieldNumber(preparedOntology.Resources[rmk].Name, r.Value))
 			}
 		}
 
@@ -267,20 +260,20 @@ enum ResourceType {
 		for _, o := range preparedOntology.Resources[rmk].ObjectRelationship {
 			if o.Name != "" && o.ObjectProperty != "" {
 				value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
+
+				// Generate field number based on the message and field name
+				fieldNumber := util.GetFieldNumber(preparedOntology.Resources[rmk].Name, name)
+
 				if value != "" && typ != "" {
-					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
-					i += 1
+					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), fieldNumber)
 				} else if typ != "" && name != "" {
-					output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), i)
-					i += 1
+					output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), fieldNumber)
 				}
 			}
 		}
 
 		// Add subresources if present
 		if len(preparedOntology.Resources[rmk].SubResources) > 0 {
-			// j is the counter for the oneof field numbers
-			j := 100
 			output += "\n\n\toneof type {"
 			// Sort slice of sub-resources
 			sort.Slice(preparedOntology.Resources[rmk].SubResources, func(i, j int) bool {
@@ -289,8 +282,7 @@ enum ResourceType {
 				return a.Name < b.Name
 			})
 			for _, v2 := range preparedOntology.Resources[rmk].SubResources {
-				j += 1
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
+				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), util.GetFieldNumber(preparedOntology.Resources[rmk].Name, v2.Name))
 
 			}
 			output += "\n\t}"

@@ -27,7 +27,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
 	case "prop:parent":
-		return "", "", ""
+		return "", "string", "parent_" + resource.Name + "_id"
 	default:
 		rep = ""
 	}
@@ -149,7 +149,7 @@ func ToSnakeCase(s string) string {
 	)
 
 	s = CleanString(s)
-	snake := matchFirstCap.ReplaceAllString(s, "${1}_${2}")
+	snake := matchFirstCap.ReplaceAllString(s, "${1}${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
 }

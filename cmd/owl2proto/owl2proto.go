@@ -172,11 +172,19 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
-				preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
-					ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
-					Class:          v.Class.IRI,
-					Name:           preparedOntology.Resources[v.Class.IRI].Name,
-				})
+				if v.ObjectProperty.IRI != "" {
+					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
+						ObjectProperty: v.ObjectProperty.IRI,
+						Class:          v.Class.IRI,
+						Name:           preparedOntology.Resources[v.Class.IRI].Name,
+					})
+				} else if v.ObjectProperty.AbbreviatedIRI != "" {
+					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
+						ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
+						Class:          v.Class.IRI,
+						Name:           preparedOntology.Resources[v.Class.IRI].Name,
+					})
+				}
 			}
 		}
 	}

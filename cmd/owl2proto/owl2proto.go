@@ -285,7 +285,7 @@ enum ResourceType {
 		// Start message
 		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[rmk].Name)
 
-		// Add data properties
+		// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
 		// Sort slice of data properties
 		sort.Slice(preparedOntology.Resources[rmk].Relationship, func(i, j int) bool {
 			a := preparedOntology.Resources[rmk].Relationship[i]
@@ -303,7 +303,7 @@ enum ResourceType {
 			}
 		}
 
-		// Add object properties
+		// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
 		// Sort slice of object properties
 		sort.Slice(preparedOntology.Resources[rmk].ObjectRelationship, func(i, j int) bool {
 			a := preparedOntology.Resources[rmk].ObjectRelationship[i]

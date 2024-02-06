@@ -27,7 +27,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
 	case "prop:parent":
-		return "", "", ""
+		return "", "string", "parent_" + resource.Name + "_id"
 	default:
 		rep = ""
 	}
@@ -66,7 +66,7 @@ func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration":
+	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration", "http://graph.clouditor.io/classes/resourceId":
 		return "string"
 	case "xsd:listString", "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
 		return "repeated string"
@@ -82,7 +82,7 @@ func GetProtoType(s string) string {
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
 		return "repeated uint32"
-	case "xsd:java.util.Map<String, String>": // TODO(oxisto): Do we want to use here maps, as in the CPG?
+	case "xsd:java.util.Map<String, String>":
 		return "map<string, string>"
 	default:
 		return s
@@ -102,6 +102,27 @@ func GetNameFromIri(s string) string {
 
 // GetDataPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
 func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.OntologyPrepared) string {
+	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
+	if prop.AbbreviatedIRI != "" {
+		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
+			return val.Name
+		} else {
+			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+		}
+	} else if prop.IRI != "" {
+		if val, ok := preparedOntology.Resources[prop.IRI]; ok {
+			return val.Name
+		} else {
+			return GetNameFromIri(prop.IRI)
+		}
+	}
+
+	return ""
+}
+
+// TODO(all): Use generic for GetObjectPropertyIRIName and GetDataPropertyIRIName
+// GetObjectPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
+func GetObjectPropertyIRIName(prop owl.ObjectProperty, preparedOntology ontology.OntologyPrepared) string {
 	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
 	if prop.AbbreviatedIRI != "" {
 		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
@@ -149,7 +170,7 @@ func ToSnakeCase(s string) string {
 	)
 
 	s = CleanString(s)
-	snake := matchFirstCap.ReplaceAllString(s, "${1}_${2}")
+	snake := matchFirstCap.ReplaceAllString(s, "${1}${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
 }

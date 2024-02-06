@@ -90,11 +90,12 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 	}
 
 	// Prepare SubClasses
-	// There are 4 different structures of SubClasses. All Class properties are IRIs:
+	// There are 5 different structures of SubClasses. All Class properties are IRIs:
 	// - 2 Classes: The second Class is the parent of the first Class
 	// - Class and DataSomeValuesFrom: Class is the current resource and DataSomeValuesFrom contains the Datatype (e.g., xsd:string) and the corresponding DataProperty/variable name as IRI or abbreviatedIRI (e.g., filename as IRI or prop:enabeld as abbreviatedIRI)
 	// - Class and DataHasValue: Class is the current resource and DataHasValue is the same as DataSomeValuesFrom except, that no Datatype exists in the Ontology, but an Literal (Literal is a string, that is not used as an Ontology object/property).
 	// - Class and ObjectSomeValuesFrom: Class is the current resource and ObjectSomeValuesFrom contains the ObjectProperty (e.g., prop:hasMultiple) and the linked resource (Class)
+	// - Class and ObjectHasValue: Class is the current resource and ObjectHasValue contains the ObjectProperty IRI (e.g., "http://graph.clouditor.io/classes/scope") and a named individual (e.g., "http://graph.clouditor.io/classes/resourceId")
 	for _, sc := range o.SubClasses {
 		if len(sc.Class) == 2 {
 
@@ -172,10 +173,53 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
-				preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
-					ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
-					Class:          v.Class.IRI,
-					Name:           preparedOntology.Resources[v.Class.IRI].Name,
+				if v.ObjectProperty.IRI != "" {
+					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
+						ObjectProperty: v.ObjectProperty.IRI,
+						Class:          v.Class.IRI,
+						Name:           preparedOntology.Resources[v.Class.IRI].Name,
+					})
+				} else if v.ObjectProperty.AbbreviatedIRI != "" {
+					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
+						ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
+						Class:          v.Class.IRI,
+						Name:           preparedOntology.Resources[v.Class.IRI].Name,
+					})
+				}
+			}
+		} else if sc.ObjectHasValue != nil {
+			for _, v := range sc.ObjectHasValue {
+				// Add object value, e.g., "scope resourceId"
+				var (
+					comment         string
+					identifier      string
+					namedIndividual string
+				)
+
+				// Get IRI or abbreviatedIRI from ObjectProperty
+				if v.ObjectProperty.AbbreviatedIRI != "" {
+					identifier = v.ObjectProperty.AbbreviatedIRI
+				} else if v.ObjectProperty.IRI != "" {
+					identifier = v.ObjectProperty.IRI
+				}
+
+				// Get IRI or abbreviatedIRI from NamedIndividual
+				if v.NamedIndividual.AbbreviatedIRI != "" {
+					namedIndividual = v.NamedIndividual.AbbreviatedIRI
+				} else if v.NamedIndividual.IRI != "" {
+					namedIndividual = v.NamedIndividual.IRI
+				}
+
+				// Check if comment is available
+				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+					comment = strings.Join(val.Comment[:], "\n\t ")
+				}
+
+				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
+					IRI:     identifier,
+					Typ:     util.GetProtoType(namedIndividual),
+					Value:   util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+					Comment: comment,
 				})
 			}
 		}
@@ -194,17 +238,47 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	//Add header
 	output += "\n\n" + header
 
-	// Create proto messages with comments
-	// Sort map keys
+	// Add EnumValueOptions
+	output += `
+
+extend google.protobuf.EnumValueOptions {
+	optional string resource_type_name = 123456789;
+}`
+
+	// Sort preparedOntology.Resources map keys
 	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
 
+	// Add ResourceType enum
+	output += `
+
+enum ResourceType {
+	RESOURCE_TYPE_UNSPECIFIED = 0;`
+
+	// Add all resource type entries
+	// i is the counter for the enum field numbers
+	i := 1
+	for _, rmk := range resourceMapKeys {
+		i += 1
+		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
+
+		// For examle, ABAC has the resource types "ABAC,Authorization,SecurityFeature" and is presented as RESOURCE_ABAC_AUTHORIZATION_SECURITYFEATURE.
+		// TODO(all): Or do we want instead RESOURCE_ABAC_AUTHORIZATION_SECURITY_FEATURE?
+		output += fmt.Sprintf("\n\tRESOURCE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), i, strings.Join(resourceTypeList, ","))
+	}
+
+	// Close ResourceType enum
+	output += "}\n"
+
+	// Create proto messages with comments
 	for _, rmk := range resourceMapKeys {
 		// is the counter for the message field numbers
 		i := 1
 
+		// Add message comment
+		output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
+
 		// Add comment
 		for _, w := range preparedOntology.Resources[rmk].Comment {
-			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
 			output += "\n// " + w
 		}
 
@@ -242,6 +316,9 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 				if value != "" && typ != "" {
 					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
 					i += 1
+				} else if typ != "" && name != "" {
+					output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), i)
+					i += 1
 				}
 			}
 		}
@@ -271,6 +348,20 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 	return output
 
+}
+
+// getResourceTypeList returns a list of all derived resources
+func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) []string {
+	var resource_types []string
+
+	if resource.Parent == "" {
+		return []string{resource.Name}
+	} else {
+		resource_types = append(resource_types, resource.Name)
+		resource_types = append(resource_types, getResourceTypeList(preparedOntology.Resources[resource.Parent], preparedOntology)...)
+	}
+
+	return resource_types
 }
 
 func writeProtofileToStorage(outputFile, s string) error {

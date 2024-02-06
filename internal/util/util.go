@@ -66,7 +66,7 @@ func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration":
+	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration", "http://graph.clouditor.io/classes/resourceId":
 		return "string"
 	case "xsd:listString", "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
 		return "repeated string"
@@ -102,6 +102,27 @@ func GetNameFromIri(s string) string {
 
 // GetDataPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
 func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.OntologyPrepared) string {
+	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
+	if prop.AbbreviatedIRI != "" {
+		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
+			return val.Name
+		} else {
+			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+		}
+	} else if prop.IRI != "" {
+		if val, ok := preparedOntology.Resources[prop.IRI]; ok {
+			return val.Name
+		} else {
+			return GetNameFromIri(prop.IRI)
+		}
+	}
+
+	return ""
+}
+
+// TODO(all): Use generic for GetObjectPropertyIRIName and GetDataPropertyIRIName
+// GetObjectPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
+func GetObjectPropertyIRIName(prop owl.ObjectProperty, preparedOntology ontology.OntologyPrepared) string {
 	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
 	if prop.AbbreviatedIRI != "" {
 		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {

@@ -90,11 +90,12 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 	}
 
 	// Prepare SubClasses
-	// There are 4 different structures of SubClasses. All Class properties are IRIs:
+	// There are 5 different structures of SubClasses. All Class properties are IRIs:
 	// - 2 Classes: The second Class is the parent of the first Class
 	// - Class and DataSomeValuesFrom: Class is the current resource and DataSomeValuesFrom contains the Datatype (e.g., xsd:string) and the corresponding DataProperty/variable name as IRI or abbreviatedIRI (e.g., filename as IRI or prop:enabeld as abbreviatedIRI)
 	// - Class and DataHasValue: Class is the current resource and DataHasValue is the same as DataSomeValuesFrom except, that no Datatype exists in the Ontology, but an Literal (Literal is a string, that is not used as an Ontology object/property).
 	// - Class and ObjectSomeValuesFrom: Class is the current resource and ObjectSomeValuesFrom contains the ObjectProperty (e.g., prop:hasMultiple) and the linked resource (Class)
+	// - Class and ObjectHasValue: Class is the current resource and ObjectHasValue contains the ObjectProperty IRI (e.g., "http://graph.clouditor.io/classes/scope") and a named individual (e.g., "http://graph.clouditor.io/classes/resourceId")
 	for _, sc := range o.SubClasses {
 		if len(sc.Class) == 2 {
 
@@ -186,6 +187,41 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 					})
 				}
 			}
+		} else if sc.ObjectHasValue != nil {
+			for _, v := range sc.ObjectHasValue {
+				// Add object value, e.g., "scope resourceId"
+				var (
+					comment         string
+					identifier      string
+					namedIndividual string
+				)
+
+				// Get IRI or abbreviatedIRI from ObjectProperty
+				if v.ObjectProperty.AbbreviatedIRI != "" {
+					identifier = v.ObjectProperty.AbbreviatedIRI
+				} else if v.ObjectProperty.IRI != "" {
+					identifier = v.ObjectProperty.IRI
+				}
+
+				// Get IRI or abbreviatedIRI from NamedIndividual
+				if v.NamedIndividual.AbbreviatedIRI != "" {
+					namedIndividual = v.NamedIndividual.AbbreviatedIRI
+				} else if v.NamedIndividual.IRI != "" {
+					namedIndividual = v.NamedIndividual.IRI
+				}
+
+				// Check if comment is available
+				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+					comment = strings.Join(val.Comment[:], "\n\t ")
+				}
+
+				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
+					IRI:     identifier,
+					Typ:     util.GetProtoType(namedIndividual),
+					Value:   util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+					Comment: comment,
+				})
+			}
 		}
 	}
 
@@ -238,9 +274,11 @@ enum ResourceType {
 		// is the counter for the message field numbers
 		i := 1
 
+		// Add message comment
+		output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
+
 		// Add comment
 		for _, w := range preparedOntology.Resources[rmk].Comment {
-			output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
 			output += "\n// " + w
 		}
 

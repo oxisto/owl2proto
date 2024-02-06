@@ -285,43 +285,11 @@ enum ResourceType {
 		// Start message
 		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[rmk].Name)
 
-		// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-		// Sort slice of data properties
-		sort.Slice(preparedOntology.Resources[rmk].Relationship, func(i, j int) bool {
-			a := preparedOntology.Resources[rmk].Relationship[i]
-			b := preparedOntology.Resources[rmk].Relationship[j]
-			return a.Value < b.Value
-		})
-		for _, r := range preparedOntology.Resources[rmk].Relationship {
-			if r.Typ != "" && r.Value != "" {
-				// Add data property comment if available
-				if r.Comment != "" {
-					output += fmt.Sprintf("\n\t// %s", r.Comment)
-				}
-				output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
-				i += 1
-			}
-		}
+		// // Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+		output, i = addDataProperties(output, rmk, i, preparedOntology)
 
 		// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-		// Sort slice of object properties
-		sort.Slice(preparedOntology.Resources[rmk].ObjectRelationship, func(i, j int) bool {
-			a := preparedOntology.Resources[rmk].ObjectRelationship[i]
-			b := preparedOntology.Resources[rmk].ObjectRelationship[j]
-			return a.Name > b.Name
-		})
-		for _, o := range preparedOntology.Resources[rmk].ObjectRelationship {
-			if o.Name != "" && o.ObjectProperty != "" {
-				value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
-				if value != "" && typ != "" {
-					output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
-					i += 1
-				} else if typ != "" && name != "" {
-					output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), i)
-					i += 1
-				}
-			}
-		}
+		output, _ = addObjectProperties(output, rmk, i, preparedOntology)
 
 		// Add subresources if present
 		if len(preparedOntology.Resources[rmk].SubResources) > 0 {
@@ -348,6 +316,102 @@ enum ResourceType {
 
 	return output
 
+}
+
+// addObjectProperties adds all object properties for the given resource to the output string
+// Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
+func addObjectProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
+	// Get all data properties of the given resource (rmk) and the parent resources
+	objectProperties := findAllObjectProperties(rmk, preparedOntology)
+
+	// Sort slice of object properties
+	sort.Slice(objectProperties, func(i, j int) bool {
+		a := objectProperties[i]
+		b := objectProperties[j]
+		return a.Name < b.Name
+	})
+
+	// Create output for the object properties
+	for _, o := range objectProperties {
+		if o.Name != "" && o.ObjectProperty != "" {
+			value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
+			if value != "" && typ != "" {
+				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
+				i += 1
+			} else if typ != "" && name != "" {
+				output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), i)
+				i += 1
+			}
+		}
+	}
+
+	return output, i
+}
+
+// findAllObjectProperties adds all object properties for the given entity and the parents
+func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepared) []*ontology.ObjectRelationship {
+	var (
+		objectRelationsships []*ontology.ObjectRelationship
+		parent               string
+	)
+
+	objectRelationsships = append(objectRelationsships, preparedOntology.Resources[rmk].ObjectRelationship...)
+
+	parent = preparedOntology.Resources[rmk].Parent
+	if parent == "" || parent == rootResourceName {
+		return objectRelationsships
+	} else {
+		objectRelationsships = append(objectRelationsships, findAllObjectProperties(parent, preparedOntology)...)
+	}
+
+	return objectRelationsships
+}
+
+// addObjectProperties adds all data properties for the given resource to the output string
+// Data properties (e.g., "bool enabled", "int64 interval", "int64 retention_period")
+func addDataProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
+	// Get all data properties of the given resource (rmk) and the parent resources
+	dataProperties := findAllDataProperties(rmk, preparedOntology)
+
+	// Sort slice of data properties
+	sort.Slice(dataProperties, func(i, j int) bool {
+		a := dataProperties[i]
+		b := dataProperties[j]
+		return a.Value < b.Value
+	})
+
+	// Create output for the data properties
+	for _, r := range dataProperties {
+		if r.Typ != "" && r.Value != "" {
+			// Add data property comment if available
+			if r.Comment != "" {
+				output += fmt.Sprintf("\n\t// %s", r.Comment)
+			}
+			output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
+			i += 1
+		}
+	}
+
+	return output, i
+}
+
+// findAllDataProperties adds all object properties for the given entity and the parents
+func findAllDataProperties(rmk string, preparedOntology ontology.OntologyPrepared) []*ontology.Relationship {
+	var (
+		relationships []*ontology.Relationship
+		parent        string
+	)
+
+	relationships = append(relationships, preparedOntology.Resources[rmk].Relationship...)
+
+	parent = preparedOntology.Resources[rmk].Parent
+	if parent == "" || parent == rootResourceName {
+		return relationships
+	} else {
+		relationships = append(relationships, findAllDataProperties(parent, preparedOntology)...)
+	}
+
+	return relationships
 }
 
 // getResourceTypeList returns a list of all derived resources

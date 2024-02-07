@@ -277,7 +277,7 @@ enum ResourceType {
 		i := 1
 
 		// Add message comment
-		output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", class.Name)
+		output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
 
 		// Add comment
 		for _, w := range class.Comment {
@@ -299,7 +299,7 @@ enum ResourceType {
 
 			// j is the counter for the oneof field numbers
 			j := 100
-			output += "\n\n\toneof type {"
+			output += "\n\toneof type {"
 			// Sort slice of sub-resources
 			sort.Slice(class.SubResources, func(i, j int) bool {
 				a := class.SubResources[i]
@@ -343,7 +343,7 @@ func addObjectProperties(output, rmk string, i int, preparedOntology ontology.On
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
 				i += 1
 			} else if typ != "" && name != "" {
-				output += fmt.Sprintf("\n\t%s %s  = %d;", typ, util.ToSnakeCase(name), i)
+				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
 				i += 1
 			}
 		}
@@ -391,7 +391,7 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 			if r.Comment != "" {
 				output += fmt.Sprintf("\n\t// %s", r.Comment)
 			}
-			output += fmt.Sprintf("\n\t%s %s  = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
+			output += fmt.Sprintf("\n\t%s %s = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
 			i += 1
 		}
 	}

@@ -362,7 +362,7 @@ func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepa
 	objectRelationsships = append(objectRelationsships, preparedOntology.Resources[rmk].ObjectRelationship...)
 
 	parent = preparedOntology.Resources[rmk].Parent
-	if parent == "" || parent == rootResourceName {
+	if parent == "" || rmk == rootResourceName {
 		return objectRelationsships
 	} else {
 		objectRelationsships = append(objectRelationsships, findAllObjectProperties(parent, preparedOntology)...)
@@ -409,7 +409,7 @@ func findAllDataProperties(rmk string, preparedOntology ontology.OntologyPrepare
 	relationships = append(relationships, preparedOntology.Resources[rmk].Relationship...)
 
 	parent = preparedOntology.Resources[rmk].Parent
-	if parent == "" || parent == rootResourceName {
+	if parent == "" || rmk == rootResourceName {
 		return relationships
 	} else {
 		relationships = append(relationships, findAllDataProperties(parent, preparedOntology)...)

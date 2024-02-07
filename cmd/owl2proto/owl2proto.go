@@ -263,7 +263,7 @@ enum ResourceType {
 
 		// For examle, ABAC has the resource types "ABAC,Authorization,SecurityFeature" and is presented as RESOURCE_ABAC_AUTHORIZATION_SECURITYFEATURE.
 		// TODO(all): Or do we want instead RESOURCE_ABAC_AUTHORIZATION_SECURITY_FEATURE?
-		output += fmt.Sprintf("\n\tRESOURCE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), i, strings.Join(resourceTypeList, ","))
+		output += fmt.Sprintf("\n\tRESOURCE_TYPE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), i, strings.Join(resourceTypeList, ","))
 	}
 
 	// Close ResourceType enum

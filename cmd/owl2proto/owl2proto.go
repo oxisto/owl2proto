@@ -238,36 +238,8 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	//Add header
 	output += "\n\n" + header
 
-	// Add EnumValueOptions
-	output += `
-
-extend google.protobuf.EnumValueOptions {
-	optional string resource_type_name = 123456789;
-}`
-
 	// Sort preparedOntology.Resources map keys
 	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
-
-	// Add ResourceType enum
-	output += `
-
-enum ResourceType {
-	RESOURCE_TYPE_UNSPECIFIED = 0;`
-
-	// Add all resource type entries
-	// i is the counter for the enum field numbers
-	i := 1
-	for _, rmk := range resourceMapKeys {
-		i += 1
-		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
-
-		// For examle, ABAC has the resource types "ABAC,Authorization,SecurityFeature" and is presented as RESOURCE_ABAC_AUTHORIZATION_SECURITYFEATURE.
-		// TODO(all): Or do we want instead RESOURCE_ABAC_AUTHORIZATION_SECURITY_FEATURE?
-		output += fmt.Sprintf("\n\tRESOURCE_TYPE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), i, strings.Join(resourceTypeList, ","))
-	}
-
-	// Close ResourceType enum
-	output += "}\n"
 
 	// Create proto messages with comments
 	for _, rmk := range resourceMapKeys {
@@ -416,20 +388,6 @@ func findAllDataProperties(rmk string, preparedOntology ontology.OntologyPrepare
 	}
 
 	return relationships
-}
-
-// getResourceTypeList returns a list of all derived resources
-func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) []string {
-	var resource_types []string
-
-	if resource.Parent == "" {
-		return []string{resource.Name}
-	} else {
-		resource_types = append(resource_types, resource.Name)
-		resource_types = append(resource_types, getResourceTypeList(preparedOntology.Resources[resource.Parent], preparedOntology)...)
-	}
-
-	return resource_types
 }
 
 func writeProtofileToStorage(outputFile, s string) error {

@@ -238,13 +238,6 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	//Add header
 	output += "\n\n" + header
 
-	// Add EnumValueOptions
-	output += `
-
-extend google.protobuf.EnumValueOptions {
-	optional string resource_type_name = 123456789;
-}`
-
 	// Sort preparedOntology.Resources map keys
 	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
 
@@ -395,20 +388,6 @@ func findAllDataProperties(rmk string, preparedOntology ontology.OntologyPrepare
 	}
 
 	return relationships
-}
-
-// getResourceTypeList returns a list of all derived resources
-func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) []string {
-	var resource_types []string
-
-	if resource.Parent == "" {
-		return []string{resource.Name}
-	} else {
-		resource_types = append(resource_types, resource.Name)
-		resource_types = append(resource_types, getResourceTypeList(preparedOntology.Resources[resource.Parent], preparedOntology)...)
-	}
-
-	return resource_types
 }
 
 func writeProtofileToStorage(outputFile, s string) error {

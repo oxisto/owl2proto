@@ -271,38 +271,42 @@ enum ResourceType {
 
 	// Create proto messages with comments
 	for _, rmk := range resourceMapKeys {
+		class := preparedOntology.Resources[rmk]
+
 		// is the counter for the message field numbers
 		i := 1
 
 		// Add message comment
-		output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", preparedOntology.Resources[rmk].Name)
+		output += fmt.Sprintf("\n// %s is an entity in our Cloud ontology", class.Name)
 
 		// Add comment
-		for _, w := range preparedOntology.Resources[rmk].Comment {
+		for _, w := range class.Comment {
 			output += "\n// " + w
 		}
 
 		// Start message
-		output += fmt.Sprintf("\nmessage %s {", preparedOntology.Resources[rmk].Name)
+		output += fmt.Sprintf("\nmessage %s {", class.Name)
 
-		// // Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-		output, i = addDataProperties(output, rmk, i, preparedOntology)
+		// We only add properties for "leaf" nodes
+		if len(class.SubResources) == 0 {
+			// // Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+			output, i = addDataProperties(output, rmk, i, preparedOntology)
 
-		// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-		output, _ = addObjectProperties(output, rmk, i, preparedOntology)
+			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
+			output, _ = addObjectProperties(output, rmk, i, preparedOntology)
+		} else {
+			// Otherwise, we add sub-classes
 
-		// Add subresources if present
-		if len(preparedOntology.Resources[rmk].SubResources) > 0 {
 			// j is the counter for the oneof field numbers
 			j := 100
 			output += "\n\n\toneof type {"
 			// Sort slice of sub-resources
-			sort.Slice(preparedOntology.Resources[rmk].SubResources, func(i, j int) bool {
-				a := preparedOntology.Resources[rmk].SubResources[i]
-				b := preparedOntology.Resources[rmk].SubResources[j]
+			sort.Slice(class.SubResources, func(i, j int) bool {
+				a := class.SubResources[i]
+				b := class.SubResources[j]
 				return a.Name < b.Name
 			})
-			for _, v2 := range preparedOntology.Resources[rmk].SubResources {
+			for _, v2 := range class.SubResources {
 				j += 1
 				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
 

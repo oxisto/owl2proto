@@ -269,6 +269,9 @@ enum ResourceType {
 			// is the counter for the message field numbers
 			i := 1
 
+			// is the counter for the oneof fields
+			j := 100
+
 			// Add message comment
 			output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
 
@@ -281,13 +284,13 @@ enum ResourceType {
 			output += fmt.Sprintf("\nmessage %s {", class.Name)
 
 			// We only add properties for "leaf" nodes
-			if len(class.SubResources) == 0 {
-				// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-				output, i = addDataProperties(output, rmk, i, preparedOntology)
+			// if len(class.SubResources) == 0 {
+			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+			output, i = addDataProperties(output, rmk, i, preparedOntology)
 
-				// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-				output, _ = addObjectProperties(output, rmk, i, preparedOntology)
-			} else {
+			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
+			output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
+			/*} else {
 				// Otherwise, we add sub-classes
 
 				// j is the counter for the oneof field numbers
@@ -305,7 +308,7 @@ enum ResourceType {
 
 				}
 				output += "\n\t}"
-			}
+			} */
 
 			// Close message
 			output += "\n}\n"
@@ -318,7 +321,7 @@ enum ResourceType {
 
 // addObjectProperties adds all object properties for the given resource to the output string
 // Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
-func addObjectProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
+func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology.OntologyPrepared) (string, int, int) {
 	// Get all data properties of the given resource (rmk) and the parent resources
 	objectProperties := findAllObjectProperties(rmk, preparedOntology)
 
@@ -331,19 +334,53 @@ func addObjectProperties(output, rmk string, i int, preparedOntology ontology.On
 
 	// Create output for the object properties
 	for _, o := range objectProperties {
+		if o.Name == "HttpEndpoint" {
+			fmt.Println("AHA")
+		}
 		if o.Name != "" && o.ObjectProperty != "" {
 			value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 			if value != "" && typ != "" {
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
-				i += 1
 			} else if typ != "" && name != "" {
-				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
-				i += 1
+				// Get all leafs from object property and write it as 'oneOf {}'
+				leafs := findAllLeafs(o.Class, preparedOntology)
+				if name == "parent_Resource_id" {
+					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
+				} else if len(leafs) >= 2 {
+					// begin oneof X {}
+					output += fmt.Sprintf("\n\toneof %s {", o.Name)
+					for _, v := range leafs {
+						output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), j)
+						j += 1
+					}
+
+					// close onfOf{}
+					output += "\n\t}"
+				} else if len(leafs) == 1 {
+					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
+				}
 			}
+			i += 1
 		}
 	}
 
-	return output, i
+	return output, i, j
+}
+
+func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*ontology.Resource {
+	var leafs []*ontology.Resource
+
+	r := preparedOntology.Resources[class]
+
+	if len(r.SubResources) == 0 {
+		leafs = append(leafs, r)
+	} else {
+		for _, s := range r.SubResources {
+			leafs = append(leafs, findAllLeafs(s.Iri, preparedOntology)...)
+		}
+	}
+
+	return leafs
 }
 
 // findAllObjectProperties adds all object properties for the given entity and the parents

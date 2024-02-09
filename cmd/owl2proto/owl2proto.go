@@ -248,7 +248,7 @@ enum ResourceType {
 
 	// Add all resource type entries
 	// i is the counter for the enum field numbers
-	i := 1
+	i := 0
 	for _, rmk := range resourceMapKeys {
 		i += 1
 		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
@@ -281,7 +281,7 @@ enum ResourceType {
 
 		// We only add properties for "leaf" nodes
 		if len(class.SubResources) == 0 {
-			// // Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
 			output, i = addDataProperties(output, rmk, i, preparedOntology)
 
 			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"

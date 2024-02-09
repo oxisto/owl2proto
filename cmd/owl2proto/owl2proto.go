@@ -313,7 +313,7 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 
 	// Create output for the object properties
 	for _, o := range objectProperties {
-		if o.Name == "HttpEndpoint" {
+		if o.Name == "NetworkService" {
 			fmt.Println("AHA")
 		}
 		if o.Name != "" && o.ObjectProperty != "" {
@@ -323,7 +323,7 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 			} else if typ != "" && name != "" {
 				// Get all leafs from object property and write it as 'oneOf {}'
 				leafs := findAllLeafs(o.Class, preparedOntology)
-				if name == "parent_Resource_id" {
+				if strings.Contains(name, "_id") {
 					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
 				} else if len(leafs) >= 2 {
 					// begin oneof X {}
@@ -333,7 +333,7 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 						j += 1
 					}
 
-					// close onfOf{}
+					// close oneOf{}
 					output += "\n\t}"
 				} else if len(leafs) == 1 {
 					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)

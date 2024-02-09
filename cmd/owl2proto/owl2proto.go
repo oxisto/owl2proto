@@ -326,6 +326,7 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 				if strings.Contains(name, "_id") {
 					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
 				} else if len(leafs) >= 2 {
+					// TODO(all): Increment counter to next 100
 					// begin oneof X {}
 					output += fmt.Sprintf("\n\toneof %s {", o.Name)
 					for _, v := range leafs {

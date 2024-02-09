@@ -265,49 +265,51 @@ enum ResourceType {
 	for _, rmk := range resourceMapKeys {
 		class := preparedOntology.Resources[rmk]
 
-		// is the counter for the message field numbers
-		i := 1
-
-		// Add message comment
-		output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
-
-		// Add comment
-		for _, w := range class.Comment {
-			output += "\n// " + w
-		}
-
-		// Start message
-		output += fmt.Sprintf("\nmessage %s {", class.Name)
-
-		// We only add properties for "leaf" nodes
 		if len(class.SubResources) == 0 {
-			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-			output, i = addDataProperties(output, rmk, i, preparedOntology)
+			// is the counter for the message field numbers
+			i := 1
 
-			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-			output, _ = addObjectProperties(output, rmk, i, preparedOntology)
-		} else {
-			// Otherwise, we add sub-classes
+			// Add message comment
+			output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
 
-			// j is the counter for the oneof field numbers
-			j := 100
-			output += "\n\toneof type {"
-			// Sort slice of sub-resources
-			sort.Slice(class.SubResources, func(i, j int) bool {
-				a := class.SubResources[i]
-				b := class.SubResources[j]
-				return a.Name < b.Name
-			})
-			for _, v2 := range class.SubResources {
-				j += 1
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
-
+			// Add comment
+			for _, w := range class.Comment {
+				output += "\n// " + w
 			}
-			output += "\n\t}"
-		}
 
-		// Close message
-		output += "\n}\n"
+			// Start message
+			output += fmt.Sprintf("\nmessage %s {", class.Name)
+
+			// We only add properties for "leaf" nodes
+			if len(class.SubResources) == 0 {
+				// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+				output, i = addDataProperties(output, rmk, i, preparedOntology)
+
+				// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
+				output, _ = addObjectProperties(output, rmk, i, preparedOntology)
+			} else {
+				// Otherwise, we add sub-classes
+
+				// j is the counter for the oneof field numbers
+				j := 100
+				output += "\n\toneof type {"
+				// Sort slice of sub-resources
+				sort.Slice(class.SubResources, func(i, j int) bool {
+					a := class.SubResources[i]
+					b := class.SubResources[j]
+					return a.Name < b.Name
+				})
+				for _, v2 := range class.SubResources {
+					j += 1
+					output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
+
+				}
+				output += "\n\t}"
+			}
+
+			// Close message
+			output += "\n}\n"
+		}
 	}
 
 	return output

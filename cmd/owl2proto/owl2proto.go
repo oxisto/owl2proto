@@ -15,12 +15,6 @@ import (
 	"github.com/lmittmann/tint"
 )
 
-// TODOs
-// - get label instead of iri for the name fields
-// - add data/object property comments
-// - add ObjectHasValue
-// - add cli
-
 var (
 	owlFile          string
 	headerFile       string

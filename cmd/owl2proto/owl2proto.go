@@ -265,33 +265,33 @@ enum ResourceType {
 	for _, rmk := range resourceMapKeys {
 		class := preparedOntology.Resources[rmk]
 
-		if len(class.SubResources) == 0 {
-			// is the counter for the message field numbers
-			i := 1
+		//if len(class.SubResources) == 0 {
+		// is the counter for the message field numbers
+		i := 1
 
-			// is the counter for the oneof fields
-			j := 100
+		// is the counter for the oneof fields
+		j := 100
 
-			// Add message comment
-			output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
+		// Add message comment
+		output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
 
-			// Add comment
-			for _, w := range class.Comment {
-				output += "\n// " + w
-			}
-
-			// Start message
-			output += fmt.Sprintf("\nmessage %s {", class.Name)
-
-			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-			output, i = addDataProperties(output, rmk, i, preparedOntology)
-
-			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-			output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
-
-			// Close message
-			output += "\n}\n"
+		// Add comment
+		for _, w := range class.Comment {
+			output += "\n// " + w
 		}
+
+		// Start message
+		output += fmt.Sprintf("\nmessage %s {", class.Name)
+
+		// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+		output, i = addDataProperties(output, rmk, i, preparedOntology)
+
+		// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
+		output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
+
+		// Close message
+		output += "\n}\n"
+		//}
 	}
 
 	return output

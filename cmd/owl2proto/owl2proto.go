@@ -234,32 +234,12 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 	// Add EnumValueOptions
 	output += `
-extend google.protobuf.EnumValueOptions {
-	optional string resource_type_name = 123456789;
+extend google.protobuf.MessageOptions {
+	repeated string resource_type_name = 50000;
 }`
 
 	// Sort preparedOntology.Resources map keys
 	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
-
-	// Add ResourceType enum
-	output += `
-enum ResourceType {
-	RESOURCE_TYPE_UNSPECIFIED = 0;`
-
-	// Add all resource type entries
-	// i is the counter for the enum field numbers
-	i := 0
-	for _, rmk := range resourceMapKeys {
-		i += 1
-		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
-
-		// For examle, ABAC has the resource types "ABAC,Authorization,SecurityFeature" and is presented as RESOURCE_ABAC_AUTHORIZATION_SECURITYFEATURE.
-		// TODO(all): Or do we want instead RESOURCE_ABAC_AUTHORIZATION_SECURITY_FEATURE?
-		output += fmt.Sprintf("\n\tRESOURCE_TYPE_%s = %d [(resource_type_name) = \"%s\"];", strings.ToUpper(strings.Join(resourceTypeList, "_")), i, strings.Join(resourceTypeList, ","))
-	}
-
-	// Close ResourceType enum
-	output += "}\n"
 
 	// Create proto messages with comments
 	for _, rmk := range resourceMapKeys {
@@ -281,7 +261,10 @@ enum ResourceType {
 		}
 
 		// Start message
-		output += fmt.Sprintf("\nmessage %s {", class.Name)
+		output += fmt.Sprintf("\nmessage %s {\n", class.Name)
+
+		// Add class hierarchy as message options
+		output = addClassHierarchy(output, rmk, &preparedOntology)
 
 		// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
 		output, i = addDataProperties(output, rmk, i, preparedOntology)
@@ -398,16 +381,33 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 	// Create output for the data properties
 	for _, r := range dataProperties {
 		if r.Typ != "" && r.Value != "" {
+
+			var opts string = ""
+
+			// Make name and id mandatory
+			// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
+			if r.Value == "name" || r.Value == "id" {
+				opts = "[ (buf.validate.field).required = true ]"
+			}
+
 			// Add data property comment if available
 			if r.Comment != "" {
 				output += fmt.Sprintf("\n\t// %s", r.Comment)
 			}
-			output += fmt.Sprintf("\n\t%s %s = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
+			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), i, opts)
 			i += 1
 		}
 	}
 
 	return output, i
+}
+
+func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPrepared) string {
+	for _, typ := range getResourceTypeList(preparedOntology.Resources[rmk], preparedOntology) {
+		output += fmt.Sprintf("\toption (resource_type_name) = \"%s\";\n", typ)
+	}
+
+	return output
 }
 
 // findAllDataProperties adds all object properties for the given entity and the parents

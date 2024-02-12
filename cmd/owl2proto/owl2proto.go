@@ -15,12 +15,6 @@ import (
 	"github.com/lmittmann/tint"
 )
 
-// TODOs
-// - get label instead of iri for the name fields
-// - add data/object property comments
-// - add ObjectHasValue
-// - add cli
-
 var (
 	owlFile          string
 	headerFile       string
@@ -238,6 +232,12 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	//Add header
 	output += "\n\n" + header
 
+	// Add EnumValueOptions
+	output += `
+extend google.protobuf.MessageOptions {
+	repeated string resource_type_name = 50000;
+}`
+
 	// Sort preparedOntology.Resources map keys
 	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
 
@@ -245,8 +245,12 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	for _, rmk := range resourceMapKeys {
 		class := preparedOntology.Resources[rmk]
 
+		//if len(class.SubResources) == 0 {
 		// is the counter for the message field numbers
 		i := 1
+
+		// is the counter for the oneof fields
+		j := 100
 
 		// Add message comment
 		output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
@@ -257,37 +261,20 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 		}
 
 		// Start message
-		output += fmt.Sprintf("\nmessage %s {", class.Name)
+		output += fmt.Sprintf("\nmessage %s {\n", class.Name)
 
-		// We only add properties for "leaf" nodes
-		if len(class.SubResources) == 0 {
-			// // Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-			output, i = addDataProperties(output, rmk, i, preparedOntology)
+		// Add class hierarchy as message options
+		output = addClassHierarchy(output, rmk, &preparedOntology)
 
-			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-			output, _ = addObjectProperties(output, rmk, i, preparedOntology)
-		} else {
-			// Otherwise, we add sub-classes
+		// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+		output, i = addDataProperties(output, rmk, i, preparedOntology)
 
-			// j is the counter for the oneof field numbers
-			j := 100
-			output += "\n\toneof type {"
-			// Sort slice of sub-resources
-			sort.Slice(class.SubResources, func(i, j int) bool {
-				a := class.SubResources[i]
-				b := class.SubResources[j]
-				return a.Name < b.Name
-			})
-			for _, v2 := range class.SubResources {
-				j += 1
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v2.Name, util.ToSnakeCase(v2.Name), j)
-
-			}
-			output += "\n\t}"
-		}
+		// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
+		output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
 
 		// Close message
 		output += "\n}\n"
+		//}
 	}
 
 	return output
@@ -296,7 +283,7 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 
 // addObjectProperties adds all object properties for the given resource to the output string
 // Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
-func addObjectProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
+func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology.OntologyPrepared) (string, int, int) {
 	// Get all data properties of the given resource (rmk) and the parent resources
 	objectProperties := findAllObjectProperties(rmk, preparedOntology)
 
@@ -313,15 +300,47 @@ func addObjectProperties(output, rmk string, i int, preparedOntology ontology.On
 			value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 			if value != "" && typ != "" {
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
-				i += 1
 			} else if typ != "" && name != "" {
-				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
-				i += 1
+				// Get all leafs from object property and write it as 'oneOf {}'
+				leafs := findAllLeafs(o.Class, preparedOntology)
+				if strings.Contains(name, "_id") {
+					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
+				} else if len(leafs) >= 2 {
+					// TODO(all): Increment counter to next 100
+					// begin oneof X {}
+					output += fmt.Sprintf("\n\toneof %s {", o.Name)
+					for _, v := range leafs {
+						output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), j)
+						j += 1
+					}
+
+					// close oneOf{}
+					output += "\n\t}"
+				} else if len(leafs) == 1 {
+					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
+				}
 			}
+			i += 1
 		}
 	}
 
-	return output, i
+	return output, i, j
+}
+
+func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*ontology.Resource {
+	var leafs []*ontology.Resource
+
+	r := preparedOntology.Resources[class]
+
+	if len(r.SubResources) == 0 {
+		leafs = append(leafs, r)
+	} else {
+		for _, s := range r.SubResources {
+			leafs = append(leafs, findAllLeafs(s.Iri, preparedOntology)...)
+		}
+	}
+
+	return leafs
 }
 
 // findAllObjectProperties adds all object properties for the given entity and the parents
@@ -359,16 +378,33 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 	// Create output for the data properties
 	for _, r := range dataProperties {
 		if r.Typ != "" && r.Value != "" {
+
+			var opts string = ""
+
+			// Make name and id mandatory
+			// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
+			if r.Value == "name" || r.Value == "id" {
+				opts = "[ (buf.validate.field).required = true ]"
+			}
+
 			// Add data property comment if available
 			if r.Comment != "" {
 				output += fmt.Sprintf("\n\t// %s", r.Comment)
 			}
-			output += fmt.Sprintf("\n\t%s %s = %d;", r.Typ, util.ToSnakeCase(r.Value), i)
+			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), i, opts)
 			i += 1
 		}
 	}
 
 	return output, i
+}
+
+func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPrepared) string {
+	for _, typ := range getResourceTypeList(preparedOntology.Resources[rmk], preparedOntology) {
+		output += fmt.Sprintf("\toption (resource_type_name) = \"%s\";\n", typ)
+	}
+
+	return output
 }
 
 // findAllDataProperties adds all object properties for the given entity and the parents
@@ -419,6 +455,20 @@ func writeProtofileToStorage(outputFile, s string) error {
 	}
 
 	return nil
+}
+
+// getResourceTypeList returns a list of all derived resources
+func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) []string {
+	var resource_types []string
+
+	if resource.Parent == "" {
+		return []string{resource.Name}
+	} else {
+		resource_types = append(resource_types, resource.Name)
+		resource_types = append(resource_types, getResourceTypeList(preparedOntology.Resources[resource.Parent], preparedOntology)...)
+	}
+
+	return resource_types
 }
 
 func main() {

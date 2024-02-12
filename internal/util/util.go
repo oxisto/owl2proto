@@ -18,8 +18,10 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	switch s {
 	case "prop:hasMultiple", "prop:offersMultiple":
 		rep = Repeated
-	case "prop:has", "prop:runsOn", "prop:to", "prop:offers", "prop:storage":
+	case "prop:has", "prop:runsOn", "prop:offers", "prop:storage":
 		rep = ""
+	case "prop:to":
+		rep = Repeated
 	case "prop:collectionOf":
 		rep = Repeated
 	case "prop:offersInterface":
@@ -27,7 +29,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
 	case "prop:parent":
-		return "", "string", "parent_" + resource.Name + "_id"
+		return "", "string", "parent_id"
 	default:
 		rep = ""
 	}
@@ -76,9 +78,9 @@ func GetProtoType(s string) string {
 		return "uint32"
 	case "xsd:float":
 		return "float"
-	case "xsd:java.time.Duration", "xsd:dateTime":
-		return "int64"
-	case "xsd:java.time.ZonedDateTime":
+	case "xsd:java.time.Duration":
+		return "google.protobuf.Duration"
+	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
 		return "repeated uint32"

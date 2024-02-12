@@ -18,8 +18,10 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	switch s {
 	case "prop:hasMultiple", "prop:offersMultiple":
 		rep = Repeated
-	case "prop:has", "prop:runsOn", "prop:to", "prop:offers", "prop:storage":
+	case "prop:has", "prop:runsOn", "prop:offers", "prop:storage":
 		rep = ""
+	case "prop:to":
+		rep = Repeated
 	case "prop:collectionOf":
 		rep = Repeated
 	case "prop:offersInterface":
@@ -27,13 +29,13 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
 	case "prop:parent":
-		return "", "string", "parent_" + resource.Name + "_id"
+		return "", "string", "parent_id"
 	default:
 		rep = ""
 	}
 
 	// If the object is a kind of the rootResourceName, the type is string and "_id" is added to the name to show that an ID is stored in the string.
-	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
+	if isResourceAboveX(resource, preparedOntology, rootResourceName) && s != "prop:to" {
 		return rep, "string", resource.Name + "_id"
 	}
 

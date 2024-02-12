@@ -296,9 +296,6 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 
 	// Create output for the object properties
 	for _, o := range objectProperties {
-		if o.Name == "NetworkService" {
-			fmt.Println("AHA")
-		}
 		if o.Name != "" && o.ObjectProperty != "" {
 			value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 			if value != "" && typ != "" {

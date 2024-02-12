@@ -28,6 +28,8 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 		rep = ""
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
+	case "prop:parent":
+		return "", "string", "parent_id"
 	default:
 		rep = ""
 	}

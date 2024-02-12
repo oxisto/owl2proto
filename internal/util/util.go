@@ -28,8 +28,6 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 		rep = ""
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
-	case "prop:parent":
-		return "", "string", "parent_" + resource.Name + "_id"
 	default:
 		rep = ""
 	}
@@ -79,7 +77,7 @@ func GetProtoType(s string) string {
 	case "xsd:float":
 		return "float"
 	case "xsd:java.time.Duration":
-		return "google.protobuf.Duration"
+		return "int64" //return "google.protobuf.Duration"
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":

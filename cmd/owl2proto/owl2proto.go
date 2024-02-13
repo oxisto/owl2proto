@@ -245,7 +245,6 @@ extend google.protobuf.MessageOptions {
 	for _, rmk := range resourceMapKeys {
 		class := preparedOntology.Resources[rmk]
 
-		//if len(class.SubResources) == 0 {
 		// is the counter for the message field numbers
 		i := 1
 
@@ -253,7 +252,11 @@ extend google.protobuf.MessageOptions {
 		j := 100
 
 		// Add message comment
-		output += fmt.Sprintf("\n// %s is an entity class in our ontology.", class.Name)
+		if len(class.SubResources) == 0 {
+			output += fmt.Sprintf("\n// %s is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.", class.Name)
+		} else {
+			output += fmt.Sprintf("\n// %s is an abstract class in our ontology, it cannot be instantiated but acts as an \"interface\".", class.Name)
+		}
 
 		// Add comment
 		for _, w := range class.Comment {
@@ -263,18 +266,31 @@ extend google.protobuf.MessageOptions {
 		// Start message
 		output += fmt.Sprintf("\nmessage %s {\n", class.Name)
 
-		// Add class hierarchy as message options
-		output = addClassHierarchy(output, rmk, &preparedOntology)
+		if len(class.SubResources) == 0 {
+			// Add class hierarchy as message options
+			output = addClassHierarchy(output, rmk, &preparedOntology)
 
-		// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-		output, i = addDataProperties(output, rmk, i, preparedOntology)
+			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
+			output, i = addDataProperties(output, rmk, i, preparedOntology)
 
-		// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-		output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
+			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
+			output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
+		} else {
+			// Get all leafs from object property and write it as 'oneOf {}'
+			leafs := findAllLeafs(class.Iri, preparedOntology)
+			// begin oneof X {}
+			output += fmt.Sprintf("\n\toneof %s {", "type")
+			for _, v := range leafs {
+				output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), i)
+				i += 1
+			}
+
+			// close oneOf{}
+			output += "\n\t}"
+		}
 
 		// Close message
 		output += "\n}\n"
-		//}
 	}
 
 	return output
@@ -301,11 +317,9 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 			if value != "" && typ != "" {
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
 			} else if typ != "" && name != "" {
-				// Get all leafs from object property and write it as 'oneOf {}'
-				leafs := findAllLeafs(o.Class, preparedOntology)
-				if strings.Contains(name, "_id") {
-					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
-				} else if len(leafs) >= 2 {
+				//if strings.Contains(name, "_id") {
+				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
+				/*} else if len(leafs) >= 2 {
 					// TODO(all): Increment counter to next 100
 					// begin oneof X {}
 					output += fmt.Sprintf("\n\toneof %s {", o.Name)
@@ -318,7 +332,7 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 					output += "\n\t}"
 				} else if len(leafs) == 1 {
 					output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
-				}
+				}*/
 			}
 			i += 1
 		}

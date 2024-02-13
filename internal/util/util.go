@@ -36,7 +36,12 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 
 	// If the object is a kind of the rootResourceName, the type is string and "_id" is added to the name to show that an ID is stored in the string.
 	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
-		return rep, "string", resource.Name + "_id"
+		// if the property is repeated, than use "ids"
+		if rep == "" {
+			return rep, "string", resource.Name + "_id"
+		} else {
+			return rep, "string", resource.Name + "_ids"
+		}
 	}
 
 	return rep, resource.Name, resource.Name

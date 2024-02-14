@@ -38,7 +38,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
 		// if the property is repeated, than use "ids"
 		if rep == "" {
-			return rep, "string", resource.Name + "_id"
+			return rep, "optional string", resource.Name + "_id"
 		} else {
 			return rep, "string", resource.Name + "_ids"
 		}
@@ -88,7 +88,8 @@ func GetProtoType(s string) string {
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
-		return "repeated uint16"
+		// Note, there is no uint16 in protobuf, therefore we need to resort to uint32.
+		return "repeated uint32"
 	case "xsd:java.util.Map<String, String>":
 		return "map<string, string>"
 	default:

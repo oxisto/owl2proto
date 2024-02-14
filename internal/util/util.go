@@ -16,7 +16,7 @@ const (
 // GetObjectDetail returns the object type
 func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (rep, typ, name string) {
 	switch s {
-	case "prop:hasMultiple", "prop:offersMultiple":
+	case "prop:hasMultiple", "prop:offersMultiple", "http://graph.clouditor.io/classes/offersMultiple":
 		rep = Repeated
 	case "prop:has", "prop:runsOn", "prop:offers", "prop:storage":
 		rep = ""

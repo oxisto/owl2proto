@@ -88,7 +88,7 @@ func GetProtoType(s string) string {
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
-		return "repeated uint32"
+		return "repeated uint16"
 	case "xsd:java.util.Map<String, String>":
 		return "map<string, string>"
 	default:

@@ -16,7 +16,7 @@ const (
 // GetObjectDetail returns the object type
 func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (rep, typ, name string) {
 	switch s {
-	case "prop:hasMultiple", "prop:offersMultiple":
+	case "prop:hasMultiple", "prop:offersMultiple", "http://graph.clouditor.io/classes/offersMultiple":
 		rep = Repeated
 	case "prop:has", "prop:runsOn", "prop:offers", "prop:storage":
 		rep = ""
@@ -29,7 +29,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	case "prop:proxyTarget":
 		return "string", "", resource.Name
 	case "prop:parent":
-		return "", "string", "parent_id"
+		return "", "optional string", "parent_id"
 	default:
 		rep = ""
 	}
@@ -38,7 +38,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
 		// if the property is repeated, than use "ids"
 		if rep == "" {
-			return rep, "string", resource.Name + "_id"
+			return rep, "optional string", resource.Name + "_id"
 		} else {
 			return rep, "string", resource.Name + "_ids"
 		}
@@ -88,6 +88,7 @@ func GetProtoType(s string) string {
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
+		// Note, there is no uint16 in protobuf, therefore we need to resort to uint32.
 		return "repeated uint32"
 	case "xsd:java.util.Map<String, String>":
 		return "map<string, string>"

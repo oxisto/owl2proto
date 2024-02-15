@@ -235,7 +235,7 @@ func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) 
 	// Add EnumValueOptions
 	output += `
 extend google.protobuf.MessageOptions {
-	repeated string resource_type_name = 50000;
+	repeated string resource_type_names = 50000;
 }`
 
 	// Sort preparedOntology.Resources map keys
@@ -400,7 +400,7 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 
 func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPrepared) string {
 	for _, typ := range getResourceTypeList(preparedOntology.Resources[rmk], preparedOntology) {
-		output += fmt.Sprintf("\toption (resource_type_name) = \"%s\";\n", typ)
+		output += fmt.Sprintf("\toption (resource_type_names) = \"%s\";\n", typ)
 	}
 
 	return output

@@ -15,6 +15,7 @@ const (
 
 // GetObjectDetail returns the object type
 func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (rep, typ, name string) {
+	rName := resource.Name
 	switch s {
 	case "prop:hasMultiple", "prop:offersMultiple", "http://graph.clouditor.io/classes/offersMultiple":
 		rep = Repeated
@@ -27,7 +28,7 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	case "prop:offersInterface":
 		rep = ""
 	case "prop:proxyTarget":
-		return "string", "", resource.Name
+		return "string", "", rName
 	case "prop:parent":
 		return "", "optional string", "parent_id"
 	default:
@@ -38,13 +39,31 @@ func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, pr
 	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
 		// if the property is repeated, than use "ids"
 		if rep == "" {
-			return rep, "optional string", resource.Name + "_id"
+			return rep, "optional string", rName + "_id"
 		} else {
-			return rep, "string", resource.Name + "_ids"
+			return rep, "string", rName + "_ids"
 		}
 	}
 
-	return rep, resource.Name, resource.Name
+	// if the property is repeated add "s" to the name
+	if rep == Repeated {
+		name = toPlural(rName)
+	} else {
+		name = rName
+	}
+
+	return rep, rName, name
+
+}
+
+// toPlural return the plural of a string
+func toPlural(s string) string {
+	// if last character is "y", change to "ies"
+	if s[len(s)-1:] == "y" {
+		return s[:len(s)-1] + "ies"
+	} else {
+		return s + "s"
+	}
 
 }
 

@@ -170,7 +170,7 @@ func CleanString(s string) string {
 }
 
 // ToSnakeCase converts camel case to snake case and deletes spaces
-// TODO(all): FIx "CI/CD Service" to CICDService and cicd_service
+// TODO(all): Fix "OSLogging" to OSLogging and os_logging
 func ToSnakeCase(s string) string {
 	var (
 		matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
@@ -178,7 +178,7 @@ func ToSnakeCase(s string) string {
 	)
 
 	s = CleanString(s)
-	snake := matchFirstCap.ReplaceAllString(s, "${1}${2}")
+	snake := matchFirstCap.ReplaceAllString(s, "${1}_${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
 }

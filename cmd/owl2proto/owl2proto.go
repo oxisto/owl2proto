@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/oxisto/owl2proto"
 	"github.com/oxisto/owl2proto/internal/util"
 	"github.com/oxisto/owl2proto/ontology"
 	"github.com/oxisto/owl2proto/owl"
@@ -19,11 +20,13 @@ var (
 	owlFile          string
 	headerFile       string
 	outputPath       string
+	umlOutputPath    string
 	rootResourceName string
 )
 
 const (
-	DefaultOutputPath = "api/ontology.proto"
+	DefaultOutputPath    = "api/ontology.proto"
+	DefaultUMLOutputPath = "api/ontology.puml"
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
@@ -32,6 +35,7 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 		Resources:           make(map[string]*ontology.Resource),
 		SubClasses:          make(map[string]owl.SubClassOf),
 		AnnotationAssertion: make(map[string]*ontology.AnnotationAssertion),
+		RootResourceName:    rootResourceName,
 	}
 
 	for _, c := range o.Declarations {
@@ -169,15 +173,17 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 			for _, v := range sc.ObjectSomeValuesFrom {
 				if v.ObjectProperty.IRI != "" {
 					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
-						ObjectProperty: v.ObjectProperty.IRI,
-						Class:          v.Class.IRI,
-						Name:           preparedOntology.Resources[v.Class.IRI].Name,
+						ObjectProperty:     v.ObjectProperty.IRI,
+						ObjectPropertyName: util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+						Class:              v.Class.IRI,
+						Name:               preparedOntology.Resources[v.Class.IRI].Name,
 					})
 				} else if v.ObjectProperty.AbbreviatedIRI != "" {
 					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
-						ObjectProperty: v.ObjectProperty.AbbreviatedIRI,
-						Class:          v.Class.IRI,
-						Name:           preparedOntology.Resources[v.Class.IRI].Name,
+						ObjectProperty:     v.ObjectProperty.AbbreviatedIRI,
+						ObjectPropertyName: util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+						Class:              v.Class.IRI,
+						Name:               preparedOntology.Resources[v.Class.IRI].Name,
 					})
 				}
 			}
@@ -222,8 +228,8 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 	return preparedOntology
 }
 
-// createProtoFile creates the protobuf file
-func createProtoFile(preparedOntology ontology.OntologyPrepared, header string) string {
+// createProto creates the protobuf file
+func createProto(preparedOntology ontology.OntologyPrepared, header string) string {
 	output := ""
 
 	// Add "auto-generated" header
@@ -365,7 +371,7 @@ func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepa
 // Data properties (e.g., "bool enabled", "int64 interval", "int64 retention_period")
 func addDataProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
 	// Get all data properties of the given resource (rmk) and the parent resources
-	dataProperties := findAllDataProperties(rmk, preparedOntology)
+	dataProperties := preparedOntology.FindAllDataProperties(rmk)
 
 	// Sort slice of data properties
 	sort.Slice(dataProperties, func(i, j int) bool {
@@ -406,26 +412,7 @@ func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPr
 	return output
 }
 
-// findAllDataProperties adds all object properties for the given entity and the parents
-func findAllDataProperties(rmk string, preparedOntology ontology.OntologyPrepared) []*ontology.Relationship {
-	var (
-		relationships []*ontology.Relationship
-		parent        string
-	)
-
-	relationships = append(relationships, preparedOntology.Resources[rmk].Relationship...)
-
-	parent = preparedOntology.Resources[rmk].Parent
-	if parent == "" || rmk == rootResourceName {
-		return relationships
-	} else {
-		relationships = append(relationships, findAllDataProperties(parent, preparedOntology)...)
-	}
-
-	return relationships
-}
-
-func writeProtofileToStorage(outputFile, s string) error {
+func writeFile(outputFile, s string) error {
 	var err error
 
 	// TODO(all):Create folder if not exists
@@ -496,6 +483,13 @@ func main() {
 		outputPath = DefaultOutputPath
 	}
 
+	// Check if output path is given as argument
+	if len(os.Args) >= 6 {
+		umlOutputPath = os.Args[5]
+	} else {
+		umlOutputPath = DefaultUMLOutputPath
+	}
+
 	// Set up logging
 	slog.SetDefault(slog.New(
 		tint.NewHandler(os.Stdout, &tint.Options{
@@ -527,13 +521,24 @@ func main() {
 	preparedOntology := prepareOntology(o)
 
 	// Generate proto content
-	output := createProtoFile(preparedOntology, string(b))
+	output := createProto(preparedOntology, string(b))
 
 	// Write proto content to file
-	err = writeProtofileToStorage(outputPath, output)
+	err = writeFile(outputPath, output)
 	if err != nil {
 		slog.Error("error writing proto file to storage", tint.Err(err))
 	}
 
 	slog.Info("proto file written to storage", slog.String("output folder", outputPath))
+
+	// Generate UML
+	output = owl2proto.CreatePlantUMLFile(preparedOntology)
+
+	// Write UML
+	err = writeFile(umlOutputPath, output)
+	if err != nil {
+		slog.Error("error writing UML file to storage", tint.Err(err))
+	}
+
+	slog.Info("UML file written to storage", slog.String("output folder", umlOutputPath))
 }

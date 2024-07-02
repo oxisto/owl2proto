@@ -295,7 +295,6 @@ extend google.protobuf.MessageOptions {
 			output += "\n\t}"
 		}
 
-
 		// Close message
 		output += "\n}\n"
 	}
@@ -411,20 +410,6 @@ func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPr
 	}
 
 	return output
-}
-
-// getResourceTypeList returns a list of all derived resources
-func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) []string {
-	var resource_types []string
-
-	if resource.Parent == "" {
-		return []string{resource.Name}
-	} else {
-		resource_types = append(resource_types, resource.Name)
-		resource_types = append(resource_types, getResourceTypeList(preparedOntology.Resources[resource.Parent], preparedOntology)...)
-	}
-
-	return resource_types
 }
 
 func writeFile(outputFile, s string) error {

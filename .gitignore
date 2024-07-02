@@ -21,4 +21,4 @@
 go.work
 owl2proto
 proto.go
-
+*.proto

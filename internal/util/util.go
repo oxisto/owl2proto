@@ -17,29 +17,55 @@ const (
 
 // GetObjectDetail returns the object type
 func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (rep, typ, name string) {
+	rName := resource.Name
 	switch s {
-	case "prop:hasMultiple", "prop:offersMultiple":
+	case "prop:hasMultiple", "prop:offersMultiple", "http://graph.clouditor.io/classes/offersMultiple":
 		rep = Repeated
-	case "prop:has", "prop:runsOn", "prop:to", "prop:offers", "prop:storage":
+	case "prop:has", "prop:runsOn", "prop:offers", "prop:storage":
 		rep = ""
+	case "prop:to":
+		rep = Repeated
 	case "prop:collectionOf":
 		rep = Repeated
 	case "prop:offersInterface":
 		rep = ""
 	case "prop:proxyTarget":
-		return "string", "", resource.Name
+		return "string", "", rName
 	case "prop:parent":
-		return "", "", ""
+		return "", "optional string", "parent_id"
 	default:
 		rep = ""
 	}
 
 	// If the object is a kind of the rootResourceName, the type is string and "_id" is added to the name to show that an ID is stored in the string.
 	if isResourceAboveX(resource, preparedOntology, rootResourceName) {
-		return rep, "string", resource.Name + "_id"
+		// if the property is repeated, than use "ids"
+		if rep == "" {
+			return rep, "optional string", rName + "_id"
+		} else {
+			return rep, "string", rName + "_ids"
+		}
 	}
 
-	return rep, resource.Name, resource.Name
+	// if the property is repeated add "s" to the name
+	if rep == Repeated {
+		name = toPlural(rName)
+	} else {
+		name = rName
+	}
+
+	return rep, rName, name
+
+}
+
+// toPlural return the plural of a string
+func toPlural(s string) string {
+	// if last character is "y", change to "ies"
+	if s[len(s)-1:] == "y" {
+		return s[:len(s)-1] + "ies"
+	} else {
+		return s + "s"
+	}
 
 }
 
@@ -68,7 +94,7 @@ func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration":
+	case "xsd:String", "xsd:string", "xsd:de.fraunhofer.aisec.cpg.graph.Node", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression", "xsd:de.fraunhofer.aisec.cpg.graph.statements.expressions.Expression", "xsd:de.fraunhofer.aisec.cpg.graph.declarations.FunctionDeclaration", "http://graph.clouditor.io/classes/resourceId":
 		return "string"
 	case "xsd:listString", "xsd:java.util.ArrayList<String>", "java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>", "java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.statements.expressions.CallExpression>", "xsd:java.util.List<de.fraunhofer.aisec.cpg.graph.declarations.TranslationUnitDeclaration>":
 		return "repeated string"
@@ -78,11 +104,12 @@ func GetProtoType(s string) string {
 		return "uint32"
 	case "xsd:float":
 		return "float"
-	case "xsd:java.time.Duration", "xsd:dateTime":
-		return "int64"
-	case "xsd:java.time.ZonedDateTime":
+	case "xsd:java.time.Duration":
+		return "google.protobuf.Duration"
+	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
 		return "google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
+		// Note, there is no uint16 in protobuf, therefore we need to resort to uint32.
 		return "repeated uint32"
 	case "xsd:java.util.Map<String, String>":
 		return "map<string, string>"
@@ -122,6 +149,27 @@ func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.Ont
 	return ""
 }
 
+// TODO(all): Use generic for GetObjectPropertyIRIName and GetDataPropertyIRIName
+// GetObjectPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
+func GetObjectPropertyIRIName(prop owl.ObjectProperty, preparedOntology ontology.OntologyPrepared) string {
+	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
+	if prop.AbbreviatedIRI != "" {
+		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
+			return val.Name
+		} else {
+			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+		}
+	} else if prop.IRI != "" {
+		if val, ok := preparedOntology.Resources[prop.IRI]; ok {
+			return val.Name
+		} else {
+			return GetNameFromIri(prop.IRI)
+		}
+	}
+
+	return ""
+}
+
 // GetDataPropertyAbbreviatedIriName returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
 func GetDataPropertyAbbreviatedIriName(s string) string {
 	if s == "" {
@@ -143,7 +191,7 @@ func CleanString(s string) string {
 }
 
 // ToSnakeCase converts camel case to snake case and deletes spaces
-// TODO(all): FIx "CI/CD Service" to CICDService and cicd_service
+// TODO(all): Fix "OSLogging" to OSLogging and os_logging
 func ToSnakeCase(s string) string {
 	var (
 		matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")

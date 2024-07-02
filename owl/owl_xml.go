@@ -75,6 +75,6 @@ type Datatype struct {
 }
 
 type ObjectHasValue struct {
-	ObjectProperty string  `xml:"ObjectProperty"`
-	Class          []Class `xml:"Class"`
+	ObjectProperty  ObjectProperty  `xml:"ObjectProperty"`
+	NamedIndividual NamedIndividual `xml:"NamedIndividual"`
 }

@@ -251,12 +251,6 @@ extend google.protobuf.MessageOptions {
 	for _, rmk := range resourceMapKeys {
 		class := preparedOntology.Resources[rmk]
 
-		// is the counter for the message field numbers
-		i := 1
-
-		// is the counter for the oneof fields
-		j := 100
-
 		// Add message comment
 		if len(class.SubResources) == 0 {
 			output += fmt.Sprintf("\n// %s is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.", class.Name)
@@ -277,10 +271,10 @@ extend google.protobuf.MessageOptions {
 			output = addClassHierarchy(output, rmk, &preparedOntology)
 
 			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-			output, i = addDataProperties(output, rmk, i, preparedOntology)
+			output = addDataProperties(output, rmk, preparedOntology)
 
 			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-			output, _, _ = addObjectProperties(output, rmk, i, j, preparedOntology)
+			output = addObjectProperties(output, rmk, preparedOntology)
 		} else {
 			// Get all leafs from object property and write it as 'oneOf {}'
 			leafs := findAllLeafs(class.Iri, preparedOntology)
@@ -288,7 +282,6 @@ extend google.protobuf.MessageOptions {
 			output += fmt.Sprintf("\n\toneof %s {", "type")
 			for _, v := range leafs {
 				output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), util.GetFieldNumber(getResourceTypeList(v, &preparedOntology)...))
-				i += 1
 			}
 
 			// close oneOf{}
@@ -305,7 +298,7 @@ extend google.protobuf.MessageOptions {
 
 // addObjectProperties adds all object properties for the given resource to the output string
 // Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
-func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology.OntologyPrepared) (string, int, int) {
+func addObjectProperties(output, rmk string, preparedOntology ontology.OntologyPrepared) string {
 	// Get all data properties of the given resource (rmk) and the parent resources
 	objectProperties := findAllObjectProperties(rmk, preparedOntology)
 
@@ -331,11 +324,10 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 			} else if typ != "" && name != "" {
 				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), fieldNumber)
 			}
-			i += 1
 		}
 	}
 
-	return output, i, j
+	return output
 }
 
 func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*ontology.Resource {
@@ -375,7 +367,7 @@ func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepa
 
 // addObjectProperties adds all data properties for the given resource to the output string
 // Data properties (e.g., "bool enabled", "int64 interval", "int64 retention_period")
-func addDataProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
+func addDataProperties(output, rmk string, preparedOntology ontology.OntologyPrepared) string {
 	// Get all data properties of the given resource (rmk) and the parent resources
 	dataProperties := preparedOntology.FindAllDataProperties(rmk)
 
@@ -410,11 +402,10 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 			}
 
 			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), fieldNumber, opts)
-			i += 1
 		}
 	}
 
-	return output, i
+	return output
 }
 
 func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPrepared) string {

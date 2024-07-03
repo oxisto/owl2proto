@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"regexp"
 	"sort"
 	"strings"
@@ -218,23 +217,12 @@ func SortMapKeys[V *ontology.Resource](m map[string]V) []string {
 	return resources
 }
 
-// GetFieldNumber returns a "consistent" field number for the proto field based on the input strings
+// GetFieldNumber returns a "consistent" field number for the proto field based on the input strings. The maximum field number is 19000.
 func GetFieldNumber(input ...string) int {
-	fmt.Printf("%s\n", input)
 	hash := xxhash.Sum64([]byte(strings.Join(input, "")))
-	fmt.Printf("Hash: %d\n", hash)
+
+	// the maximum field number is 19000, because the numbers 19000 to 19999 are reserved for the Protocol Buffers implementation
 	number := int(hash%19000) + 1
-	fmt.Printf("(Hash mod 19000)+1: %d\n", number)
 
 	return number
-
-	// TODO(all): Or do we want use the standard library?
-	// h := fnv.New64a()
-	// h.Write([]byte(messageName + fieldName))
-	// fmt.Println("Message name: ", messageName)
-	// fmt.Println("Field name: ", fieldName)
-	// fmt.Println("Hash: ", h.Sum64()%100)
-
-	// // the proto field number must not contain 0, so we add 1 at the end
-	// return int(h.Sum64()%200) + 1
 }

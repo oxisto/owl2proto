@@ -287,7 +287,7 @@ extend google.protobuf.MessageOptions {
 			// begin oneof X {}
 			output += fmt.Sprintf("\n\toneof %s {", "type")
 			for _, v := range leafs {
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), i)
+				output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), util.GetFieldNumber(getResourceTypeList(v, &preparedOntology)...))
 				i += 1
 			}
 
@@ -318,12 +318,20 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 
 	// Create output for the object properties
 	for _, o := range objectProperties {
+		// Get list of resource types for given  object
+		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
+
+		// Get field number
+		resourceTypeList = append(resourceTypeList, o.Name)
+		fieldNumber := util.GetFieldNumber(resourceTypeList...)
+
+		// Create output for object property
 		if o.Name != "" && o.ObjectProperty != "" {
 			value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
 			if value != "" && typ != "" {
-				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), i)
+				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), fieldNumber)
 			} else if typ != "" && name != "" {
-				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), i)
+				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), fieldNumber)
 			}
 			i += 1
 		}
@@ -383,8 +391,14 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 	// Create output for the data properties
 	for _, r := range dataProperties {
 		if r.Typ != "" && r.Value != "" {
-
 			var opts string = ""
+
+			// Get list of resource types for given  object
+			resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
+
+			// Get field number
+			resourceTypeList = append(resourceTypeList, r.Value)
+			fieldNumber := util.GetFieldNumber(resourceTypeList...)
 
 			// Make name and id mandatory
 			// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
@@ -396,7 +410,7 @@ func addDataProperties(output, rmk string, i int, preparedOntology ontology.Onto
 			if r.Comment != "" {
 				output += fmt.Sprintf("\n\t// %s", r.Comment)
 			}
-			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), i, opts)
+			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), fieldNumber, opts)
 			i += 1
 		}
 	}

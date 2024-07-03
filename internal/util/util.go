@@ -1,10 +1,12 @@
 package util
 
 import (
+	"fmt"
 	"regexp"
 	"sort"
 	"strings"
 
+	"github.com/cespare/xxhash"
 	"github.com/oxisto/owl2proto/ontology"
 	"github.com/oxisto/owl2proto/owl"
 )
@@ -214,4 +216,25 @@ func SortMapKeys[V *ontology.Resource](m map[string]V) []string {
 	sort.Strings(resources)
 
 	return resources
+}
+
+// GetFieldNumber returns a "consistent" field number for the proto field based on the input strings
+func GetFieldNumber(input ...string) int {
+	fmt.Printf("%s\n", input)
+	hash := xxhash.Sum64([]byte(strings.Join(input, "")))
+	fmt.Printf("Hash: %d\n", hash)
+	number := int(hash%10000) + 1
+	fmt.Printf("(Hash mod 10000)+1: %d\n", number)
+
+	return number
+
+	// TODO(all): Or do we want use the standard library?
+	// h := fnv.New64a()
+	// h.Write([]byte(messageName + fieldName))
+	// fmt.Println("Message name: ", messageName)
+	// fmt.Println("Field name: ", fieldName)
+	// fmt.Println("Hash: ", h.Sum64()%100)
+
+	// // the proto field number must not contain 0, so we add 1 at the end
+	// return int(h.Sum64()%200) + 1
 }

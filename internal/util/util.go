@@ -223,8 +223,8 @@ func GetFieldNumber(input ...string) int {
 	fmt.Printf("%s\n", input)
 	hash := xxhash.Sum64([]byte(strings.Join(input, "")))
 	fmt.Printf("Hash: %d\n", hash)
-	number := int(hash%10000) + 1
-	fmt.Printf("(Hash mod 10000)+1: %d\n", number)
+	number := int(hash%19000) + 1
+	fmt.Printf("(Hash mod 19000)+1: %d\n", number)
 
 	return number
 

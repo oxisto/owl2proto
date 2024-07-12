@@ -460,8 +460,8 @@ var cli struct {
 }
 
 type GenerateCmd struct {
-	OwlFile          string
-	RootResourceName string
+	OwlFile          string `arg:""`
+	RootResourceName string `required:""`
 }
 
 type GenerateProtoCmd struct {
@@ -549,7 +549,7 @@ func (cmd *GenerateUMLCmd) Run() (err error) {
 }
 
 func main() {
-	ctx := kong.Parse(&cli)
+	ctx := kong.Parse(&cli, kong.UsageOnError())
 	err := ctx.Run()
 	ctx.FatalIfErrorf(err)
 }

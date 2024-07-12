@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/alecthomas/kong"
 	"github.com/oxisto/owl2proto"
 	"github.com/oxisto/owl2proto/internal/util"
 	"github.com/oxisto/owl2proto/ontology"
@@ -17,10 +18,6 @@ import (
 )
 
 var (
-	owlFile          string
-	headerFile       string
-	outputPath       string
-	umlOutputPath    string
 	rootResourceName string
 )
 
@@ -229,7 +226,7 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 }
 
 // createProto creates the protobuf file
-func createProto(preparedOntology ontology.OntologyPrepared, header string) string {
+func createProto(preparedOntology *ontology.OntologyPrepared, header string) string {
 	output := ""
 
 	// Add "auto-generated" header
@@ -274,7 +271,7 @@ extend google.protobuf.MessageOptions {
 
 		if len(class.SubResources) == 0 {
 			// Add class hierarchy as message options
-			output = addClassHierarchy(output, rmk, &preparedOntology)
+			output = addClassHierarchy(output, rmk, preparedOntology)
 
 			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
 			output, i = addDataProperties(output, rmk, i, preparedOntology)
@@ -305,7 +302,7 @@ extend google.protobuf.MessageOptions {
 
 // addObjectProperties adds all object properties for the given resource to the output string
 // Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
-func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology.OntologyPrepared) (string, int, int) {
+func addObjectProperties(output, rmk string, i, j int, preparedOntology *ontology.OntologyPrepared) (string, int, int) {
 	// Get all data properties of the given resource (rmk) and the parent resources
 	objectProperties := findAllObjectProperties(rmk, preparedOntology)
 
@@ -332,7 +329,7 @@ func addObjectProperties(output, rmk string, i, j int, preparedOntology ontology
 	return output, i, j
 }
 
-func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*ontology.Resource {
+func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*ontology.Resource {
 	var leafs []*ontology.Resource
 
 	r := preparedOntology.Resources[class]
@@ -349,7 +346,7 @@ func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*o
 }
 
 // findAllObjectProperties adds all object properties for the given entity and the parents
-func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepared) []*ontology.ObjectRelationship {
+func findAllObjectProperties(rmk string, preparedOntology *ontology.OntologyPrepared) []*ontology.ObjectRelationship {
 	var (
 		objectRelationsships []*ontology.ObjectRelationship
 		parent               string
@@ -369,7 +366,7 @@ func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepa
 
 // addObjectProperties adds all data properties for the given resource to the output string
 // Data properties (e.g., "bool enabled", "int64 interval", "int64 retention_period")
-func addDataProperties(output, rmk string, i int, preparedOntology ontology.OntologyPrepared) (string, int) {
+func addDataProperties(output, rmk string, i int, preparedOntology *ontology.OntologyPrepared) (string, int) {
 	// Get all data properties of the given resource (rmk) and the parent resources
 	dataProperties := preparedOntology.FindAllDataProperties(rmk)
 
@@ -457,38 +454,35 @@ func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology
 	return resource_types
 }
 
-func main() {
+var cli struct {
+	GenerateProto GenerateProtoCmd `cmd:"" help:"Generates proto files."`
+	GenerateUML   GenerateUMLCmd   `cmd:"" help:"Generates proto files."`
+}
+
+type GenerateCmd struct {
+	OwlFile          string
+	RootResourceName string
+}
+
+type GenerateProtoCmd struct {
+	GenerateCmd
+	HeaderFile string
+	OutputPath string `optional:"" default:"api/ontology.proto"`
+}
+
+type GenerateUMLCmd struct {
+	GenerateCmd
+	OutputPath string `optional:"" default:"api/ontology.puml"`
+}
+
+func (cmd *GenerateCmd) prepare() *ontology.OntologyPrepared {
 	var (
 		b   []byte
 		err error
 		o   owl.Ontology
 	)
 
-	if len(os.Args) < 4 {
-		slog.Error("not enough command line arguments given",
-			slog.String("arguments needed",
-				"owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource) and output path (optional, default is 'api/ontology.proto'"),
-		)
-
-		return
-	}
-	owlFile = os.Args[1]
-	headerFile = os.Args[2]
-	rootResourceName = os.Args[3]
-
-	// Check if output path is given as argument
-	if len(os.Args) >= 5 {
-		outputPath = os.Args[4]
-	} else {
-		outputPath = DefaultOutputPath
-	}
-
-	// Check if output path is given as argument
-	if len(os.Args) >= 6 {
-		umlOutputPath = os.Args[5]
-	} else {
-		umlOutputPath = DefaultUMLOutputPath
-	}
+	rootResourceName = cmd.RootResourceName
 
 	// Set up logging
 	slog.SetDefault(slog.New(
@@ -498,47 +492,64 @@ func main() {
 	))
 
 	// Read Ontology XML
-	b, err = os.ReadFile(owlFile)
+	b, err = os.ReadFile(cmd.OwlFile)
 	if err != nil {
-		slog.Error("error reading ontology file", "location", owlFile, tint.Err(err))
-		return
+		slog.Error("error reading ontology file", "location", cmd.OwlFile, tint.Err(err))
+		return nil
 	}
 
 	err = xml.Unmarshal(b, &o)
 	if err != nil {
 		slog.Error("error while unmarshalling XML", tint.Err(err))
-		return
-	}
-
-	// Read header content from file
-	b, err = os.ReadFile(headerFile)
-	if err != nil {
-		slog.Error("error reading header file", "location", headerFile, tint.Err(err))
-		return
+		return nil
 	}
 
 	// prepareOntology
-	preparedOntology := prepareOntology(o)
+	prep := prepareOntology(o)
+	return &prep
+}
+
+func (cmd *GenerateProtoCmd) Run() (err error) {
+	preparedOntology := cmd.prepare()
+
+	// Read header content from file
+	b, err := os.ReadFile(cmd.HeaderFile)
+	if err != nil {
+		slog.Error("error reading header file", "location", cmd.HeaderFile, tint.Err(err))
+		return nil
+	}
 
 	// Generate proto content
 	output := createProto(preparedOntology, string(b))
 
 	// Write proto content to file
-	err = writeFile(outputPath, output)
+	err = writeFile(cmd.OutputPath, output)
 	if err != nil {
 		slog.Error("error writing proto file to storage", tint.Err(err))
 	}
 
-	slog.Info("proto file written to storage", slog.String("output folder", outputPath))
+	slog.Info("proto file written to storage", slog.String("output folder", cmd.OutputPath))
+	return
+}
+
+func (cmd *GenerateUMLCmd) Run() (err error) {
+	preparedOntology := cmd.prepare()
 
 	// Generate UML
-	output = owl2proto.CreatePlantUMLFile(preparedOntology)
+	output := owl2proto.CreatePlantUMLFile(preparedOntology)
 
 	// Write UML
-	err = writeFile(umlOutputPath, output)
+	err = writeFile(cmd.OutputPath, output)
 	if err != nil {
 		slog.Error("error writing UML file to storage", tint.Err(err))
 	}
 
-	slog.Info("UML file written to storage", slog.String("output folder", umlOutputPath))
+	slog.Info("UML file written to storage", slog.String("output folder", cmd.OutputPath))
+	return
+}
+
+func main() {
+	ctx := kong.Parse(&cli)
+	err := ctx.Run()
+	ctx.FatalIfErrorf(err)
 }

@@ -14,7 +14,7 @@ const (
 )
 
 // GetObjectDetail returns the object type
-func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology ontology.OntologyPrepared) (rep, typ, name string) {
+func GetObjectDetail(s, rootResourceName string, resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) (rep, typ, name string) {
 	rName := resource.Name
 	switch s {
 	case "prop:hasMultiple", "prop:offersMultiple", "http://graph.clouditor.io/classes/offersMultiple":
@@ -68,7 +68,7 @@ func toPlural(s string) string {
 }
 
 // isResourceAboveX checks if a resource above the given resource has the name of rootResourceName
-func isResourceAboveX(resource *ontology.Resource, preparedOntology ontology.OntologyPrepared, rootResourceName string) bool {
+func isResourceAboveX(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared, rootResourceName string) bool {
 	if resource == nil {
 		return false
 	}

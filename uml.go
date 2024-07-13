@@ -7,7 +7,7 @@ import (
 	"github.com/oxisto/owl2proto/ontology"
 )
 
-func CreatePlantUMLFile(po ontology.OntologyPrepared) string {
+func CreatePlantUMLFile(po *ontology.OntologyPrepared) string {
 	var output string
 
 	output += "@startuml ontology\n"
@@ -47,7 +47,7 @@ func CreatePlantUMLFile(po ontology.OntologyPrepared) string {
 }
 
 // addObjectProperties adds all data properties for the given resource to the output string
-func addDataProperties(output, iri string, po ontology.OntologyPrepared) string {
+func addDataProperties(output, iri string, po *ontology.OntologyPrepared) string {
 	// TODO(oxisto): Types; for now everything is untyped
 
 	// Get all only the properties of the given resource

@@ -487,9 +487,6 @@ func (cmd *GenerateCmd) prepare() {
 		err error
 	)
 
-	// cmd.FieldNumberOption = cmd.FieldNumberOption
-	// cmd.RootResourceName = cmd.RootResourceName
-
 	// Set up logging
 	slog.SetDefault(slog.New(
 		tint.NewHandler(os.Stdout, &tint.Options{

@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/alecthomas/kong"
 	"github.com/oxisto/owl2proto"
 	"github.com/oxisto/owl2proto/internal/util"
 	"github.com/oxisto/owl2proto/ontology"
@@ -16,34 +17,6 @@ import (
 
 	"github.com/lmittmann/tint"
 )
-
-// var (
-// 	owlFile          string
-// 	headerFile       string
-// 	protoOutputPath  string
-// 	umlOutputPath    string
-// 	rootResourceName string
-// 	// true for deterministic field numbers, false for ascending field numbers
-// 	fieldNumberOption bool
-// )
-
-type Owl2proto struct {
-	preparedOntology ontology.OntologyPrepared
-	owlOntology      owl.Ontology
-	options          Options
-}
-
-// Options for generating the proto file
-type Options struct {
-	owlFile         string
-	headerFile      string
-	protoOutputPath string
-	umlOutputPath   string
-	// true for deterministic field numbers, false for ascending field numbers
-	fieldNumberOption bool
-	// counter for generating the field number if ascending order is chosen
-	i int
-}
 
 const (
 	DefaultProtoOutputPath = "api/ontology.proto"
@@ -356,7 +329,7 @@ func (o2p *Owl2proto) addObjectProperties(output, rmk string) string {
 	return output
 }
 
-func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*ontology.Resource {
+func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*ontology.Resource {
 	var leafs []*ontology.Resource
 
 	r := preparedOntology.Resources[class]
@@ -487,22 +460,51 @@ func (o2p *Owl2proto) getResourceTypeList(resource *ontology.Resource) []string 
 
 	return resource_types
 }
+  
+  type Owl2proto struct {
+	preparedOntology ontology.OntologyPrepared
+	owlOntology      owl.Ontology
+	options          Options
+  cli cli
+  generateCmd GenerateCmd
+}
 
-func main() {
+// Options for generating the proto file
+type Options struct {
+	// true for deterministic field numbers, false for ascending field numbers
+	fieldNumberOption bool
+	// counter for generating the field number if ascending order is chosen
+	i int
+}
+
+
+var cli struct {
+	GenerateProto GenerateProtoCmd `cmd:"" help:"Generates proto files."`
+	GenerateUML   GenerateUMLCmd   `cmd:"" help:"Generates proto files."`
+}
+
+type GenerateCmd struct {
+	OwlFile          string `arg:""`
+	RootResourceName string `required:""`
+}
+
+type GenerateProtoCmd struct {
+	GenerateCmd
+	HeaderFile string
+	OutputPath string `optional:"" default:"api/ontology.proto"`
+}
+
+type GenerateUMLCmd struct {
+	GenerateCmd
+	OutputPath string `optional:"" default:"api/ontology.puml"`
+}
+
+func (cmd *GenerateCmd) prepare() *ontology.OntologyPrepared {
 	var (
 		b   []byte
 		err error
 		// o   owl.Ontology
 	)
-
-	if len(os.Args) < 5 {
-		slog.Error("not enough command line arguments given",
-			slog.String("arguments needed",
-				"owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource), bool for field number option (true for deterministic field numbers, false for ascending field numbers) and output path (optional, default is 'api/ontology.proto') and uml output path (if this path is given, the proto output path must also be given)"),
-		)
-
-		return
-	}
 
 	o2p := &Owl2proto{
 		preparedOntology: ontology.OntologyPrepared{
@@ -524,19 +526,7 @@ func main() {
 		return
 	}
 
-	// Check if proto output path is given as argument
-	if len(os.Args) >= 6 {
-		o2p.options.protoOutputPath = os.Args[5]
-	} else {
-		o2p.options.protoOutputPath = DefaultProtoOutputPath
-	}
-
-	// Check if UML output path is given as argument
-	if len(os.Args) >= 7 {
-		o2p.options.umlOutputPath = os.Args[6]
-	} else {
-		o2p.options.umlOutputPath = DefaultUMLOutputPath
-	}
+		rootResourceName = cmd.RootResourceName
 
 	// Set up logging
 	slog.SetDefault(slog.New(
@@ -546,48 +536,65 @@ func main() {
 	))
 
 	// Read Ontology XML
-	b, err = os.ReadFile(o2p.options.owlFile)
+	b, err = os.ReadFile(o2p.cmd.OwlFile)
 	if err != nil {
-		slog.Error("error reading ontology file", "location", o2p.options.owlFile, tint.Err(err))
-		return
+		slog.Error("error reading ontology file", "location", o2p.cmd.OwlFile, tint.Err(err))
+		return nil
 	}
 
 	// Unmarshal file content (Ontology xml file)
 	err = xml.Unmarshal(b, &o2p.owlOntology)
 	if err != nil {
 		slog.Error("error while unmarshalling XML", tint.Err(err))
-		return
-	}
-
-	// Read header content from file
-	b, err = os.ReadFile(o2p.options.headerFile)
-	if err != nil {
-		slog.Error("error reading header file", "location", o2p.options.headerFile, tint.Err(err))
-		return
+		return nil
 	}
 
 	// prepareOntology
-	o2p.prepareOntology()
+	prep := prepareOntology(o)
+	return &prep
+}
+
+func (cmd *GenerateProtoCmd) Run() (err error) {
+	preparedOntology := cmd.prepare()
+  
+	// Read header content from file
+	b, err := os.ReadFile(o2p.cmd.HeaderFile)
+	if err != nil {
+		slog.Error("error reading header file", "location", o2p.cmd.HeaderFile, tint.Err(err))
+		return nil
+	}
 
 	// Generate proto content
 	output := o2p.createProto(string(b))
 
 	// Write proto content to file
-	err = writeFile(o2p.options.protoOutputPath, output)
+	err = writeFile(o2p.cmd.OutputPath, output)
 	if err != nil {
 		slog.Error("error writing proto file to storage", tint.Err(err))
 	}
 
-	slog.Info("proto file written to storage", slog.String("output folder", o2p.options.protoOutputPath))
+	slog.Info("proto file written to storage", slog.String("output folder", o2p.cmd.OutputPath))
+	return
+}
+
+func (cmd *GenerateUMLCmd) Run() (err error) {
+	preparedOntology := cmd.prepare()
 
 	// Generate UML
-	output = owl2proto.CreatePlantUMLFile(o2p.preparedOntology)
+	output := owl2proto.CreatePlantUMLFile(preparedOntology)
 
 	// Write UML
-	err = writeFile(o2p.options.umlOutputPath, output)
+	err = writeFile(cmd.OutputPath, output)
 	if err != nil {
 		slog.Error("error writing UML file to storage", tint.Err(err))
 	}
 
-	slog.Info("UML file written to storage", slog.String("output folder", o2p.options.umlOutputPath))
+	slog.Info("UML file written to storage", slog.String("output folder", cmd.OutputPath))
+	return
+}
+
+func main() {
+	ctx := kong.Parse(&cli, kong.UsageOnError())
+	err := ctx.Run()
+	ctx.FatalIfErrorf(err)
 }

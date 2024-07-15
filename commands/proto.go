@@ -35,7 +35,7 @@ func (cmd *GenerateProtoCmd) createProto(header string) string {
 	// Add EnumValueOptions
 	output += `
 extend google.protobuf.MessageOptions {
-	repeated string resource_type_names = 50000;
+	repeated string resource_type_names = 60000;
 }`
 
 	// Sort preparedOntology.Resources map keys
@@ -119,7 +119,7 @@ func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 		fieldNumber, cmd.i = util.GetFieldNumber(cmd.DeterministicFieldNumbers, cmd.i, resourceTypeList...)
 
 		if o.Name != "" && o.ObjectProperty != "" {
-			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectProperty, cmd.preparedOntology.Resources[o.Class])
+			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.Class])
 			if value != "" && typ != "" {
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), fieldNumber)
 			} else if typ != "" && name != "" {

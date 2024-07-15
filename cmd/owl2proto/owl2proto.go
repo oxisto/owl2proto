@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
+	"github.com/oxisto/owl2proto"
 	"github.com/oxisto/owl2proto/internal/util"
 	"github.com/oxisto/owl2proto/ontology"
 	"github.com/oxisto/owl2proto/owl"
@@ -17,7 +18,13 @@ import (
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
-func (cmd *GenerateProtoCmd) prepareOntology() {
+func (cmd *GenerateCmd) prepareOntology() {
+	cmd.preparedOntology = &ontology.OntologyPrepared{
+		Resources:           map[string]*ontology.Resource{},
+		SubClasses:          map[string]owl.SubClassOf{},
+		AnnotationAssertion: map[string]*ontology.AnnotationAssertion{},
+		RootResourceName:    cmd.RootResourceName,
+	}
 	for _, c := range cmd.owlOntology.Declarations {
 		// Prepare ontology classes
 		// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
@@ -454,17 +461,17 @@ var cli struct {
 
 type GenerateCmd struct {
 	OwlFile          string `arg:""`
-	preparedOntology *ontology.OntologyPrepared
 	RootResourceName string `required:""`
-	// true for deterministic field numbers, false for ascending field numbers
-	FieldNumberOption bool `required:""`
+	owlOntology      *owl.Ontology
+	preparedOntology *ontology.OntologyPrepared
 }
 
 type GenerateProtoCmd struct {
 	GenerateCmd
-	owlOntology *owl.Ontology
-	HeaderFile  string
-	OutputPath  string `optional:"" default:"api/ontology.proto"`
+	HeaderFile string
+	OutputPath string `optional:"" default:"api/ontology.proto"`
+	// true for deterministic field numbers, false for ascending field numbers
+	FieldNumberOption bool `optional:"" default:"true"`
 	// counter for generating the field number if ascending order is chosen
 	i int
 }
@@ -474,14 +481,14 @@ type GenerateUMLCmd struct {
 	OutputPath string `optional:"" default:"api/ontology.puml"`
 }
 
-func (cmd *GenerateProtoCmd) prepare() {
+func (cmd *GenerateCmd) prepare() {
 	var (
 		b   []byte
 		err error
 	)
 
-	cmd.FieldNumberOption = cmd.FieldNumberOption
-	cmd.RootResourceName = cmd.RootResourceName
+	// cmd.FieldNumberOption = cmd.FieldNumberOption
+	// cmd.RootResourceName = cmd.RootResourceName
 
 	// Set up logging
 	slog.SetDefault(slog.New(
@@ -531,21 +538,21 @@ func (cmd *GenerateProtoCmd) Run() (err error) {
 	return
 }
 
-// func (cmd *GenerateUMLCmd) Run() (err error) {
-// 	cmd.prepare()
+func (cmd *GenerateUMLCmd) Run() (err error) {
+	cmd.prepare()
 
-// 	// Generate UML
-// 	output := owl2proto.CreatePlantUMLFile(cmd.preparedOntology)
+	// Generate UML
+	output := owl2proto.CreatePlantUMLFile(cmd.preparedOntology)
 
-// 	// Write UML
-// 	err = writeFile(cmd.OutputPath, output)
-// 	if err != nil {
-// 		slog.Error("error writing UML file to storage", tint.Err(err))
-// 	}
+	// Write UML
+	err = writeFile(cmd.OutputPath, output)
+	if err != nil {
+		slog.Error("error writing UML file to storage", tint.Err(err))
+	}
 
-// 	slog.Info("UML file written to storage", slog.String("output folder", cmd.OutputPath))
-// 	return
-// }
+	slog.Info("UML file written to storage", slog.String("output folder", cmd.OutputPath))
+	return
+}
 
 func main() {
 	ctx := kong.Parse(&cli, kong.UsageOnError())

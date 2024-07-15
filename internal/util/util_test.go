@@ -46,9 +46,9 @@ func TestToSnakeCase(t *testing.T) {
 
 func TestGetFieldNumber(t *testing.T) {
 	type args struct {
-		fieldNumberOption bool
-		counter           int
-		input             []string
+		deterministicFieldNumbers bool
+		counter                   int
+		input                     []string
 	}
 	tests := []struct {
 		name        string
@@ -59,9 +59,9 @@ func TestGetFieldNumber(t *testing.T) {
 		{
 			name: "Happy path: incremented",
 			args: args{
-				fieldNumberOption: false,
-				counter:           0,
-				input:             []string{"Resource", "Compute", "VirtualMachine", "name"},
+				deterministicFieldNumbers: false,
+				counter:                   0,
+				input:                     []string{"Resource", "Compute", "VirtualMachine", "name"},
 			},
 			fieldNumber: 1,
 			wantI:       1,
@@ -69,9 +69,9 @@ func TestGetFieldNumber(t *testing.T) {
 		{
 			name: "Happy path: consistent",
 			args: args{
-				fieldNumberOption: true,
-				counter:           0,
-				input:             []string{"Resource", "Compute", "VirtualMachine", "name"},
+				deterministicFieldNumbers: true,
+				counter:                   0,
+				input:                     []string{"Resource", "Compute", "VirtualMachine", "name"},
 			},
 			fieldNumber: 4044,
 			wantI:       0,
@@ -79,7 +79,7 @@ func TestGetFieldNumber(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := GetFieldNumber(tt.args.fieldNumberOption, tt.args.counter, tt.args.input...)
+			got, got1 := GetFieldNumber(tt.args.deterministicFieldNumbers, tt.args.counter, tt.args.input...)
 			if got != tt.fieldNumber {
 				t.Errorf("GetFieldNumber() got = %v, want %v", got, tt.fieldNumber)
 			}

@@ -1,10 +1,13 @@
 package util
 
 import (
+	"log/slog"
+	"os"
 	"regexp"
 	"sort"
 	"strings"
 
+	"github.com/cespare/xxhash"
 	"github.com/oxisto/owl2proto/ontology"
 	"github.com/oxisto/owl2proto/owl"
 )
@@ -128,7 +131,7 @@ func GetNameFromIri(s string) string {
 }
 
 // GetDataPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
-func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.OntologyPrepared) string {
+func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology *ontology.OntologyPrepared) string {
 	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
 	if prop.AbbreviatedIRI != "" {
 		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
@@ -149,7 +152,7 @@ func GetDataPropertyIRIName(prop owl.DataProperty, preparedOntology ontology.Ont
 
 // TODO(all): Use generic for GetObjectPropertyIRIName and GetDataPropertyIRIName
 // GetObjectPropertyIRIName return the existing IRI (IRI vs. abbreviatedIRI) from the Data Property
-func GetObjectPropertyIRIName(prop owl.ObjectProperty, preparedOntology ontology.OntologyPrepared) string {
+func GetObjectPropertyIRIName(prop owl.ObjectProperty, preparedOntology *ontology.OntologyPrepared) string {
 	// It is possible, that the IRI/abbreviatedIRI name is not correct, therefore we have to get the correct name from the preparedOntology. Otherwise, we get the name directly from the IRI/abbreviatedIRI
 	if prop.AbbreviatedIRI != "" {
 		if val, ok := preparedOntology.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
@@ -214,4 +217,25 @@ func SortMapKeys[V *ontology.Resource](m map[string]V) []string {
 	sort.Strings(resources)
 
 	return resources
+}
+
+// GetFieldNumber returns a "consistent" field number for the proto field based on the input strings if fieldNumberOption is true, otherwise it returns the incremented counter input (ascending field numbers). The maximum field number is 18999.
+// The first return value is the field number and the second is the counter i
+func GetFieldNumber(fieldNumberOption bool, counter int, input ...string) (int, int) {
+
+	if fieldNumberOption {
+		hash := xxhash.Sum64([]byte(strings.Join(input, "")))
+
+		// the maximum field number is 18999, because the numbers 19000 to 19999 are reserved for the Protocol Buffers implementation
+		number := int(hash%19000) + 1
+
+		return number, counter
+	} else {
+		counter++
+		if counter >= 19000 {
+			slog.Error("field number '%s' is to high", slog.Int("counter", counter))
+			os.Exit(1)
+		}
+		return counter, counter
+	}
 }

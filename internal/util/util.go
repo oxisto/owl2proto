@@ -1,6 +1,8 @@
 package util
 
 import (
+	"log/slog"
+	"os"
 	"regexp"
 	"sort"
 	"strings"
@@ -217,12 +219,23 @@ func SortMapKeys[V *ontology.Resource](m map[string]V) []string {
 	return resources
 }
 
-// GetFieldNumber returns a "consistent" field number for the proto field based on the input strings. The maximum field number is 19000.
-func GetFieldNumber(input ...string) int {
-	hash := xxhash.Sum64([]byte(strings.Join(input, "")))
+// GetFieldNumber returns a "consistent" field number for the proto field based on the input strings if fieldNumberOption is true, otherwise it returns the incremented counter input (ascending field numbers). The maximum field number is 18999.
+// The first return value is the field number and the second is the counter i
+func GetFieldNumber(fieldNumberOption bool, counter int, input ...string) (int, int) {
 
-	// the maximum field number is 19000, because the numbers 19000 to 19999 are reserved for the Protocol Buffers implementation
-	number := int(hash%19000) + 1
+	if fieldNumberOption {
+		hash := xxhash.Sum64([]byte(strings.Join(input, "")))
 
-	return number
+		// the maximum field number is 18999, because the numbers 19000 to 19999 are reserved for the Protocol Buffers implementation
+		number := int(hash%19000) + 1
+
+		return number, counter
+	} else {
+		counter++
+		if counter >= 19000 {
+			slog.Error("field number '%s' is to high", slog.Int("counter", counter))
+			os.Exit(1)
+		}
+		return counter, counter
+	}
 }

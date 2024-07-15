@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/oxisto/owl2proto"
@@ -16,13 +17,34 @@ import (
 	"github.com/lmittmann/tint"
 )
 
-var (
+// var (
+// 	owlFile          string
+// 	headerFile       string
+// 	protoOutputPath  string
+// 	umlOutputPath    string
+// 	rootResourceName string
+// 	// true for deterministic field numbers, false for ascending field numbers
+// 	fieldNumberOption bool
+// )
+
+type Owl2proto struct {
+	preparedOntology ontology.OntologyPrepared
+	owlOntology      owl.Ontology
+	options          Options
+}
+
+// Options for generating the proto file
+type Options struct {
 	owlFile          string
 	headerFile       string
-	outputPath       string
+	protoOutputPath  string
 	umlOutputPath    string
 	rootResourceName string
-)
+	// true for deterministic field numbers, false for ascending field numbers
+	fieldNumberOption bool
+	// counter for generating the field number if ascending order is chosen
+	i int
+}
 
 const (
 	DefaultOutputPath    = "api/ontology.proto"
@@ -30,19 +52,19 @@ const (
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
-func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
-	preparedOntology := ontology.OntologyPrepared{
-		Resources:           make(map[string]*ontology.Resource),
-		SubClasses:          make(map[string]owl.SubClassOf),
-		AnnotationAssertion: make(map[string]*ontology.AnnotationAssertion),
-		RootResourceName:    rootResourceName,
-	}
+func (o2p *Owl2proto) prepareOntology() {
+	// preparedOntology := ontology.OntologyPrepared{
+	// 	Resources:           make(map[string]*ontology.Resource),
+	// 	SubClasses:          make(map[string]owl.SubClassOf),
+	// 	AnnotationAssertion: make(map[string]*ontology.AnnotationAssertion),
+	// 	RootResourceName:    rootResourceName,
+	// }
 
-	for _, c := range o.Declarations {
+	for _, c := range o2p.owlOntology.Declarations {
 		// Prepare ontology classes
 		// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
 		if c.Class.IRI != "" {
-			preparedOntology.Resources[c.Class.IRI] = &ontology.Resource{
+			o2p.preparedOntology.Resources[c.Class.IRI] = &ontology.Resource{
 				Iri:  c.Class.IRI,
 				Name: util.CleanString(util.GetNameFromIri(c.Class.IRI)),
 			}
@@ -50,12 +72,12 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 
 		// Prepare ontology data properties
 		if c.DataProperty.IRI != "" {
-			preparedOntology.AnnotationAssertion[c.DataProperty.IRI] = &ontology.AnnotationAssertion{
+			o2p.preparedOntology.AnnotationAssertion[c.DataProperty.IRI] = &ontology.AnnotationAssertion{
 				IRI:  c.DataProperty.IRI,
 				Name: util.CleanString(util.GetNameFromIri(c.DataProperty.IRI)),
 			}
 		} else if c.DataProperty.AbbreviatedIRI != "" {
-			preparedOntology.AnnotationAssertion[c.DataProperty.AbbreviatedIRI] = &ontology.AnnotationAssertion{
+			o2p.preparedOntology.AnnotationAssertion[c.DataProperty.AbbreviatedIRI] = &ontology.AnnotationAssertion{
 				IRI:  c.DataProperty.AbbreviatedIRI,
 				Name: util.CleanString(util.GetDataPropertyAbbreviatedIriName(c.DataProperty.AbbreviatedIRI)),
 			}
@@ -63,26 +85,26 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 	}
 
 	// Prepare name and comment
-	for _, aa := range o.AnnotationAssertion {
+	for _, aa := range o2p.owlOntology.AnnotationAssertion {
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
-			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-				preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
-			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
-				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
+			if _, ok := o2p.preparedOntology.Resources[aa.IRI]; ok {
+				o2p.preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
+			} else if _, ok := o2p.preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
+				o2p.preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
 			}
 		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
-			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-				c := preparedOntology.Resources[aa.IRI].Comment
+			if _, ok := o2p.preparedOntology.Resources[aa.IRI]; ok {
+				c := o2p.preparedOntology.Resources[aa.IRI].Comment
 				c = append(c, aa.Literal)
-				preparedOntology.Resources[aa.IRI].Comment = c
-			} else if _, ok := preparedOntology.AnnotationAssertion[aa.IRI]; ok {
-				c := preparedOntology.AnnotationAssertion[aa.IRI].Comment
+				o2p.preparedOntology.Resources[aa.IRI].Comment = c
+			} else if _, ok := o2p.preparedOntology.AnnotationAssertion[aa.IRI]; ok {
+				c := o2p.preparedOntology.AnnotationAssertion[aa.IRI].Comment
 				c = append(c, aa.Literal)
-				preparedOntology.AnnotationAssertion[aa.IRI].Comment = c
-			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
-				c := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment
+				o2p.preparedOntology.AnnotationAssertion[aa.IRI].Comment = c
+			} else if _, ok := o2p.preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
+				c := o2p.preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment
 				c = append(c, aa.Literal)
-				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment = c
+				o2p.preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment = c
 			}
 		}
 	}
@@ -94,7 +116,7 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 	// - Class and DataHasValue: Class is the current resource and DataHasValue is the same as DataSomeValuesFrom except, that no Datatype exists in the Ontology, but an Literal (Literal is a string, that is not used as an Ontology object/property).
 	// - Class and ObjectSomeValuesFrom: Class is the current resource and ObjectSomeValuesFrom contains the ObjectProperty (e.g., prop:hasMultiple) and the linked resource (Class)
 	// - Class and ObjectHasValue: Class is the current resource and ObjectHasValue contains the ObjectProperty IRI (e.g., "http://graph.clouditor.io/classes/scope") and a named individual (e.g., "http://graph.clouditor.io/classes/resourceId")
-	for _, sc := range o.SubClasses {
+	for _, sc := range o2p.owlOntology.SubClasses {
 		if len(sc.Class) == 2 {
 
 			// "owl.Thing" is the root of the ontology and is not needed for the protobuf files
@@ -102,21 +124,21 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				// Create resource that has a parent. All resources directly under "owl.Thing" are alread created before (via the Declarations)
 				r := &ontology.Resource{
 					Iri:     sc.Class[0].IRI,
-					Name:    preparedOntology.Resources[sc.Class[0].IRI].Name,
+					Name:    o2p.preparedOntology.Resources[sc.Class[0].IRI].Name,
 					Parent:  sc.Class[1].IRI,
-					Comment: preparedOntology.Resources[sc.Class[0].IRI].Comment,
+					Comment: o2p.preparedOntology.Resources[sc.Class[0].IRI].Comment,
 				}
 
 				// Add subresources to the parent resource
-				if val, ok := preparedOntology.Resources[sc.Class[1].IRI]; ok {
+				if val, ok := o2p.preparedOntology.Resources[sc.Class[1].IRI]; ok {
 					if val.SubResources == nil {
-						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*ontology.Resource, 0)
+						o2p.preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*ontology.Resource, 0)
 					}
-					preparedOntology.Resources[sc.Class[1].IRI].SubResources = append(preparedOntology.Resources[sc.Class[1].IRI].SubResources, r)
+					o2p.preparedOntology.Resources[sc.Class[1].IRI].SubResources = append(o2p.preparedOntology.Resources[sc.Class[1].IRI].SubResources, r)
 				}
 
 				// Add parent IRI to resource (not subresource!). We couldn't do this beforehand (Declarations) because we only get the information here,
-				preparedOntology.Resources[sc.Class[0].IRI].Parent = sc.Class[1].IRI
+				o2p.preparedOntology.Resources[sc.Class[0].IRI].Parent = sc.Class[1].IRI
 			}
 		} else if sc.DataSomeValuesFrom != nil {
 			// Add data values, e.g. "enabled xsd:bool" ("enabled" is a data property and "xsd:bool" is a datatype) or
@@ -125,17 +147,17 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 					comment string
 				)
 				// Check if comment is available
-				if val, ok := preparedOntology.AnnotationAssertion[v.DataProperty.IRI]; ok {
+				if val, ok := o2p.preparedOntology.AnnotationAssertion[v.DataProperty.IRI]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
-				} else if val, ok := preparedOntology.AnnotationAssertion[v.DataProperty.AbbreviatedIRI]; ok {
+				} else if val, ok := o2p.preparedOntology.AnnotationAssertion[v.DataProperty.AbbreviatedIRI]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
 				// Get DataProperty name
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
+				o2p.preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(o2p.preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					IRI:     v.DataProperty.IRI,
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
-					Value:   util.GetDataPropertyIRIName(v.DataProperty, preparedOntology),
+					Value:   util.GetDataPropertyIRIName(v.DataProperty, o2p.preparedOntology),
 					Comment: comment,
 				})
 
@@ -156,14 +178,14 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				}
 
 				// Check if comment is available
-				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+				if val, ok := o2p.preparedOntology.AnnotationAssertion[identifier]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
+				o2p.preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(o2p.preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					IRI:     identifier,
 					Typ:     util.GetProtoType(v.Literal),
-					Value:   util.GetDataPropertyIRIName(v.DataProperty, preparedOntology),
+					Value:   util.GetDataPropertyIRIName(v.DataProperty, o2p.preparedOntology),
 					Comment: comment,
 				})
 
@@ -172,18 +194,18 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
 				if v.ObjectProperty.IRI != "" {
-					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
+					o2p.preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(o2p.preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
 						ObjectProperty:     v.ObjectProperty.IRI,
-						ObjectPropertyName: util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+						ObjectPropertyName: util.GetObjectPropertyIRIName(v.ObjectProperty, o2p.preparedOntology),
 						Class:              v.Class.IRI,
-						Name:               preparedOntology.Resources[v.Class.IRI].Name,
+						Name:               o2p.preparedOntology.Resources[v.Class.IRI].Name,
 					})
 				} else if v.ObjectProperty.AbbreviatedIRI != "" {
-					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
+					o2p.preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(o2p.preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ontology.ObjectRelationship{
 						ObjectProperty:     v.ObjectProperty.AbbreviatedIRI,
-						ObjectPropertyName: util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+						ObjectPropertyName: util.GetObjectPropertyIRIName(v.ObjectProperty, o2p.preparedOntology),
 						Class:              v.Class.IRI,
-						Name:               preparedOntology.Resources[v.Class.IRI].Name,
+						Name:               o2p.preparedOntology.Resources[v.Class.IRI].Name,
 					})
 				}
 			}
@@ -211,25 +233,23 @@ func prepareOntology(o owl.Ontology) ontology.OntologyPrepared {
 				}
 
 				// Check if comment is available
-				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+				if val, ok := o2p.preparedOntology.AnnotationAssertion[identifier]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
+				o2p.preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(o2p.preparedOntology.Resources[sc.Class[0].IRI].Relationship, &ontology.Relationship{
 					IRI:     identifier,
 					Typ:     util.GetProtoType(namedIndividual),
-					Value:   util.GetObjectPropertyIRIName(v.ObjectProperty, preparedOntology),
+					Value:   util.GetObjectPropertyIRIName(v.ObjectProperty, o2p.preparedOntology),
 					Comment: comment,
 				})
 			}
 		}
 	}
-
-	return preparedOntology
 }
 
 // createProto creates the protobuf file
-func createProto(preparedOntology ontology.OntologyPrepared, header string) string {
+func (o2p *Owl2proto) createProto(header string) string {
 	output := ""
 
 	// Add "auto-generated" header
@@ -245,11 +265,15 @@ extend google.protobuf.MessageOptions {
 }`
 
 	// Sort preparedOntology.Resources map keys
-	resourceMapKeys := util.SortMapKeys(preparedOntology.Resources)
+	resourceMapKeys := util.SortMapKeys(o2p.preparedOntology.Resources)
 
 	// Create proto messages with comments
 	for _, rmk := range resourceMapKeys {
-		class := preparedOntology.Resources[rmk]
+		class := o2p.preparedOntology.Resources[rmk]
+
+		// is the counter for the message field numbers
+		o2p.options.i = 0
+		// i := 1
 
 		// Add message comment
 		if len(class.SubResources) == 0 {
@@ -268,20 +292,22 @@ extend google.protobuf.MessageOptions {
 
 		if len(class.SubResources) == 0 {
 			// Add class hierarchy as message options
-			output = addClassHierarchy(output, rmk, &preparedOntology)
+			output = o2p.addClassHierarchy(output, rmk)
 
 			// Add data properties, e.g., "bool enabled", "int64 interval", "int64 retention_period"
-			output = addDataProperties(output, rmk, preparedOntology)
+			output = o2p.addDataProperties(output, rmk)
 
 			// Add object properties, e.g., "string compute_id", "ApplicationLogging application_logging", "TransportEncryption transport_encrypton"
-			output = addObjectProperties(output, rmk, preparedOntology)
+			output = o2p.addObjectProperties(output, rmk)
 		} else {
 			// Get all leafs from object property and write it as 'oneOf {}'
-			leafs := findAllLeafs(class.Iri, preparedOntology)
+			leafs := findAllLeafs(class.Iri, o2p.preparedOntology)
 			// begin oneof X {}
 			output += fmt.Sprintf("\n\toneof %s {", "type")
 			for _, v := range leafs {
-				output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), util.GetFieldNumber(getResourceTypeList(v, &preparedOntology)...))
+				var fieldNumber = 0
+				fieldNumber, o2p.options.i = util.GetFieldNumber(o2p.options.fieldNumberOption, o2p.options.i, o2p.getResourceTypeList(v)...)
+				output += fmt.Sprintf("\n\t\t%s %s = %d;", v.Name, util.ToSnakeCase(v.Name), fieldNumber)
 			}
 
 			// close oneOf{}
@@ -298,9 +324,10 @@ extend google.protobuf.MessageOptions {
 
 // addObjectProperties adds all object properties for the given resource to the output string
 // Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
-func addObjectProperties(output, rmk string, preparedOntology ontology.OntologyPrepared) string {
+func (o2p *Owl2proto) addObjectProperties(output, rmk string) string {
+	var fieldNumber = 0
 	// Get all data properties of the given resource (rmk) and the parent resources
-	objectProperties := findAllObjectProperties(rmk, preparedOntology)
+	objectProperties := o2p.findAllObjectProperties(rmk)
 
 	// Sort slice of object properties
 	sort.Slice(objectProperties, func(i, j int) bool {
@@ -311,14 +338,14 @@ func addObjectProperties(output, rmk string, preparedOntology ontology.OntologyP
 
 	// Create output for the object properties
 	for _, o := range objectProperties {
-		resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
+		resourceTypeList := o2p.getResourceTypeList(o2p.preparedOntology.Resources[rmk])
 
 		// Get field number
 		resourceTypeList = append(resourceTypeList, o.Name)
-		fieldNumber := util.GetFieldNumber(resourceTypeList...)
+		fieldNumber, o2p.options.i = util.GetFieldNumber(o2p.options.fieldNumberOption, o2p.options.i, resourceTypeList...)
 
 		if o.Name != "" && o.ObjectProperty != "" {
-			value, typ, name := util.GetObjectDetail(o.ObjectProperty, rootResourceName, preparedOntology.Resources[o.Class], preparedOntology)
+			value, typ, name := util.GetObjectDetail(o.ObjectProperty, o2p.preparedOntology.RootResourceName, o2p.preparedOntology.Resources[o.Class], o2p.preparedOntology)
 			if value != "" && typ != "" {
 				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), fieldNumber)
 			} else if typ != "" && name != "" {
@@ -347,19 +374,19 @@ func findAllLeafs(class string, preparedOntology ontology.OntologyPrepared) []*o
 }
 
 // findAllObjectProperties adds all object properties for the given entity and the parents
-func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepared) []*ontology.ObjectRelationship {
+func (o2p *Owl2proto) findAllObjectProperties(rmk string) []*ontology.ObjectRelationship {
 	var (
 		objectRelationsships []*ontology.ObjectRelationship
 		parent               string
 	)
 
-	objectRelationsships = append(objectRelationsships, preparedOntology.Resources[rmk].ObjectRelationship...)
+	objectRelationsships = append(objectRelationsships, o2p.preparedOntology.Resources[rmk].ObjectRelationship...)
 
-	parent = preparedOntology.Resources[rmk].Parent
-	if parent == "" || rmk == rootResourceName {
+	parent = o2p.preparedOntology.Resources[rmk].Parent
+	if parent == "" || rmk == o2p.preparedOntology.RootResourceName {
 		return objectRelationsships
 	} else {
-		objectRelationsships = append(objectRelationsships, findAllObjectProperties(parent, preparedOntology)...)
+		objectRelationsships = append(objectRelationsships, o2p.findAllObjectProperties(parent)...)
 	}
 
 	return objectRelationsships
@@ -367,9 +394,9 @@ func findAllObjectProperties(rmk string, preparedOntology ontology.OntologyPrepa
 
 // addObjectProperties adds all data properties for the given resource to the output string
 // Data properties (e.g., "bool enabled", "int64 interval", "int64 retention_period")
-func addDataProperties(output, rmk string, preparedOntology ontology.OntologyPrepared) string {
+func (o2p *Owl2proto) addDataProperties(output, rmk string) string {
 	// Get all data properties of the given resource (rmk) and the parent resources
-	dataProperties := preparedOntology.FindAllDataProperties(rmk)
+	dataProperties := o2p.preparedOntology.FindAllDataProperties(rmk)
 
 	// Sort slice of data properties
 	sort.Slice(dataProperties, func(i, j int) bool {
@@ -382,13 +409,14 @@ func addDataProperties(output, rmk string, preparedOntology ontology.OntologyPre
 	for _, r := range dataProperties {
 		if r.Typ != "" && r.Value != "" {
 			var opts string = ""
+			var fieldNumber = 0
 
 			// Get list of resource types for given  object
-			resourceTypeList := getResourceTypeList(preparedOntology.Resources[rmk], &preparedOntology)
+			resourceTypeList := o2p.getResourceTypeList(o2p.preparedOntology.Resources[rmk])
 
 			// Get field number
 			resourceTypeList = append(resourceTypeList, r.Value)
-			fieldNumber := util.GetFieldNumber(resourceTypeList...)
+			fieldNumber, o2p.options.i = util.GetFieldNumber(o2p.options.fieldNumberOption, o2p.options.i, resourceTypeList...)
 
 			// Make name and id mandatory
 			// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
@@ -408,8 +436,8 @@ func addDataProperties(output, rmk string, preparedOntology ontology.OntologyPre
 	return output
 }
 
-func addClassHierarchy(output, rmk string, preparedOntology *ontology.OntologyPrepared) string {
-	for _, typ := range getResourceTypeList(preparedOntology.Resources[rmk], preparedOntology) {
+func (o2p *Owl2proto) addClassHierarchy(output, rmk string) string {
+	for _, typ := range o2p.getResourceTypeList(o2p.preparedOntology.Resources[rmk]) {
 		output += fmt.Sprintf("\toption (resource_type_names) = \"%s\";\n", typ)
 	}
 
@@ -448,14 +476,14 @@ func writeFile(outputFile, s string) error {
 }
 
 // getResourceTypeList returns a list of all derived resources
-func getResourceTypeList(resource *ontology.Resource, preparedOntology *ontology.OntologyPrepared) []string {
+func (o2p *Owl2proto) getResourceTypeList(resource *ontology.Resource) []string {
 	var resource_types []string
 
 	if resource.Parent == "" {
 		return []string{resource.Name}
 	} else {
 		resource_types = append(resource_types, resource.Name)
-		resource_types = append(resource_types, getResourceTypeList(preparedOntology.Resources[resource.Parent], preparedOntology)...)
+		resource_types = append(resource_types, o2p.getResourceTypeList(o2p.preparedOntology.Resources[resource.Parent])...)
 	}
 
 	return resource_types
@@ -465,33 +493,50 @@ func main() {
 	var (
 		b   []byte
 		err error
-		o   owl.Ontology
+		// o   owl.Ontology
 	)
 
-	if len(os.Args) < 4 {
+	if len(os.Args) < 5 {
 		slog.Error("not enough command line arguments given",
 			slog.String("arguments needed",
-				"owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource) and output path (optional, default is 'api/ontology.proto'"),
+				"owl file location, header file location, root resource name from owl file (e.g., http://graph.clouditor.io/classes/CloudResource), bool for field number option (true for deterministic field numbers, false for ascending field numbers) and output path (optional, default is 'api/ontology.proto') and uml output path (if this path is given, the proto output path must also be given)"),
 		)
 
 		return
 	}
-	owlFile = os.Args[1]
-	headerFile = os.Args[2]
-	rootResourceName = os.Args[3]
 
-	// Check if output path is given as argument
-	if len(os.Args) >= 5 {
-		outputPath = os.Args[4]
-	} else {
-		outputPath = DefaultOutputPath
+	o2p := &Owl2proto{
+		preparedOntology: ontology.OntologyPrepared{
+			Resources:           make(map[string]*ontology.Resource),
+			SubClasses:          make(map[string]owl.SubClassOf),
+			AnnotationAssertion: make(map[string]*ontology.AnnotationAssertion),
+		},
+		options: Options{
+			owlFile:          os.Args[1],
+			headerFile:       os.Args[2],
+			rootResourceName: os.Args[3],
+		},
 	}
 
-	// Check if output path is given as argument
+	// convert string to bool for field number option
+	o2p.options.fieldNumberOption, err = strconv.ParseBool(os.Args[4])
+	if err != nil {
+		slog.Error("error in conversion of bool for the 'field number option'", tint.Err(err))
+		return
+	}
+
+	// Check if proto output path is given as argument
 	if len(os.Args) >= 6 {
-		umlOutputPath = os.Args[5]
+		o2p.options.protoOutputPath = os.Args[5]
 	} else {
-		umlOutputPath = DefaultUMLOutputPath
+		o2p.options.protoOutputPath = DefaultOutputPath
+	}
+
+	// Check if UML output path is given as argument
+	if len(os.Args) >= 7 {
+		o2p.options.umlOutputPath = os.Args[6]
+	} else {
+		o2p.options.umlOutputPath = DefaultUMLOutputPath
 	}
 
 	// Set up logging
@@ -502,47 +547,48 @@ func main() {
 	))
 
 	// Read Ontology XML
-	b, err = os.ReadFile(owlFile)
+	b, err = os.ReadFile(o2p.options.owlFile)
 	if err != nil {
-		slog.Error("error reading ontology file", "location", owlFile, tint.Err(err))
+		slog.Error("error reading ontology file", "location", o2p.options.owlFile, tint.Err(err))
 		return
 	}
 
-	err = xml.Unmarshal(b, &o)
+	// Unmarshal file content (Ontology xml file)
+	err = xml.Unmarshal(b, &o2p.owlOntology)
 	if err != nil {
 		slog.Error("error while unmarshalling XML", tint.Err(err))
 		return
 	}
 
 	// Read header content from file
-	b, err = os.ReadFile(headerFile)
+	b, err = os.ReadFile(o2p.options.headerFile)
 	if err != nil {
-		slog.Error("error reading header file", "location", headerFile, tint.Err(err))
+		slog.Error("error reading header file", "location", o2p.options.headerFile, tint.Err(err))
 		return
 	}
 
 	// prepareOntology
-	preparedOntology := prepareOntology(o)
+	o2p.prepareOntology()
 
 	// Generate proto content
-	output := createProto(preparedOntology, string(b))
+	output := o2p.createProto(string(b))
 
 	// Write proto content to file
-	err = writeFile(outputPath, output)
+	err = writeFile(o2p.options.protoOutputPath, output)
 	if err != nil {
 		slog.Error("error writing proto file to storage", tint.Err(err))
 	}
 
-	slog.Info("proto file written to storage", slog.String("output folder", outputPath))
+	slog.Info("proto file written to storage", slog.String("output folder", o2p.options.protoOutputPath))
 
 	// Generate UML
-	output = owl2proto.CreatePlantUMLFile(preparedOntology)
+	output = owl2proto.CreatePlantUMLFile(o2p.preparedOntology)
 
 	// Write UML
-	err = writeFile(umlOutputPath, output)
+	err = writeFile(o2p.options.umlOutputPath, output)
 	if err != nil {
 		slog.Error("error writing UML file to storage", tint.Err(err))
 	}
 
-	slog.Info("UML file written to storage", slog.String("output folder", umlOutputPath))
+	slog.Info("UML file written to storage", slog.String("output folder", o2p.options.umlOutputPath))
 }

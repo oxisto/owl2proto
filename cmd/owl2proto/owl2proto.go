@@ -35,11 +35,10 @@ type Owl2proto struct {
 
 // Options for generating the proto file
 type Options struct {
-	owlFile          string
-	headerFile       string
-	protoOutputPath  string
-	umlOutputPath    string
-	rootResourceName string
+	owlFile         string
+	headerFile      string
+	protoOutputPath string
+	umlOutputPath   string
 	// true for deterministic field numbers, false for ascending field numbers
 	fieldNumberOption bool
 	// counter for generating the field number if ascending order is chosen
@@ -47,8 +46,8 @@ type Options struct {
 }
 
 const (
-	DefaultOutputPath    = "api/ontology.proto"
-	DefaultUMLOutputPath = "api/ontology.puml"
+	DefaultProtoOutputPath = "api/ontology.proto"
+	DefaultUMLOutputPath   = "api/ontology.puml"
 )
 
 // prepareOntology extracts important information from the owl ontology file that is needed for the protobuf file creation
@@ -510,11 +509,11 @@ func main() {
 			Resources:           make(map[string]*ontology.Resource),
 			SubClasses:          make(map[string]owl.SubClassOf),
 			AnnotationAssertion: make(map[string]*ontology.AnnotationAssertion),
+			RootResourceName:    os.Args[3],
 		},
 		options: Options{
-			owlFile:          os.Args[1],
-			headerFile:       os.Args[2],
-			rootResourceName: os.Args[3],
+			owlFile:    os.Args[1],
+			headerFile: os.Args[2],
 		},
 	}
 
@@ -529,7 +528,7 @@ func main() {
 	if len(os.Args) >= 6 {
 		o2p.options.protoOutputPath = os.Args[5]
 	} else {
-		o2p.options.protoOutputPath = DefaultOutputPath
+		o2p.options.protoOutputPath = DefaultProtoOutputPath
 	}
 
 	// Check if UML output path is given as argument

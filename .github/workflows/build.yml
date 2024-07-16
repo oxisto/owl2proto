@@ -30,18 +30,19 @@ jobs:
         uses: bufbuild/buf-setup-action@v1.33.0
         with:
           github_token: ${{ github.token }}
-      - name: Generate
-        run: |
-          buf generate
       - name: Build
         run: |
-          go build -o build ./cmd/owl2proto
+          go build -o build/ ./cmd/owl2proto
       - name: Test
         run: |
           go install github.com/mfridman/tparse@latest
 
           go test -v -coverprofile=coverage.cov -coverpkg ./... -covermode=atomic ./...  -json | tee output.json | tparse -follow || true
           tparse -format markdown -file output.json > $GITHUB_STEP_SUMMARY
+      - name: Generate Example
+        run: |
+          ./build/owl2proto generate-proto --root-resource-name=ex:Resource example/cloud.owx --header-file=example/example_header.proto --output-path=example/example.proto
+          buf generate
       - name: "Upload Artifact"
         uses: actions/upload-artifact@v4
         with:

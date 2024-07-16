@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package example.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/oxisto/owl2proto/example";

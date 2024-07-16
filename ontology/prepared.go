@@ -10,8 +10,10 @@ import (
 // OntologyPrepared contains an [owl.Ontology] in a way that is "prepared" for the translation to protobuf messages.
 type OntologyPrepared struct {
 	Resources           map[string]*Resource
-	SubClasses          map[string]owl.SubClassOf
+	SubClasses          map[string]*owl.SubClassOf
 	AnnotationAssertion map[string]*AnnotationAssertion
+
+	Prefixes map[string]*owl.Prefix
 
 	RootResourceName string
 }
@@ -69,18 +71,27 @@ func (po *OntologyPrepared) FindAllDataProperties(key string) []*Relationship {
 // Prepare extracts important information from the owl ontology file that is needed for the protobuf file creation.
 func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 	preparedOntology := &OntologyPrepared{
+		Prefixes:            map[string]*owl.Prefix{},
 		Resources:           map[string]*Resource{},
-		SubClasses:          map[string]owl.SubClassOf{},
+		SubClasses:          map[string]*owl.SubClassOf{},
 		AnnotationAssertion: map[string]*AnnotationAssertion{},
 		RootResourceName:    rootIRI,
 	}
+
+	for idx := range src.Prefixes {
+		p := &src.Prefixes[idx]
+		preparedOntology.Prefixes[p.Name] = p
+	}
+
 	for _, c := range src.Declarations {
+		iri := preparedOntology.NormalizedIRI(&c.Class)
+
 		// Prepare ontology classes
 		// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
-		if c.Class.IRI != "" {
-			preparedOntology.Resources[c.Class.IRI] = &Resource{
-				Iri:  c.Class.IRI,
-				Name: util.CleanString(GetNameFromIri(c.Class.IRI)),
+		if iri != "" {
+			preparedOntology.Resources[iri] = &Resource{
+				Iri:  iri,
+				Name: util.CleanString(GetNameFromIri(iri)),
 			}
 		}
 
@@ -139,31 +150,34 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 	//    (e.g., "http://graph.clouditor.io/classes/resourceId")
 	for _, sc := range src.SubClasses {
 		if len(sc.Class) == 2 {
+			iri := preparedOntology.NormalizedIRI(&sc.Class[0])
+			parentIri := preparedOntology.NormalizedIRI(&sc.Class[1])
 			// "owl.Thing" is the root of the ontology and is not needed for the protobuf files
-			if sc.Class[1].IRI != "owl.Thing" {
-				// Create resource that has a parent. All resources directly under "owl.Thing" are alread created before
+			if parentIri != "owl.Thing" {
+				// Create resource that has a parent. All resources directly under "owl.Thing" are already created before
 				// (via the Declarations)
 				r := &Resource{
-					Iri:     sc.Class[0].IRI,
-					Name:    preparedOntology.Resources[sc.Class[0].IRI].Name,
-					Parent:  sc.Class[1].IRI,
-					Comment: preparedOntology.Resources[sc.Class[0].IRI].Comment,
+					Iri:     iri,
+					Name:    preparedOntology.Resources[iri].Name,
+					Parent:  parentIri,
+					Comment: preparedOntology.Resources[iri].Comment,
 				}
 
 				// Add subresources to the parent resource
-				if val, ok := preparedOntology.Resources[sc.Class[1].IRI]; ok {
+				if val, ok := preparedOntology.Resources[parentIri]; ok {
 					if val.SubResources == nil {
-						preparedOntology.Resources[sc.Class[1].IRI].SubResources = make([]*Resource, 0)
+						preparedOntology.Resources[parentIri].SubResources = make([]*Resource, 0)
 					}
-					preparedOntology.Resources[sc.Class[1].IRI].SubResources = append(preparedOntology.Resources[sc.Class[1].IRI].SubResources, r)
+					preparedOntology.Resources[parentIri].SubResources = append(preparedOntology.Resources[parentIri].SubResources, r)
 				}
 
 				// Add parent IRI to resource (not subresource!). We couldn't do this beforehand (Declarations) because we only get the information here,
-				preparedOntology.Resources[sc.Class[0].IRI].Parent = sc.Class[1].IRI
+				preparedOntology.Resources[iri].Parent = parentIri
 			}
 		} else if sc.DataSomeValuesFrom != nil {
 			// Add data values, e.g. "enabled xsd:bool" ("enabled" is a data property and "xsd:bool" is a datatype) or
 			for _, v := range sc.DataSomeValuesFrom {
+				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0])
 				var (
 					comment string
 				)
@@ -175,7 +189,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 				}
 
 				// Get DataProperty name
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &Relationship{
+				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
 					IRI:     v.DataProperty.IRI,
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
@@ -214,19 +228,22 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
+				classIri := preparedOntology.NormalizedIRI(&v.Class)
+				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0])
+
 				if v.ObjectProperty.IRI != "" {
-					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ObjectRelationship{
+					preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
 						ObjectProperty:     v.ObjectProperty.IRI,
 						ObjectPropertyName: preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
-						Class:              v.Class.IRI,
-						Name:               preparedOntology.Resources[v.Class.IRI].Name,
+						Class:              classIri,
+						Name:               preparedOntology.Resources[classIri].Name,
 					})
 				} else if v.ObjectProperty.AbbreviatedIRI != "" {
-					preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship = append(preparedOntology.Resources[sc.Class[0].IRI].ObjectRelationship, &ObjectRelationship{
+					preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
 						ObjectProperty:     v.ObjectProperty.AbbreviatedIRI,
 						ObjectPropertyName: preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
-						Class:              v.Class.IRI,
-						Name:               preparedOntology.Resources[v.Class.IRI].Name,
+						Class:              classIri,
+						Name:               preparedOntology.Resources[classIri].Name,
 					})
 				}
 			}

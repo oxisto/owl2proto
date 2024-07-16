@@ -34,13 +34,15 @@ type Relationship struct {
 	Typ     string
 	Value   string
 	Comment string
+	From    string // IRI
 }
 
 type ObjectRelationship struct {
 	ObjectProperty     string
 	ObjectPropertyName string
-	Class              string // IRI
-	Name               string // Name of Class IRI
+	From               string // IRI
+	To                 string // IRI
+	Name               string // Name of To IRI
 	Comment            string // Comment of the property
 }
 
@@ -204,6 +206,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					IRI:     preparedOntology.NormalizedIRI(&v.DataProperty.Entity),
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
+					From:    fromIri,
 					Comment: comment,
 				})
 
@@ -227,6 +230,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					IRI:     relationshipIri,
 					Typ:     util.GetProtoType(v.Literal),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
+					From:    fromIri,
 					Comment: comment,
 				})
 
@@ -234,15 +238,16 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
-				classIri := preparedOntology.NormalizedIRI(&v.Class.Entity)
+				toIri := preparedOntology.NormalizedIRI(&v.Class.Entity)
 				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
 				relationshipIri := preparedOntology.NormalizedIRI(&v.ObjectProperty.Entity)
 
 				preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
+					From:               fromIri,
 					ObjectProperty:     relationshipIri,
 					ObjectPropertyName: preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
-					Class:              classIri,
-					Name:               preparedOntology.Resources[classIri].Name,
+					To:                 toIri,
+					Name:               preparedOntology.Resources[toIri].Name,
 				})
 			}
 		} else if sc.ObjectHasValue != nil {
@@ -265,6 +270,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					IRI:     relationshipIri,
 					Typ:     util.GetProtoType(typeIri),
 					Value:   preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
+					From:    fromIri,
 					Comment: comment,
 				})
 			}

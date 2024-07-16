@@ -12,18 +12,6 @@ option go_package = "github.com/oxisto/owl2proto/example";
 option (owl.meta) = {
   prefixes: [
     {
-      prefix: "ex"
-      iri: "http://example.com/cloud/"
-    },
-    {
-      prefix: "owl"
-      iri: "http://www.w3.org/2002/07/owl#"
-    },
-    {
-      prefix: "rdf"
-      iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    },
-    {
       prefix: "xml"
       iri: "http://www.w3.org/XML/1998/namespace"
     },
@@ -34,6 +22,18 @@ option (owl.meta) = {
     {
       prefix: "rdfs"
       iri: "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    {
+      prefix: "ex"
+      iri: "http://example.com/cloud/"
+    },
+    {
+      prefix: "owl"
+      iri: "http://www.w3.org/2002/07/owl#"
+    },
+    {
+      prefix: "rdf"
+      iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     }
   ]
 };
@@ -48,7 +48,8 @@ message BlockStorage {
   string name = 8027 [
     (buf.validate.field).required = true,
     (owl.property).iri = "ex:name",
-    (owl.property).parent = "owl:topDataProperty"
+    (owl.property).parent = "owl:topDataProperty",
+    (owl.property).class_iri = "ex:Resource"
   ];
 }
 
@@ -70,11 +71,13 @@ message Container {
   string name = 15153 [
     (buf.validate.field).required = true,
     (owl.property).iri = "ex:name",
-    (owl.property).parent = "owl:topDataProperty"
+    (owl.property).parent = "owl:topDataProperty",
+    (owl.property).class_iri = "ex:Resource"
   ];
   GeoLocation geo_location = 9969 [
     (owl.property).iri = "ex:has",
-    (owl.property).parent = "owl:topObjectProperty"
+    (owl.property).parent = "owl:topObjectProperty",
+    (owl.property).class_iri = "ex:Compute"
   ];
 }
 
@@ -110,14 +113,17 @@ message VirtualMachine {
   string name = 5214 [
     (buf.validate.field).required = true,
     (owl.property).iri = "ex:name",
-    (owl.property).parent = "owl:topDataProperty"
+    (owl.property).parent = "owl:topDataProperty",
+    (owl.property).class_iri = "ex:Resource"
   ];
   repeated string block_storage_ids = 6443 [
     (owl.property).iri = "ex:hasMultiple",
-    (owl.property).parent = "owl:topObjectProperty"
+    (owl.property).parent = "owl:topObjectProperty",
+    (owl.property).class_iri = "ex:VirtualMachine"
   ];
   GeoLocation geo_location = 12691 [
     (owl.property).iri = "ex:has",
-    (owl.property).parent = "owl:topObjectProperty"
+    (owl.property).parent = "owl:topObjectProperty",
+    (owl.property).class_iri = "ex:Compute"
   ];
 }

@@ -11,6 +11,12 @@ message EntityEntry {
   repeated string parent = 2;
 }
 
+message PropertyEntry {
+  string iri = 1;
+  repeated string parent = 2;
+  string class_iri = 3;
+}
+
 message PrefixEntry {
   string prefix = 1;
   string iri = 2;
@@ -25,7 +31,7 @@ extend google.protobuf.MessageOptions {
 }
 
 extend google.protobuf.FieldOptions {
-  optional EntityEntry property = 50000;
+  optional PropertyEntry property = 50000;
 }
 
 extend google.protobuf.FileOptions {

@@ -173,6 +173,7 @@ func (cmd *GenerateProtoCmd) emitPropertyOptions(r *ontology.Relationship) strin
 		opts = append(opts, fmt.Sprintf("(owl.property).iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.IRI)))
 		// TODO(oxisto): Emit all the real property parents
 		opts = append(opts, fmt.Sprintf("(owl.property).parent = \"%s\"", "owl:topDataProperty"))
+		opts = append(opts, fmt.Sprintf("(owl.property).class_iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.From)))
 	}
 
 	if len(opts) > 0 {
@@ -192,6 +193,7 @@ func (cmd *GenerateProtoCmd) emitObjectPropertyOptions(r *ontology.ObjectRelatio
 		opts = append(opts, fmt.Sprintf("(owl.property).iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.ObjectProperty)))
 		// TODO(oxisto): Emit all the real property parents
 		opts = append(opts, fmt.Sprintf("(owl.property).parent = \"%s\"", "owl:topObjectProperty"))
+		opts = append(opts, fmt.Sprintf("(owl.property).class_iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.From)))
 	}
 
 	if len(opts) > 0 {
@@ -230,7 +232,7 @@ func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 		optsOutput = cmd.emitObjectPropertyOptions(o)
 
 		if o.Name != "" && o.ObjectProperty != "" {
-			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.Class])
+			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.To])
 			if value != "" && typ != "" {
 				output += fmt.Sprintf("\n\t%s%s %s  = %d%s;", value, typ, util.ToSnakeCase(name), fieldNumber, optsOutput)
 			} else if typ != "" && name != "" {
@@ -262,8 +264,8 @@ func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*
 // findAllObjectProperties adds all object properties for the given entity and the parents
 func (cmd *GenerateProtoCmd) findAllObjectProperties(iri string) []*ontology.ObjectRelationship {
 	var (
-		objectRelationsships []*ontology.ObjectRelationship
-		parent               string
+		objectRelationships []*ontology.ObjectRelationship
+		parent              string
 	)
 
 	res, ok := cmd.preparedOntology.Resources[iri]
@@ -272,16 +274,16 @@ func (cmd *GenerateProtoCmd) findAllObjectProperties(iri string) []*ontology.Obj
 		return nil
 	}
 
-	objectRelationsships = append(objectRelationsships, res.ObjectRelationship...)
+	objectRelationships = append(objectRelationships, res.ObjectRelationship...)
 
 	parent = cmd.preparedOntology.Resources[iri].Parent
 	if parent == "" || iri == cmd.preparedOntology.RootResourceName {
-		return objectRelationsships
+		return objectRelationships
 	} else {
-		objectRelationsships = append(objectRelationsships, cmd.findAllObjectProperties(parent)...)
+		objectRelationships = append(objectRelationships, cmd.findAllObjectProperties(parent)...)
 	}
 
-	return objectRelationsships
+	return objectRelationships
 }
 
 // addObjectProperties adds all data properties for the given resource to the output string

@@ -2,9 +2,15 @@ package owl
 
 // Ontology holds all information of one ontology
 type Ontology struct {
+	Prefixes            []Prefix              `xml:"Prefix"`
 	Declarations        []Declaration         `xml:"Declaration"`
 	SubClasses          []SubClassOf          `xml:"SubClassOf"`
 	AnnotationAssertion []AnnotationAssertion `xml:"AnnotationAssertion"`
+}
+
+type Prefix struct {
+	Name string `xml:"name,attr"`
+	IRI  string `xml:"IRI,attr"`
 }
 
 type Declaration struct {
@@ -29,7 +35,8 @@ type AnnotationProperty struct {
 }
 
 type Class struct {
-	IRI string `xml:"IRI,attr"`
+	IRI            string `xml:"IRI,attr"`
+	AbbreviatedIRI string `xml:"abbreviatedIRI,attr"`
 }
 
 type ObjectProperty struct {

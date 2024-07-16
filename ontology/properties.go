@@ -33,7 +33,7 @@ func GetNameFromIri(s string) string {
 	}
 	split := strings.Split(s, "/")
 
-	return split[4]
+	return split[len(split)-1]
 }
 
 // GetDataPropertyAbbreviatedIriName returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"

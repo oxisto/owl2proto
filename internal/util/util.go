@@ -56,7 +56,7 @@ func GetProtoType(s string) string {
 
 }
 
-// CleanString deletes spaces and /.
+// CleanString deletes spaces, '-' and '/'.
 func CleanString(s string) string {
 	s = strings.ReplaceAll(s, " ", "")
 	s = strings.ReplaceAll(s, "/", "")

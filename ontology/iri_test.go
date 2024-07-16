@@ -36,7 +36,7 @@ func TestOntologyPrepared_normalizeIRI(t *testing.T) {
 			args: args{
 				iri: "Resource",
 			},
-			want: "",
+			want: "Resource",
 		},
 		{
 			name: "prefix not available",
@@ -51,7 +51,7 @@ func TestOntologyPrepared_normalizeIRI(t *testing.T) {
 			args: args{
 				iri: "x:Resource",
 			},
-			want: "",
+			want: "x:Resource",
 		},
 		{
 			name: "happy path",

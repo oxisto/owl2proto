@@ -152,8 +152,9 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		if len(sc.Class) == 2 {
 			iri := preparedOntology.NormalizedIRI(&sc.Class[0])
 			parentIri := preparedOntology.NormalizedIRI(&sc.Class[1])
-			// "owl.Thing" is the root of the ontology and is not needed for the protobuf files
-			if parentIri != "owl.Thing" {
+
+			// "owl#Thing" is the root of the ontology and is not needed for the protobuf files
+			if parentIri != "http://www.w3.org/2002/07/owl#Thing" {
 				// Create resource that has a parent. All resources directly under "owl.Thing" are already created before
 				// (via the Declarations)
 				r := &Resource{

@@ -1,6 +1,7 @@
 package ontology
 
 import (
+	"log/slog"
 	"strings"
 
 	"github.com/oxisto/owl2proto/internal/util"
@@ -50,16 +51,22 @@ type AnnotationAssertion struct {
 }
 
 // FindAllDataProperties adds all object properties for the given entity and the parents
-func (po *OntologyPrepared) FindAllDataProperties(key string) []*Relationship {
+func (po *OntologyPrepared) FindAllDataProperties(iri string) []*Relationship {
 	var (
 		relationships []*Relationship
 		parent        string
 	)
 
-	relationships = append(relationships, po.Resources[key].Relationship...)
+	res, ok := po.Resources[iri]
+	if !ok {
+		slog.Error("Could not find entity", "iri", iri)
+		return nil
+	}
 
-	parent = po.Resources[key].Parent
-	if parent == "" || key == po.RootResourceName {
+	relationships = append(relationships, res.Relationship...)
+
+	parent = po.Resources[iri].Parent
+	if parent == "" || iri == po.RootResourceName {
 		return relationships
 	} else {
 		relationships = append(relationships, po.FindAllDataProperties(parent)...)

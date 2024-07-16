@@ -149,16 +149,22 @@ func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*
 }
 
 // findAllObjectProperties adds all object properties for the given entity and the parents
-func (cmd *GenerateProtoCmd) findAllObjectProperties(rmk string) []*ontology.ObjectRelationship {
+func (cmd *GenerateProtoCmd) findAllObjectProperties(iri string) []*ontology.ObjectRelationship {
 	var (
 		objectRelationsships []*ontology.ObjectRelationship
 		parent               string
 	)
 
-	objectRelationsships = append(objectRelationsships, cmd.preparedOntology.Resources[rmk].ObjectRelationship...)
+	res, ok := cmd.preparedOntology.Resources[iri]
+	if !ok {
+		slog.Error("Could not find entity", "iri", iri)
+		return nil
+	}
 
-	parent = cmd.preparedOntology.Resources[rmk].Parent
-	if parent == "" || rmk == cmd.preparedOntology.RootResourceName {
+	objectRelationsships = append(objectRelationsships, res.ObjectRelationship...)
+
+	parent = cmd.preparedOntology.Resources[iri].Parent
+	if parent == "" || iri == cmd.preparedOntology.RootResourceName {
 		return objectRelationsships
 	} else {
 		objectRelationsships = append(objectRelationsships, cmd.findAllObjectProperties(parent)...)
@@ -222,6 +228,10 @@ func (cmd *GenerateProtoCmd) addClassHierarchy(output, rmk string) string {
 // getResourceTypeList returns a list of all derived resources
 func (cmd *GenerateProtoCmd) getResourceTypeList(resource *ontology.Resource) []string {
 	var resource_types []string
+
+	if resource == nil {
+		return nil
+	}
 
 	if resource.Parent == "" {
 		return []string{resource.Name}

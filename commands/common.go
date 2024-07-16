@@ -16,11 +16,12 @@ type GenerateCmd struct {
 	preparedOntology *ontology.OntologyPrepared
 }
 
+// prepare prepares the ontology for further processing.
 func (cmd *GenerateCmd) prepare() {
 	var (
 		b   []byte
 		err error
-		ont owl.Ontology
+		ont *owl.Ontology
 	)
 
 	// Set up logging
@@ -44,5 +45,5 @@ func (cmd *GenerateCmd) prepare() {
 		return
 	}
 
-	cmd.preparedOntology = ontology.Prepare(&ont, cmd.RootResourceName)
+	cmd.preparedOntology = ontology.Prepare(ont, cmd.RootResourceName)
 }

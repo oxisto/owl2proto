@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	"regexp"
@@ -65,7 +66,6 @@ func CleanString(s string) string {
 }
 
 // ToSnakeCase converts camel case to snake case and deletes spaces
-// TODO(all): Fix "OSLogging" to OSLogging and os_logging
 func ToSnakeCase(s string) string {
 	var (
 		matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
@@ -111,4 +111,35 @@ func GetFieldNumber(deterministicFieldNumbers bool, counter int, input ...string
 		}
 		return counter, counter
 	}
+}
+
+func WriteFile(outputFile, s string) error {
+	var err error
+
+	// TODO(all):Create folder if not exists
+	// Create storage file
+	f, err := os.Create(outputFile)
+	if err != nil {
+		err = fmt.Errorf("error creating file: %v", err)
+		slog.Error(err.Error())
+	}
+
+	// Write output string to file
+	_, err = f.WriteString(s)
+	if err != nil {
+		err = fmt.Errorf("error writing output to file: %v", err)
+		slog.Error(err.Error())
+		f.Close()
+		return err
+	}
+
+	// Close storage file
+	err = f.Close()
+	if err != nil {
+		err = fmt.Errorf("error closing file: %v", err)
+		slog.Error(err.Error())
+		return err
+	}
+
+	return nil
 }

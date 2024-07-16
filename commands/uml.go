@@ -5,6 +5,7 @@ import (
 
 	"github.com/lmittmann/tint"
 	"github.com/oxisto/owl2proto"
+	"github.com/oxisto/owl2proto/internal/util"
 )
 
 type GenerateUMLCmd struct {
@@ -19,7 +20,7 @@ func (cmd *GenerateUMLCmd) Run() (err error) {
 	output := owl2proto.CreatePlantUMLFile(cmd.preparedOntology)
 
 	// Write UML
-	err = writeFile(cmd.OutputPath, output)
+	err = util.WriteFile(cmd.OutputPath, output)
 	if err != nil {
 		slog.Error("error writing UML file to storage", tint.Err(err))
 	}

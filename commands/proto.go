@@ -22,7 +22,7 @@ type GenerateProtoCmd struct {
 	i int
 }
 
-// createProto creates the protobuf file
+// createProto creates the proto file
 func (cmd *GenerateProtoCmd) createProto(header string) string {
 	output := ""
 
@@ -97,7 +97,7 @@ extend google.protobuf.MessageOptions {
 }
 
 // addObjectProperties adds all object properties for the given resource to the output string
-// Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoing http_endpoint", "TransportEncryption transport_encryption")
+// Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoint http_endpoint", "TransportEncryption transport_encryption")
 func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 	var fieldNumber = 0
 	// Get all data properties of the given resource (rmk) and the parent resources
@@ -131,6 +131,7 @@ func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 	return output
 }
 
+// findAllLeafs returns a resource list of all leaf nodes of a given resource/class
 func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*ontology.Resource {
 	var leafs []*ontology.Resource
 
@@ -218,37 +219,6 @@ func (cmd *GenerateProtoCmd) addClassHierarchy(output, rmk string) string {
 	return output
 }
 
-func writeFile(outputFile, s string) error {
-	var err error
-
-	// TODO(all):Create folder if not exists
-	// Create storage file
-	f, err := os.Create(outputFile)
-	if err != nil {
-		err = fmt.Errorf("error creating file: %v", err)
-		slog.Error(err.Error())
-	}
-
-	// Write output string to file
-	_, err = f.WriteString(s)
-	if err != nil {
-		err = fmt.Errorf("error writing output to file: %v", err)
-		slog.Error(err.Error())
-		f.Close()
-		return err
-	}
-
-	// Close storage file
-	err = f.Close()
-	if err != nil {
-		err = fmt.Errorf("error closing file: %v", err)
-		slog.Error(err.Error())
-		return err
-	}
-
-	return nil
-}
-
 // getResourceTypeList returns a list of all derived resources
 func (cmd *GenerateProtoCmd) getResourceTypeList(resource *ontology.Resource) []string {
 	var resource_types []string
@@ -277,7 +247,7 @@ func (cmd *GenerateProtoCmd) Run() (err error) {
 	output := cmd.createProto(string(b))
 
 	// Write proto content to file
-	err = writeFile(cmd.OutputPath, output)
+	err = util.WriteFile(cmd.OutputPath, output)
 	if err != nil {
 		slog.Error("error writing proto file to storage", tint.Err(err))
 	}

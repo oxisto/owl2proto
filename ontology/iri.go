@@ -22,7 +22,7 @@ func (ont *OntologyPrepared) normalizeAbbreviatedIRI(iri string) string {
 	// We need to split the abbreviated IRI and look for the matching prefix
 	prefix, name, found := strings.Cut(iri, ":")
 	if !found {
-		return ""
+		return iri
 	}
 
 	p, ok := ont.Prefixes[prefix]
@@ -30,7 +30,7 @@ func (ont *OntologyPrepared) normalizeAbbreviatedIRI(iri string) string {
 		return p.IRI + name
 	}
 
-	return ""
+	return iri
 }
 
 // AbbreviateIRI returns an abbreviated IRI, e.g., "ex:Storage" -> "http://example.com/cloud/Storage" if a matching

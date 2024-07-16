@@ -12,18 +12,6 @@ option go_package = "github.com/oxisto/owl2proto/example";
 option (owl.meta) = {
   prefixes: [
     {
-      prefix: "xml"
-      iri: "http://www.w3.org/XML/1998/namespace"
-    },
-    {
-      prefix: "xsd"
-      iri: "http://www.w3.org/2001/XMLSchema#"
-    },
-    {
-      prefix: "rdfs"
-      iri: "http://www.w3.org/2000/01/rdf-schema#"
-    },
-    {
       prefix: "ex"
       iri: "http://example.com/cloud/"
     },
@@ -34,6 +22,18 @@ option (owl.meta) = {
     {
       prefix: "rdf"
       iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    },
+    {
+      prefix: "xml"
+      iri: "http://www.w3.org/XML/1998/namespace"
+    },
+    {
+      prefix: "xsd"
+      iri: "http://www.w3.org/2001/XMLSchema#"
+    },
+    {
+      prefix: "rdfs"
+      iri: "http://www.w3.org/2000/01/rdf-schema#"
     }
   ]
 };
@@ -112,7 +112,7 @@ message VirtualMachine {
     (owl.property).iri = "ex:name",
     (owl.property).parent = "owl:topDataProperty"
   ];
-  repeated BlockStorage block_storages = 6443 [
+  repeated string block_storage_ids = 6443 [
     (owl.property).iri = "ex:hasMultiple",
     (owl.property).parent = "owl:topObjectProperty"
   ];

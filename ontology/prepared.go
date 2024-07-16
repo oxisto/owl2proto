@@ -90,6 +90,9 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		preparedOntology.Prefixes[p.Name] = p
 	}
 
+	// Make sure our root resource name is definitely not an abbreviated IRI anymore
+	preparedOntology.RootResourceName = preparedOntology.normalizeAbbreviatedIRI(preparedOntology.RootResourceName)
+
 	for _, c := range src.Declarations {
 		iri := preparedOntology.NormalizedIRI(&c.Class.Entity)
 

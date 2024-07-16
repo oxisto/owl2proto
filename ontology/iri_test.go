@@ -78,7 +78,7 @@ func TestOntologyPrepared_normalizeIRI(t *testing.T) {
 				Prefixes:            tt.fields.Prefixes,
 				RootResourceName:    tt.fields.RootResourceName,
 			}
-			if got := ont.normalizeIRI(tt.args.iri); got != tt.want {
+			if got := ont.normalizeAbbreviatedIRI(tt.args.iri); got != tt.want {
 				t.Errorf("OntologyPrepared.normalizeIRI() = %v, want %v", got, tt.want)
 			}
 		})

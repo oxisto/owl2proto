@@ -149,21 +149,22 @@ func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*
 }
 
 // findAllObjectProperties adds all object properties for the given entity and the parents
-func (cmd *GenerateProtoCmd) findAllObjectProperties(rmk string) []*ontology.ObjectRelationship {
+func (cmd *GenerateProtoCmd) findAllObjectProperties(iri string) []*ontology.ObjectRelationship {
 	var (
 		objectRelationsships []*ontology.ObjectRelationship
 		parent               string
 	)
 
-	// "owl.Thing" is the root of the ontology and is not needed for the protobuf files. We do not have it in the prepared Ontology, so we have to skip, if we come to "owl.Thing".
-	res, ok := cmd.preparedOntology.Resources[rmk]
+	res, ok := cmd.preparedOntology.Resources[iri]
 	if !ok {
+		slog.Error("Could not find entity", "iri", iri)
 		return nil
 	}
+
 	objectRelationsships = append(objectRelationsships, res.ObjectRelationship...)
 
-	parent = cmd.preparedOntology.Resources[rmk].Parent
-	if parent == "" || rmk == cmd.preparedOntology.RootResourceName {
+	parent = cmd.preparedOntology.Resources[iri].Parent
+	if parent == "" || iri == cmd.preparedOntology.RootResourceName {
 		return objectRelationsships
 	} else {
 		objectRelationsships = append(objectRelationsships, cmd.findAllObjectProperties(parent)...)

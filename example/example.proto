@@ -1,0 +1,76 @@
+// Auto-generated code by owl2proto (https://github.com/oxisto/owl2proto)
+
+syntax = "proto3";
+
+package example.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/oxisto/owl2proto/example";
+
+extend google.protobuf.MessageOptions {
+	repeated string resource_type_names = 60000;
+}
+// BlockStorage is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message BlockStorage {
+	option (resource_type_names) = "BlockStorage";
+	option (resource_type_names) = "Storage";
+	option (resource_type_names) = "Resource";
+
+	string name = 8027[ (buf.validate.field).required = true ];
+}
+
+// Compute is an abstract class in our ontology, it cannot be instantiated but acts as an "interface".
+message Compute {
+
+	oneof type {
+		Container container = 15127;
+		VirtualMachine virtual_machine = 3481;
+	}
+}
+
+// Container is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message Container {
+	option (resource_type_names) = "Container";
+	option (resource_type_names) = "Compute";
+	option (resource_type_names) = "Resource";
+
+	string name = 15153[ (buf.validate.field).required = true ];
+	GeoLocation geo_location = 9969;
+}
+
+// GeoLocation is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message GeoLocation {
+	option (resource_type_names) = "GeoLocation";
+
+}
+
+// Resource is an abstract class in our ontology, it cannot be instantiated but acts as an "interface".
+message Resource {
+
+	oneof type {
+		Container container = 15127;
+		VirtualMachine virtual_machine = 3481;
+		BlockStorage block_storage = 14627;
+	}
+}
+
+// Storage is an abstract class in our ontology, it cannot be instantiated but acts as an "interface".
+message Storage {
+
+	oneof type {
+		BlockStorage block_storage = 14627;
+	}
+}
+
+// VirtualMachine is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message VirtualMachine {
+	option (resource_type_names) = "VirtualMachine";
+	option (resource_type_names) = "Compute";
+	option (resource_type_names) = "Resource";
+
+	string name = 5214[ (buf.validate.field).required = true ];
+	repeated BlockStorage block_storages  = 6443;
+	GeoLocation geo_location = 12691;
+}

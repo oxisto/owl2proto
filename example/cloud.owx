@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="urn:webprotege:ontology:43d2ae46-4a4c-475e-b3c4-76ab96cef433"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="urn:webprotege:ontology:43d2ae46-4a4c-475e-b3c4-76ab96cef433">
+    <Prefix name="ex" IRI="http://example.com/cloud/"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class abbreviatedIRI="ex:BlockStorage"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="ex:Compute"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="ex:Container"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="ex:GeoLocation"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="ex:Resource"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="ex:Storage"/>
+    </Declaration>
+    <Declaration>
+        <Class abbreviatedIRI="ex:VirtualMachine"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty abbreviatedIRI="ex:has"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty abbreviatedIRI="ex:hasMultiple"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty abbreviatedIRI="ex:name"/>
+    </Declaration>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:BlockStorage"/>
+        <Class abbreviatedIRI="ex:Storage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:Compute"/>
+        <Class abbreviatedIRI="ex:Resource"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:Compute"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty abbreviatedIRI="ex:has"/>
+            <Class abbreviatedIRI="ex:GeoLocation"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:Container"/>
+        <Class abbreviatedIRI="ex:Compute"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:Resource"/>
+        <DataSomeValuesFrom>
+            <DataProperty abbreviatedIRI="ex:name"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:Storage"/>
+        <Class abbreviatedIRI="ex:Resource"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:VirtualMachine"/>
+        <Class abbreviatedIRI="ex:Compute"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class abbreviatedIRI="ex:VirtualMachine"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty abbreviatedIRI="ex:hasMultiple"/>
+            <Class abbreviatedIRI="ex:BlockStorage"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:BlockStorage</AbbreviatedIRI>
+        <Literal>BlockStorage</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:Compute</AbbreviatedIRI>
+        <Literal>Compute</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:Container</AbbreviatedIRI>
+        <Literal>Container</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:GeoLocation</AbbreviatedIRI>
+        <Literal>GeoLocation</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:Resource</AbbreviatedIRI>
+        <Literal>Resource</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:Storage</AbbreviatedIRI>
+        <Literal>Storage</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:VirtualMachine</AbbreviatedIRI>
+        <Literal>VirtualMachine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:has</AbbreviatedIRI>
+        <Literal>has</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:hasMultiple</AbbreviatedIRI>
+        <Literal>hasMultiple</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AbbreviatedIRI>ex:name</AbbreviatedIRI>
+        <Literal>name</Literal>
+    </AnnotationAssertion>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.13) https://github.com/owlcs/owlapi -->
+

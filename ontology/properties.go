@@ -33,7 +33,7 @@ func GetNameFromIri(s string) string {
 	}
 	split := strings.Split(s, "/")
 
-	return split[4]
+	return split[len(split)-1]
 }
 
 // GetDataPropertyAbbreviatedIriName returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
@@ -51,19 +51,19 @@ func GetDataPropertyAbbreviatedIriName(s string) string {
 func (ont *OntologyPrepared) GetObjectDetail(s string, resource *Resource) (rep, typ, name string) {
 	rName := resource.Name
 	switch s {
-	case "prop:hasMultiple", "prop:offersMultiple", "http://graph.clouditor.io/classes/offersMultiple":
+	case "hasMultiple", "offersMultiple":
 		rep = util.Repeated
-	case "prop:has", "prop:runsOn", "prop:offers", "prop:storage":
+	case "has", "runsOn", "offers", "storage":
 		rep = ""
-	case "prop:to":
+	case "to":
 		rep = util.Repeated
-	case "prop:collectionOf":
+	case "collectionOf":
 		rep = util.Repeated
-	case "prop:offersInterface":
+	case "offersInterface":
 		rep = ""
-	case "prop:proxyTarget":
+	case "proxyTarget":
 		return "string", "", rName
-	case "prop:parent":
+	case "parent":
 		return "", "optional string", "parent_id"
 	default:
 		rep = ""
@@ -87,5 +87,4 @@ func (ont *OntologyPrepared) GetObjectDetail(s string, resource *Resource) (rep,
 	}
 
 	return rep, rName, name
-
 }

@@ -94,7 +94,7 @@ func TestOntologyPrepared_NormalizedIRI(t *testing.T) {
 		RootResourceName    string
 	}
 	type args struct {
-		c *owl.Class
+		c *owl.Entity
 	}
 	tests := []struct {
 		name   string
@@ -105,7 +105,7 @@ func TestOntologyPrepared_NormalizedIRI(t *testing.T) {
 		{
 			name: "No IRI available",
 			args: args{
-				c: &owl.Class{},
+				c: &owl.Entity{},
 			},
 			want: "",
 		},
@@ -120,7 +120,7 @@ func TestOntologyPrepared_NormalizedIRI(t *testing.T) {
 				},
 			},
 			args: args{
-				c: &owl.Class{
+				&owl.Entity{
 					AbbreviatedIRI: "ex:Storage",
 				},
 			},
@@ -129,7 +129,7 @@ func TestOntologyPrepared_NormalizedIRI(t *testing.T) {
 		{
 			name: "Happy path: IRI available",
 			args: args{
-				c: &owl.Class{
+				&owl.Entity{
 					IRI: "http://example.com/cloud/",
 				},
 			},
@@ -147,6 +147,56 @@ func TestOntologyPrepared_NormalizedIRI(t *testing.T) {
 			}
 			if got := ont.NormalizedIRI(tt.args.c); got != tt.want {
 				t.Errorf("OntologyPrepared.NormalizedIRI() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestOntologyPrepared_AbbreviateIRI(t *testing.T) {
+	type fields struct {
+		Resources           map[string]*Resource
+		SubClasses          map[string]*owl.SubClassOf
+		AnnotationAssertion map[string]*AnnotationAssertion
+		Prefixes            map[string]*owl.Prefix
+		RootResourceName    string
+	}
+	type args struct {
+		iri string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   string
+	}{
+		{
+			name: "happy path",
+			fields: fields{
+				Prefixes: map[string]*owl.Prefix{
+					"ex": {
+						Name: "ex",
+						IRI:  "http://example.com/",
+					},
+				},
+			},
+			args: args{
+				iri: "http://example.com/Resource",
+			},
+			want: "ex:Resource",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ont := &OntologyPrepared{
+				Resources:           tt.fields.Resources,
+				SubClasses:          tt.fields.SubClasses,
+				AnnotationAssertion: tt.fields.AnnotationAssertion,
+				Prefixes:            tt.fields.Prefixes,
+				RootResourceName:    tt.fields.RootResourceName,
+			}
+			if got := ont.AbbreviateIRI(tt.args.iri); got != tt.want {
+				t.Errorf("OntologyPrepared.AbbreviateIRI() = %v, want %v", got, tt.want)
 			}
 		})
 	}

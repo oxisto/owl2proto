@@ -7,7 +7,7 @@ import (
 )
 
 // NormalizedIRI returns the normalized (abbreviated) IRI
-func (ont *OntologyPrepared) NormalizedIRI(c *owl.Class) string {
+func (ont *OntologyPrepared) NormalizedIRI(c *owl.Entity) string {
 	if c.IRI != "" {
 		return c.IRI
 	} else if c.AbbreviatedIRI != "" {
@@ -31,4 +31,17 @@ func (ont *OntologyPrepared) normalizeAbbreviatedIRI(iri string) string {
 	}
 
 	return ""
+}
+
+// AbbreviateIRI returns an abbreviated IRI, e.g., "ex:Storage" -> "http://example.com/cloud/Storage" if a matching
+// prefix is found. Otherwise, the long version is returned
+func (ont *OntologyPrepared) AbbreviateIRI(iri string) string {
+	for short, prefix := range ont.Prefixes {
+		_, name, found := strings.Cut(iri, prefix.IRI)
+		if found {
+			return short + ":" + name
+		}
+	}
+
+	return iri
 }

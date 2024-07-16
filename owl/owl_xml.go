@@ -34,24 +34,25 @@ type AnnotationProperty struct {
 	AbbreviatedIRI string `xml:"abbreviatedIRI,attr"`
 }
 
-type Class struct {
+type Entity struct {
 	IRI            string `xml:"IRI,attr"`
 	AbbreviatedIRI string `xml:"abbreviatedIRI,attr"`
+}
+
+type Class struct {
+	Entity
 }
 
 type ObjectProperty struct {
-	AbbreviatedIRI string `xml:"abbreviatedIRI,attr"`
-	IRI            string `xml:"IRI,attr"`
+	Entity
 }
 
 type DataProperty struct {
-	AbbreviatedIRI string `xml:"abbreviatedIRI,attr"`
-	IRI            string `xml:"IRI,attr"`
+	Entity
 }
 
 type NamedIndividual struct {
-	AbbreviatedIRI string `xml:"abbreviatedIRI,attr"`
-	IRI            string `xml:"IRI,attr"`
+	Entity
 }
 
 type SubClassOf struct {

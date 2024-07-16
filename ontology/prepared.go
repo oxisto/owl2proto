@@ -56,7 +56,13 @@ func (po *OntologyPrepared) FindAllDataProperties(key string) []*Relationship {
 		parent        string
 	)
 
-	relationships = append(relationships, po.Resources[key].Relationship...)
+	// "owl.Thing" is the root of the ontology and is not needed for the protobuf files. We do not have it in the prepared Ontology, so we have to skip, if we come to "owl.Thing".
+	res, ok := po.Resources[key]
+	if !ok {
+		return nil
+	}
+
+	relationships = append(relationships, res.Relationship...)
 
 	parent = po.Resources[key].Parent
 	if parent == "" || key == po.RootResourceName {

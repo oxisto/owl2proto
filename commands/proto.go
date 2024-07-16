@@ -155,7 +155,12 @@ func (cmd *GenerateProtoCmd) findAllObjectProperties(rmk string) []*ontology.Obj
 		parent               string
 	)
 
-	objectRelationsships = append(objectRelationsships, cmd.preparedOntology.Resources[rmk].ObjectRelationship...)
+	// "owl.Thing" is the root of the ontology and is not needed for the protobuf files. We do not have it in the prepared Ontology, so we have to skip, if we come to "owl.Thing".
+	res, ok := cmd.preparedOntology.Resources[rmk]
+	if !ok {
+		return nil
+	}
+	objectRelationsships = append(objectRelationsships, res.ObjectRelationship...)
 
 	parent = cmd.preparedOntology.Resources[rmk].Parent
 	if parent == "" || rmk == cmd.preparedOntology.RootResourceName {
@@ -222,6 +227,10 @@ func (cmd *GenerateProtoCmd) addClassHierarchy(output, rmk string) string {
 // getResourceTypeList returns a list of all derived resources
 func (cmd *GenerateProtoCmd) getResourceTypeList(resource *ontology.Resource) []string {
 	var resource_types []string
+
+	if resource == nil {
+		return nil
+	}
 
 	if resource.Parent == "" {
 		return []string{resource.Name}

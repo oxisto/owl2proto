@@ -20,5 +20,4 @@
 # Go workspace file
 go.work
 owl2proto
-*.proto
 .DS_Store

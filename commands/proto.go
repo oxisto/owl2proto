@@ -186,6 +186,7 @@ func (cmd *GenerateProtoCmd) emitPropertyOptions(r *ontology.Relationship) strin
 	return optsOutput
 }
 
+// emitObjectPropertyOptions adds the property options IRI, parent and class IRI when full semantic mode is enabled.
 func (cmd *GenerateProtoCmd) emitObjectPropertyOptions(r *ontology.ObjectRelationship) string {
 	var (
 		opts       []string

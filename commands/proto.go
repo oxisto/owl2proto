@@ -137,6 +137,7 @@ extend google.protobuf.MessageOptions {
 	return output
 }
 
+// emitClassOptions adds the class options IRI and parent when full semantic mode is enabled, otherwise it adds only the resource type name.
 func (cmd *GenerateProtoCmd) emitClassOptions(iri string) string {
 	var (
 		output string

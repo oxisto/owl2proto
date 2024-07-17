@@ -99,6 +99,7 @@ func (cmd *GenerateProtoCmd) createProto(header string) string {
 	return output
 }
 
+// emitOptionsHeader includes all semantic ontology metadata as options when full semantic mode is enabled; otherwise, it adds a streamlined version of the ontology class hierarchy.
 func (cmd *GenerateProtoCmd) emitOptionsHeader() string {
 	var output string
 

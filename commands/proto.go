@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/lmittmann/tint"
 	"github.com/oxisto/owl2proto/internal/util"
@@ -15,9 +16,16 @@ type GenerateProtoCmd struct {
 	GenerateCmd
 	HeaderFile string
 	OutputPath string `optional:"" default:"api/ontology.proto"`
+
 	// DeterministicFieldNumbers is an option to enable deterministic field numbers based on a cryptographic hash. If
 	// disabled, ascending field numbers are used sorted by parent class and then name
 	DeterministicFieldNumbers bool `optional:"" default:"true"`
+
+	// FullSemanticMode determines whether all semantic meta-data is emitted as options (see owl/owl.proto), such as all
+	// IRIs, prefixes for the ontology, etc. If disabled, only a very condensed form of the class hierarchy is emitted
+	// as protobuf options.
+	FullSemanticMode bool `optional:"" default:"true"`
+
 	// counter for generating the field number if ascending order is chosen
 	i int
 }
@@ -32,11 +40,7 @@ func (cmd *GenerateProtoCmd) createProto(header string) string {
 	//Add header
 	output += "\n\n" + header
 
-	// Add EnumValueOptions
-	output += `
-extend google.protobuf.MessageOptions {
-	repeated string resource_type_names = 60000;
-}`
+	output += cmd.emitOptionsHeader()
 
 	// Sort preparedOntology.Resources map keys
 	resourceMapKeys := util.SortMapKeys(cmd.preparedOntology.Resources)
@@ -93,13 +97,124 @@ extend google.protobuf.MessageOptions {
 	}
 
 	return output
+}
 
+// emitOptionsHeader includes all semantic ontology metadata as options when full semantic mode is enabled; otherwise, it adds a streamlined version of the ontology class hierarchy.
+func (cmd *GenerateProtoCmd) emitOptionsHeader() string {
+	var output string
+
+	if cmd.FullSemanticMode {
+		// Add import
+		output += `
+import "owl/owl.proto";
+
+`
+		// Prepare prefix output
+		var prefixOutputs []string
+
+		for short, prefix := range cmd.preparedOntology.Prefixes {
+			prefixOutputs = append(prefixOutputs, `{
+	prefix: "`+short+`"
+	iri: "`+prefix.IRI+`"
+}`)
+		}
+
+		// Add ontology meta-data
+		output += `
+option (owl.meta) = {
+	prefixes: [` + strings.Join(prefixOutputs, ",") + `]};
+`
+
+	} else {
+		// Add EnumValueOptions
+		output += `
+extend google.protobuf.MessageOptions {
+	repeated string resource_type_names = 60000;
+}`
+
+	}
+
+	return output
+}
+
+// emitClassOptions adds the class options IRI and parent when full semantic mode is enabled, otherwise it adds only the resource type name.
+func (cmd *GenerateProtoCmd) emitClassOptions(iri string) string {
+	var (
+		output string
+		class  *ontology.Resource
+	)
+
+	class = cmd.preparedOntology.Resources[iri]
+
+	if cmd.FullSemanticMode {
+		output += fmt.Sprintf("\toption (owl.class).iri = \"%s\";\n", cmd.preparedOntology.AbbreviateIRI(iri))
+		for _, parentIri := range cmd.getParents(class) {
+			output += fmt.Sprintf("\toption (owl.class).parent = \"%s\";\n", cmd.preparedOntology.AbbreviateIRI(parentIri))
+		}
+	} else {
+		for _, typ := range cmd.getResourceTypeList(class) {
+			output += fmt.Sprintf("\toption (resource_type_names) = \"%s\";\n", typ)
+		}
+	}
+
+	return output
+}
+
+// emitPropertyOptions adds the property options IRI, parent and class IRI when full semantic mode is enabled.
+func (cmd *GenerateProtoCmd) emitPropertyOptions(r *ontology.Relationship) string {
+	var (
+		opts       []string
+		optsOutput string
+	)
+	// Make name and id mandatory
+	// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
+	if r.Value == "name" || r.Value == "id" {
+		opts = append(opts, "(buf.validate.field).required = true")
+	}
+
+	if cmd.FullSemanticMode {
+		opts = append(opts, fmt.Sprintf("(owl.property).iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.IRI)))
+		// TODO(oxisto): Emit all the real property parents
+		opts = append(opts, fmt.Sprintf("(owl.property).parent = \"%s\"", "owl:topDataProperty"))
+		opts = append(opts, fmt.Sprintf("(owl.property).class_iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.From)))
+	}
+
+	if len(opts) > 0 {
+		optsOutput = fmt.Sprintf(" [ %s ]", strings.Join(opts, ",\n\t"))
+	}
+
+	return optsOutput
+}
+
+// emitObjectPropertyOptions adds the property options IRI, parent and class IRI when full semantic mode is enabled.
+func (cmd *GenerateProtoCmd) emitObjectPropertyOptions(r *ontology.ObjectRelationship) string {
+	var (
+		opts       []string
+		optsOutput string
+	)
+
+	if cmd.FullSemanticMode {
+		opts = append(opts, fmt.Sprintf("(owl.property).iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.ObjectProperty)))
+		// TODO(oxisto): Emit all the real property parents
+		opts = append(opts, fmt.Sprintf("(owl.property).parent = \"%s\"", "owl:topObjectProperty"))
+		opts = append(opts, fmt.Sprintf("(owl.property).class_iri = \"%s\"", cmd.preparedOntology.AbbreviateIRI(r.From)))
+	}
+
+	if len(opts) > 0 {
+		optsOutput = fmt.Sprintf(" [ %s ]", strings.Join(opts, ",\n\t"))
+	}
+
+	return optsOutput
 }
 
 // addObjectProperties adds all object properties for the given resource to the output string
 // Object properties (e.g., "AccessRestriction access_restriction", "HttpEndpoint http_endpoint", "TransportEncryption transport_encryption")
 func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
-	var fieldNumber = 0
+	var (
+		fieldNumber = 0
+		optsOutput  string
+	)
+
 	// Get all data properties of the given resource (rmk) and the parent resources
 	objectProperties := cmd.findAllObjectProperties(rmk)
 
@@ -118,12 +233,14 @@ func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 		resourceTypeList = append(resourceTypeList, o.Name)
 		fieldNumber, cmd.i = util.GetFieldNumber(cmd.DeterministicFieldNumbers, cmd.i, resourceTypeList...)
 
+		optsOutput = cmd.emitObjectPropertyOptions(o)
+
 		if o.Name != "" && o.ObjectProperty != "" {
-			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.Class])
+			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.To])
 			if value != "" && typ != "" {
-				output += fmt.Sprintf("\n\t%s%s %s  = %d;", value, typ, util.ToSnakeCase(name), fieldNumber)
+				output += fmt.Sprintf("\n\t%s%s %s  = %d%s;", value, typ, util.ToSnakeCase(name), fieldNumber, optsOutput)
 			} else if typ != "" && name != "" {
-				output += fmt.Sprintf("\n\t%s %s = %d;", typ, util.ToSnakeCase(name), fieldNumber)
+				output += fmt.Sprintf("\n\t%s %s = %d%s;", typ, util.ToSnakeCase(name), fieldNumber, optsOutput)
 			}
 		}
 	}
@@ -151,8 +268,8 @@ func findAllLeafs(class string, preparedOntology *ontology.OntologyPrepared) []*
 // findAllObjectProperties adds all object properties for the given entity and the parents
 func (cmd *GenerateProtoCmd) findAllObjectProperties(iri string) []*ontology.ObjectRelationship {
 	var (
-		objectRelationsships []*ontology.ObjectRelationship
-		parent               string
+		objectRelationships []*ontology.ObjectRelationship
+		parent              string
 	)
 
 	res, ok := cmd.preparedOntology.Resources[iri]
@@ -161,16 +278,16 @@ func (cmd *GenerateProtoCmd) findAllObjectProperties(iri string) []*ontology.Obj
 		return nil
 	}
 
-	objectRelationsships = append(objectRelationsships, res.ObjectRelationship...)
+	objectRelationships = append(objectRelationships, res.ObjectRelationship...)
 
 	parent = cmd.preparedOntology.Resources[iri].Parent
 	if parent == "" || iri == cmd.preparedOntology.RootResourceName {
-		return objectRelationsships
+		return objectRelationships
 	} else {
-		objectRelationsships = append(objectRelationsships, cmd.findAllObjectProperties(parent)...)
+		objectRelationships = append(objectRelationships, cmd.findAllObjectProperties(parent)...)
 	}
 
-	return objectRelationsships
+	return objectRelationships
 }
 
 // addObjectProperties adds all data properties for the given resource to the output string
@@ -189,8 +306,10 @@ func (cmd *GenerateProtoCmd) addDataProperties(output, rmk string) string {
 	// Create output for the data properties
 	for _, r := range dataProperties {
 		if r.Typ != "" && r.Value != "" {
-			var opts string = ""
-			var fieldNumber = 0
+			var (
+				optsOutput  string
+				fieldNumber = 0
+			)
 
 			// Get list of resource types for given  object
 			resourceTypeList := cmd.getResourceTypeList(cmd.preparedOntology.Resources[rmk])
@@ -199,28 +318,22 @@ func (cmd *GenerateProtoCmd) addDataProperties(output, rmk string) string {
 			resourceTypeList = append(resourceTypeList, r.Value)
 			fieldNumber, cmd.i = util.GetFieldNumber(cmd.DeterministicFieldNumbers, cmd.i, resourceTypeList...)
 
-			// Make name and id mandatory
-			// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
-			if r.Value == "name" || r.Value == "id" {
-				opts = "[ (buf.validate.field).required = true ]"
-			}
+			optsOutput = cmd.emitPropertyOptions(r)
 
 			// Add data property comment if available
 			if r.Comment != "" {
 				output += fmt.Sprintf("\n\t// %s", r.Comment)
 			}
 
-			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), fieldNumber, opts)
+			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), fieldNumber, optsOutput)
 		}
 	}
 
 	return output
 }
 
-func (cmd *GenerateProtoCmd) addClassHierarchy(output, rmk string) string {
-	for _, typ := range cmd.getResourceTypeList(cmd.preparedOntology.Resources[rmk]) {
-		output += fmt.Sprintf("\toption (resource_type_names) = \"%s\";\n", typ)
-	}
+func (cmd *GenerateProtoCmd) addClassHierarchy(output, iri string) string {
+	output += cmd.emitClassOptions(iri)
 
 	return output
 }
@@ -241,6 +354,20 @@ func (cmd *GenerateProtoCmd) getResourceTypeList(resource *ontology.Resource) []
 	}
 
 	return resource_types
+}
+
+// getParents returns a list of all parent IRIs
+func (cmd *GenerateProtoCmd) getParents(resource *ontology.Resource) []string {
+	var iris []string
+
+	if resource.Parent == "" {
+		return []string{"owl:Thing"}
+	} else {
+		iris = append(iris, resource.Parent)
+		iris = append(iris, cmd.getParents(cmd.preparedOntology.Resources[resource.Parent])...)
+	}
+
+	return iris
 }
 
 func (cmd *GenerateProtoCmd) Run() (err error) {

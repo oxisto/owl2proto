@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package owl;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/oxisto/owl2proto/owl";
+
+message EntityEntry {
+  string iri = 1;
+  repeated string parent = 2;
+}
+
+message PropertyEntry {
+  string iri = 1;
+  repeated string parent = 2;
+  string class_iri = 3;
+}
+
+message PrefixEntry {
+  string prefix = 1;
+  string iri = 2;
+}
+
+message Meta {
+  repeated PrefixEntry prefixes = 1;
+}
+
+extend google.protobuf.MessageOptions {
+  optional EntityEntry class = 50000;
+}
+
+extend google.protobuf.FieldOptions {
+  optional PropertyEntry property = 50000;
+}
+
+extend google.protobuf.FileOptions {
+  optional Meta meta = 50000;
+}

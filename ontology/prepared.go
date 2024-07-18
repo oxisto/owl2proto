@@ -34,13 +34,15 @@ type Relationship struct {
 	Typ     string
 	Value   string
 	Comment string
+	From    string // IRI
 }
 
 type ObjectRelationship struct {
 	ObjectProperty     string
 	ObjectPropertyName string
-	Class              string // IRI
-	Name               string // Name of Class IRI
+	From               string // IRI
+	To                 string // IRI
+	Name               string // Name of To IRI
 	Comment            string // Comment of the property
 }
 
@@ -90,8 +92,11 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		preparedOntology.Prefixes[p.Name] = p
 	}
 
+	// Make sure our root resource name is definitely not an abbreviated IRI anymore
+	preparedOntology.RootResourceName = preparedOntology.normalizeAbbreviatedIRI(preparedOntology.RootResourceName)
+
 	for _, c := range src.Declarations {
-		iri := preparedOntology.NormalizedIRI(&c.Class)
+		iri := preparedOntology.NormalizedIRI(&c.Class.Entity)
 
 		// Prepare ontology classes
 		// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
@@ -157,8 +162,8 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 	//    (e.g., "http://graph.clouditor.io/classes/resourceId")
 	for _, sc := range src.SubClasses {
 		if len(sc.Class) == 2 {
-			iri := preparedOntology.NormalizedIRI(&sc.Class[0])
-			parentIri := preparedOntology.NormalizedIRI(&sc.Class[1])
+			iri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
+			parentIri := preparedOntology.NormalizedIRI(&sc.Class[1].Entity)
 
 			// "owl#Thing" is the root of the ontology and is not needed for the protobuf files
 			if parentIri != "http://www.w3.org/2002/07/owl#Thing" {
@@ -185,7 +190,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if sc.DataSomeValuesFrom != nil {
 			// Add data values, e.g. "enabled xsd:bool" ("enabled" is a data property and "xsd:bool" is a datatype) or
 			for _, v := range sc.DataSomeValuesFrom {
-				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0])
+				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
 				var (
 					comment string
 				)
@@ -198,9 +203,10 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 
 				// Get DataProperty name
 				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
-					IRI:     v.DataProperty.IRI,
+					IRI:     preparedOntology.NormalizedIRI(&v.DataProperty.Entity),
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
+					From:    fromIri,
 					Comment: comment,
 				})
 
@@ -209,26 +215,22 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 			// Add data values, e.g. "interval xsd:java.time.Duration" ("interval" is a data property and "xsd:java.time.Duration" is Literal/string)
 			for _, v := range sc.DataHasValue {
 				var (
-					comment    string
-					identifier string
+					comment string
 				)
 
-				// Get IRI or abbreviatedIRI from DataProperty
-				if v.DataProperty.AbbreviatedIRI != "" {
-					identifier = v.DataProperty.AbbreviatedIRI
-				} else if v.DataProperty.IRI != "" {
-					identifier = v.DataProperty.IRI
-				}
+				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
+				relationshipIri := preparedOntology.NormalizedIRI(&v.DataProperty.Entity)
 
 				// Check if comment is available
-				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+				if val, ok := preparedOntology.AnnotationAssertion[relationshipIri]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &Relationship{
-					IRI:     identifier,
+				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &Relationship{
+					IRI:     relationshipIri,
 					Typ:     util.GetProtoType(v.Literal),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
+					From:    fromIri,
 					Comment: comment,
 				})
 
@@ -236,57 +238,39 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
-				classIri := preparedOntology.NormalizedIRI(&v.Class)
-				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0])
+				toIri := preparedOntology.NormalizedIRI(&v.Class.Entity)
+				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
+				relationshipIri := preparedOntology.NormalizedIRI(&v.ObjectProperty.Entity)
 
-				if v.ObjectProperty.IRI != "" {
-					preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
-						ObjectProperty:     v.ObjectProperty.IRI,
-						ObjectPropertyName: preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
-						Class:              classIri,
-						Name:               preparedOntology.Resources[classIri].Name,
-					})
-				} else if v.ObjectProperty.AbbreviatedIRI != "" {
-					preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
-						ObjectProperty:     v.ObjectProperty.AbbreviatedIRI,
-						ObjectPropertyName: preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
-						Class:              classIri,
-						Name:               preparedOntology.Resources[classIri].Name,
-					})
-				}
+				preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
+					From:               fromIri,
+					ObjectProperty:     relationshipIri,
+					ObjectPropertyName: preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
+					To:                 toIri,
+					Name:               preparedOntology.Resources[toIri].Name,
+				})
 			}
 		} else if sc.ObjectHasValue != nil {
 			for _, v := range sc.ObjectHasValue {
 				// Add object value, e.g., "scope resourceId"
 				var (
-					comment         string
-					identifier      string
-					namedIndividual string
+					comment string
 				)
 
-				// Get IRI or abbreviatedIRI from ObjectProperty
-				if v.ObjectProperty.AbbreviatedIRI != "" {
-					identifier = v.ObjectProperty.AbbreviatedIRI
-				} else if v.ObjectProperty.IRI != "" {
-					identifier = v.ObjectProperty.IRI
-				}
-
-				// Get IRI or abbreviatedIRI from NamedIndividual
-				if v.NamedIndividual.AbbreviatedIRI != "" {
-					namedIndividual = v.NamedIndividual.AbbreviatedIRI
-				} else if v.NamedIndividual.IRI != "" {
-					namedIndividual = v.NamedIndividual.IRI
-				}
+				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
+				relationshipIri := preparedOntology.NormalizedIRI(&v.ObjectProperty.Entity)
+				typeIri := preparedOntology.NormalizedIRI(&v.NamedIndividual.Entity)
 
 				// Check if comment is available
-				if val, ok := preparedOntology.AnnotationAssertion[identifier]; ok {
+				if val, ok := preparedOntology.AnnotationAssertion[relationshipIri]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				preparedOntology.Resources[sc.Class[0].IRI].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &Relationship{
-					IRI:     identifier,
-					Typ:     util.GetProtoType(namedIndividual),
+				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
+					IRI:     relationshipIri,
+					Typ:     util.GetProtoType(typeIri),
 					Value:   preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
+					From:    fromIri,
 					Comment: comment,
 				})
 			}

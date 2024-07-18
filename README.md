@@ -14,4 +14,4 @@ go build ./cmd/owl2proto/owl2proto.go
 
 ## Generate Go Structs
 
-Finally, go structs for the example can be created using `buf generate`.
+Finally, go structs for the example can be created using `buf generate && buf format -w`.

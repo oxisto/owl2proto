@@ -6,7 +6,7 @@ import (
 	"github.com/oxisto/owl2proto/owl"
 )
 
-func TestOntologyPrepared_normalizeIRI(t *testing.T) {
+func TestOntologyPrepared_normalizeAbbreviatedIRI(t *testing.T) {
 	type fields struct {
 		Resources           map[string]*Resource
 		SubClasses          map[string]*owl.SubClassOf
@@ -79,7 +79,7 @@ func TestOntologyPrepared_normalizeIRI(t *testing.T) {
 				RootResourceName:    tt.fields.RootResourceName,
 			}
 			if got := ont.normalizeAbbreviatedIRI(tt.args.iri); got != tt.want {
-				t.Errorf("OntologyPrepared.normalizeIRI() = %v, want %v", got, tt.want)
+				t.Errorf("OntologyPrepared.normalizeAbbreviatedIRI() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -145,7 +145,7 @@ func TestOntologyPrepared_NormalizedIRI(t *testing.T) {
 				Prefixes:            tt.fields.Prefixes,
 				RootResourceName:    tt.fields.RootResourceName,
 			}
-			if got := ont.NormalizedIRI(tt.args.c); got != tt.want {
+			if got := NormalizedIRI(ont, tt.args.c); got != tt.want {
 				t.Errorf("OntologyPrepared.NormalizedIRI() = %v, want %v", got, tt.want)
 			}
 		})

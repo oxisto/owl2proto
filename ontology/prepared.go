@@ -96,7 +96,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 	preparedOntology.RootResourceName = preparedOntology.normalizeAbbreviatedIRI(preparedOntology.RootResourceName)
 
 	for _, c := range src.Declarations {
-		iri := preparedOntology.NormalizedIRI(&c.Class.Entity)
+		iri := NormalizedIRI(preparedOntology, &c.Class.Entity)
 
 		// Prepare ontology classes
 		// We set the name extracted from the IRI and the IRI. If a name label exists we will change the name later.
@@ -123,17 +123,20 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 
 	// Prepare name and comment
 	for _, aa := range src.AnnotationAssertion {
+		// Prepare name from "rdfs:label"
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
-			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-				preparedOntology.Resources[aa.IRI].Name = util.CleanString(aa.Literal)
+			if _, ok := preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)]; ok {
+				preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)].Name = util.CleanString(aa.Literal)
 			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
 				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
 			}
-		} else if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" {
-			if _, ok := preparedOntology.Resources[aa.IRI]; ok {
-				c := preparedOntology.Resources[aa.IRI].Comment
+		}
+
+		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" { // Prepare comment from "rdfs:comment"
+			if _, ok := preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)]; ok {
+				c := preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)].Comment
 				c = append(c, aa.Literal)
-				preparedOntology.Resources[aa.IRI].Comment = c
+				preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)].Comment = c
 			} else if _, ok := preparedOntology.AnnotationAssertion[aa.IRI]; ok {
 				c := preparedOntology.AnnotationAssertion[aa.IRI].Comment
 				c = append(c, aa.Literal)
@@ -162,8 +165,8 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 	//    (e.g., "http://graph.clouditor.io/classes/resourceId")
 	for _, sc := range src.SubClasses {
 		if len(sc.Class) == 2 {
-			iri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
-			parentIri := preparedOntology.NormalizedIRI(&sc.Class[1].Entity)
+			iri := NormalizedIRI(preparedOntology, &sc.Class[0].Entity)
+			parentIri := NormalizedIRI(preparedOntology, &sc.Class[1].Entity)
 
 			// "owl#Thing" is the root of the ontology and is not needed for the protobuf files
 			if parentIri != "http://www.w3.org/2002/07/owl#Thing" {
@@ -190,7 +193,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if sc.DataSomeValuesFrom != nil {
 			// Add data values, e.g. "enabled xsd:bool" ("enabled" is a data property and "xsd:bool" is a datatype) or
 			for _, v := range sc.DataSomeValuesFrom {
-				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
+				fromIri := NormalizedIRI(preparedOntology, &sc.Class[0].Entity)
 				var (
 					comment string
 				)
@@ -203,7 +206,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 
 				// Get DataProperty name
 				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
-					IRI:     preparedOntology.NormalizedIRI(&v.DataProperty.Entity),
+					IRI:     NormalizedIRI(preparedOntology, &v.DataProperty.Entity),
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
 					From:    fromIri,
@@ -218,15 +221,15 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					comment string
 				)
 
-				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
-				relationshipIri := preparedOntology.NormalizedIRI(&v.DataProperty.Entity)
+				fromIri := NormalizedIRI(preparedOntology, &sc.Class[0].Entity)
+				relationshipIri := NormalizedIRI(preparedOntology, &v.DataProperty.Entity)
 
 				// Check if comment is available
 				if val, ok := preparedOntology.AnnotationAssertion[relationshipIri]; ok {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[preparedOntology.NormalizedIRI(&sc.Class[0].Entity)].Relationship, &Relationship{
+				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[NormalizedIRI(preparedOntology, &sc.Class[0].Entity)].Relationship, &Relationship{
 					IRI:     relationshipIri,
 					Typ:     util.GetProtoType(v.Literal),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
@@ -238,9 +241,9 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if sc.ObjectSomeValuesFrom != nil {
 			// Add object values, e.g., "offers ResourceLogging"
 			for _, v := range sc.ObjectSomeValuesFrom {
-				toIri := preparedOntology.NormalizedIRI(&v.Class.Entity)
-				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
-				relationshipIri := preparedOntology.NormalizedIRI(&v.ObjectProperty.Entity)
+				toIri := NormalizedIRI(preparedOntology, &v.Class.Entity)
+				fromIri := NormalizedIRI(preparedOntology, &sc.Class[0].Entity)
+				relationshipIri := NormalizedIRI(preparedOntology, &v.ObjectProperty.Entity)
 
 				preparedOntology.Resources[fromIri].ObjectRelationship = append(preparedOntology.Resources[fromIri].ObjectRelationship, &ObjectRelationship{
 					From:               fromIri,
@@ -257,9 +260,9 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					comment string
 				)
 
-				fromIri := preparedOntology.NormalizedIRI(&sc.Class[0].Entity)
-				relationshipIri := preparedOntology.NormalizedIRI(&v.ObjectProperty.Entity)
-				typeIri := preparedOntology.NormalizedIRI(&v.NamedIndividual.Entity)
+				fromIri := NormalizedIRI(preparedOntology, &sc.Class[0].Entity)
+				relationshipIri := NormalizedIRI(preparedOntology, &v.ObjectProperty.Entity)
+				typeIri := NormalizedIRI(preparedOntology, &v.NamedIndividual.Entity)
 
 				// Check if comment is available
 				if val, ok := preparedOntology.AnnotationAssertion[relationshipIri]; ok {

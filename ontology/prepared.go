@@ -226,7 +226,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[sc.Class[0].IRI].Relationship, &Relationship{
+				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[preparedOntology.NormalizedIRI(&sc.Class[0].Entity)].Relationship, &Relationship{
 					IRI:     relationshipIri,
 					Typ:     util.GetProtoType(v.Literal),
 					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),

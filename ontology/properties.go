@@ -15,7 +15,8 @@ func isResourceAboveX(resource *Resource, preparedOntology *OntologyPrepared, ro
 		return false
 	}
 
-	if GetNameFromIri(resource.Parent) == rootResourceName {
+	// The parent field can either be an IRI or have a prefix; retrieve the parent name from the parent field.
+	if GetParentName(resource.Parent) == rootResourceName {
 		return true
 	}
 
@@ -24,6 +25,21 @@ func isResourceAboveX(resource *Resource, preparedOntology *OntologyPrepared, ro
 	}
 
 	return false
+}
+
+// GetParentName returns the name of the parent resource, either if it is a IRI or a prefix
+func GetParentName(parent string) string {
+	if parent == "" {
+		return ""
+	}
+
+	// The parent field can either be an IRI or have a prefix; retrieve the parent name from the parent field.
+	name := GetNameFromIri(parent)
+	if name == "" {
+		name = GetDataPropertyAbbreviatedIriName(parent)
+	}
+
+	return name
 }
 
 // GetNameFromIri gets the last part of the IRI

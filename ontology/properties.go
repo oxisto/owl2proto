@@ -36,7 +36,7 @@ func GetParentName(parent string) string {
 	// The parent field can either be an IRI or have a prefix; retrieve the parent name from the parent field.
 	name := GetNameFromIri(parent)
 	if name == "" {
-		name = GetDataPropertyAbbreviatedIriName(parent)
+		name = GetNameWithoutPrefix(parent)
 	}
 
 	return name
@@ -52,8 +52,8 @@ func GetNameFromIri(s string) string {
 	return split[len(split)-1]
 }
 
-// GetDataPropertyAbbreviatedIriName returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
-func GetDataPropertyAbbreviatedIriName(s string) string {
+// GetNameWithoutPrefix returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
+func GetNameWithoutPrefix(s string) string {
 	if s == "" {
 		return ""
 	}

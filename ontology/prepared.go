@@ -116,7 +116,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if c.DataProperty.AbbreviatedIRI != "" {
 			preparedOntology.AnnotationAssertion[c.DataProperty.AbbreviatedIRI] = &AnnotationAssertion{
 				IRI:  c.DataProperty.AbbreviatedIRI,
-				Name: util.CleanString(GetDataPropertyAbbreviatedIriName(c.DataProperty.AbbreviatedIRI)),
+				Name: util.CleanString(GetNameWithoutPrefix(c.DataProperty.AbbreviatedIRI)),
 			}
 		}
 	}
@@ -290,7 +290,7 @@ func (ont *OntologyPrepared) GetDataPropertyIRIName(prop owl.DataProperty) strin
 		if val, ok := ont.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
 			return val.Name
 		} else {
-			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+			return GetNameWithoutPrefix(prop.AbbreviatedIRI)
 		}
 	} else if prop.IRI != "" {
 		if val, ok := ont.Resources[prop.IRI]; ok {
@@ -311,7 +311,7 @@ func (ont *OntologyPrepared) GetObjectPropertyIRIName(prop owl.ObjectProperty) s
 		if val, ok := ont.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
 			return val.Name
 		} else {
-			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+			return GetNameWithoutPrefix(prop.AbbreviatedIRI)
 		}
 	} else if prop.IRI != "" {
 		if val, ok := ont.Resources[prop.IRI]; ok {

@@ -15,7 +15,7 @@ func isResourceAboveX(resource *Resource, preparedOntology *OntologyPrepared, ro
 		return false
 	}
 
-	if resource.Parent == rootResourceName {
+	if GetNameFromIri(resource.Parent) == rootResourceName {
 		return true
 	}
 

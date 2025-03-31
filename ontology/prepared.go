@@ -170,8 +170,8 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 			}
 		}
 
-		// Prepare type for named individuals from "rdf:type"
-		if aa.AnnotationProperty.AbbreviatedIRI == "rdf:type" {
+		// Prepare type for named individuals from "rdfs:seeAlso"
+		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:seeAlso" {
 			if _, ok := preparedOntology.NamedIndividual[NormalizedIRI(preparedOntology, aa)]; ok {
 				preparedOntology.NamedIndividual[NormalizedIRI(preparedOntology, aa)].Type = aa.Literal
 			}

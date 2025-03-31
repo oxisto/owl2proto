@@ -12,10 +12,6 @@ option go_package = "github.com/oxisto/owl2proto/example";
 option (owl.meta) = {
   prefixes: [
     {
-      prefix: "xml"
-      iri: "http://www.w3.org/XML/1998/namespace"
-    },
-    {
       prefix: "xsd"
       iri: "http://www.w3.org/2001/XMLSchema#"
     },
@@ -34,6 +30,10 @@ option (owl.meta) = {
     {
       prefix: "rdf"
       iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    },
+    {
+      prefix: "xml"
+      iri: "http://www.w3.org/XML/1998/namespace"
     }
   ]
 };

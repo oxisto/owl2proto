@@ -31,7 +31,7 @@ func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:String", "xsd:string", "http://graph.clouditor.io/classes/resourceId":
+	case "xsd:String", "xsd:string", "string":
 		return "string"
 	case "xsd:listString", "xsd:java.util.ArrayList<String>":
 		return "repeated string"

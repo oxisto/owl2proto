@@ -7,7 +7,7 @@ import (
 )
 
 // NormalizedIRI returns the normalized (abbreviated) IRI
-func NormalizedIRI[T *owl.Entity | owl.AnnotationAssertion](ont *OntologyPrepared, c T) string {
+func NormalizedIRI[T *owl.Entity | owl.AnnotationAssertion | owl.DataProperty](ont *OntologyPrepared, c T) string {
 	switch v := any(c).(type) {
 	case *owl.Entity:
 		if v.IRI != "" {
@@ -16,6 +16,12 @@ func NormalizedIRI[T *owl.Entity | owl.AnnotationAssertion](ont *OntologyPrepare
 			return ont.normalizeAbbreviatedIRI(v.AbbreviatedIRI)
 		}
 	case owl.AnnotationAssertion:
+		if v.IRI != "" {
+			return v.IRI
+		} else if v.AbbreviatedIRI != "" {
+			return ont.normalizeAbbreviatedIRI(v.AbbreviatedIRI)
+		}
+	case owl.DataProperty:
 		if v.IRI != "" {
 			return v.IRI
 		} else if v.AbbreviatedIRI != "" {

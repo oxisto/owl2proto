@@ -60,7 +60,7 @@ func (cmd *GenerateProtoCmd) createProto(header string) string {
 			output += fmt.Sprintf("\n// %s is an abstract class in our ontology, it cannot be instantiated but acts as an \"interface\".", class.Name)
 		}
 
-		// Add comment
+		// Add field comment
 		for _, w := range class.Comment {
 			output += "\n// " + w
 		}
@@ -168,7 +168,7 @@ func (cmd *GenerateProtoCmd) emitPropertyOptions(r *ontology.Relationship) strin
 	)
 	// Make name and id mandatory
 	// TODO(oxisto): somehow extract this out of the ontology file itself which fields have constraints
-	if r.Value == "name" || r.Value == "id" {
+	if r.Name == "name" || r.Name == "id" {
 		opts = append(opts, "(buf.validate.field).required = true")
 	}
 
@@ -300,12 +300,12 @@ func (cmd *GenerateProtoCmd) addDataProperties(output, rmk string) string {
 	sort.Slice(dataProperties, func(i, j int) bool {
 		a := dataProperties[i]
 		b := dataProperties[j]
-		return a.Value < b.Value
+		return a.Name < b.Name
 	})
 
 	// Create output for the data properties
 	for _, r := range dataProperties {
-		if r.Typ != "" && r.Value != "" {
+		if r.Typ != "" && r.Name != "" {
 			var (
 				optsOutput  string
 				fieldNumber = 0
@@ -315,7 +315,7 @@ func (cmd *GenerateProtoCmd) addDataProperties(output, rmk string) string {
 			resourceTypeList := cmd.getResourceTypeList(cmd.preparedOntology.Resources[rmk])
 
 			// Get field number
-			resourceTypeList = append(resourceTypeList, r.Value)
+			resourceTypeList = append(resourceTypeList, r.Name)
 			fieldNumber, cmd.i = util.GetFieldNumber(cmd.DeterministicFieldNumbers, cmd.i, resourceTypeList...)
 
 			optsOutput = cmd.emitPropertyOptions(r)
@@ -325,7 +325,7 @@ func (cmd *GenerateProtoCmd) addDataProperties(output, rmk string) string {
 				output += fmt.Sprintf("\n\t// %s", r.Comment)
 			}
 
-			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Value), fieldNumber, optsOutput)
+			output += fmt.Sprintf("\n\t%s %s = %d%s;", r.Typ, util.ToSnakeCase(r.Name), fieldNumber, optsOutput)
 		}
 	}
 

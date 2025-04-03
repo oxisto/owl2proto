@@ -1,7 +1,6 @@
 package ontology
 
 import (
-	"fmt"
 	"log/slog"
 	"strings"
 
@@ -129,6 +128,19 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 			}
 		}
 
+		// Prepare ontology object properties
+		if c.ObjectProperty.IRI != "" {
+			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.ObjectProperty)] = &AnnotationAssertion{
+				IRI:  c.ObjectProperty.IRI,
+				Name: util.CleanString(GetNameFromIri(c.ObjectProperty.IRI)),
+			}
+		} else if c.ObjectProperty.AbbreviatedIRI != "" {
+			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.ObjectProperty)] = &AnnotationAssertion{
+				IRI:  c.ObjectProperty.AbbreviatedIRI,
+				Name: util.CleanString(GetDataPropertyAbbreviatedIriName(c.ObjectProperty.AbbreviatedIRI)),
+			}
+		}
+
 		// Prepare ontology named individuals
 		if c.NamedIndividual.IRI != "" {
 			preparedOntology.NamedIndividual[c.NamedIndividual.IRI] = &NamedIndividual{
@@ -234,7 +246,6 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 					comment = strings.Join(val.Comment[:], "\n\t ")
 				}
 
-				fmt.Println(NormalizedIRI(preparedOntology, &v.DataProperty.Entity))
 				// Get DataProperty name
 				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
 					IRI:     NormalizedIRI(preparedOntology, &v.DataProperty.Entity),

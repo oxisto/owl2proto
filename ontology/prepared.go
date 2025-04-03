@@ -155,7 +155,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		}
 	}
 
-	// Prepare name and comment
+	// Prepare name, comment and types from rdfs labels
 	for _, aa := range src.AnnotationAssertion {
 		// Prepare name from "rdfs:label"
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
@@ -183,7 +183,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 			}
 		}
 
-		// Prepare type for named individuals from "rdfs:seeAlso"
+		// Prepare data type for named individuals from "rdfs:seeAlso"
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:seeAlso" {
 			if _, ok := preparedOntology.NamedIndividual[NormalizedIRI(preparedOntology, aa)]; ok {
 				preparedOntology.NamedIndividual[NormalizedIRI(preparedOntology, aa)].Type = aa.Literal

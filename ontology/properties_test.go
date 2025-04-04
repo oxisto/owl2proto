@@ -28,7 +28,7 @@ func TestGetDataPropertyAbbreviatedIriName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetDataPropertyAbbreviatedIriName(tt.args.s); got != tt.want {
+			if got := GetDataPropertyNameWithoutPrefix(tt.args.s); got != tt.want {
 				t.Errorf("GetDataPropertyAbbreviatedIriName() = %v, want %v", got, tt.want)
 			}
 		})

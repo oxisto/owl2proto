@@ -124,7 +124,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if c.DataProperty.AbbreviatedIRI != "" {
 			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.DataProperty)] = &AnnotationAssertion{
 				IRI:  c.DataProperty.AbbreviatedIRI,
-				Name: util.CleanString(GetDataPropertyAbbreviatedIriName(c.DataProperty.AbbreviatedIRI)),
+				Name: util.CleanString(GetDataPropertyNameWithoutPrefix(c.DataProperty.AbbreviatedIRI)),
 			}
 		}
 
@@ -137,7 +137,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if c.ObjectProperty.AbbreviatedIRI != "" {
 			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.ObjectProperty)] = &AnnotationAssertion{
 				IRI:  c.ObjectProperty.AbbreviatedIRI,
-				Name: util.CleanString(GetDataPropertyAbbreviatedIriName(c.ObjectProperty.AbbreviatedIRI)),
+				Name: util.CleanString(GetDataPropertyNameWithoutPrefix(c.ObjectProperty.AbbreviatedIRI)),
 			}
 		}
 
@@ -150,7 +150,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		} else if c.NamedIndividual.AbbreviatedIRI != "" {
 			preparedOntology.NamedIndividual[c.NamedIndividual.AbbreviatedIRI] = &NamedIndividual{
 				IRI:  c.NamedIndividual.AbbreviatedIRI,
-				Name: util.CleanString(GetDataPropertyAbbreviatedIriName(c.NamedIndividual.AbbreviatedIRI)),
+				Name: util.CleanString(GetDataPropertyNameWithoutPrefix(c.NamedIndividual.AbbreviatedIRI)),
 			}
 		}
 	}
@@ -332,7 +332,7 @@ func (ont *OntologyPrepared) GetDataPropertyIRIName(prop owl.DataProperty) strin
 		if val, ok := ont.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
 			return val.Name
 		} else {
-			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+			return GetDataPropertyNameWithoutPrefix(prop.AbbreviatedIRI)
 		}
 	} else if prop.IRI != "" {
 		if val, ok := ont.Resources[prop.IRI]; ok {
@@ -353,7 +353,7 @@ func (ont *OntologyPrepared) GetObjectPropertyIRIName(prop owl.ObjectProperty) s
 		if val, ok := ont.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
 			return val.Name
 		} else {
-			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+			return GetDataPropertyNameWithoutPrefix(prop.AbbreviatedIRI)
 		}
 	} else if prop.IRI != "" {
 		if val, ok := ont.Resources[prop.IRI]; ok {

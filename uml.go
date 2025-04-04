@@ -54,7 +54,7 @@ func addDataProperties(output, iri string, po *ontology.OntologyPrepared) string
 	props := po.Resources[iri].Relationship
 
 	for _, prop := range props {
-		output += fmt.Sprintf("\t%s\n", prop.Value)
+		output += fmt.Sprintf("\t%s\n", prop.Name)
 	}
 
 	return output

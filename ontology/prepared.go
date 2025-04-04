@@ -13,6 +13,7 @@ type OntologyPrepared struct {
 	Resources           map[string]*Resource
 	SubClasses          map[string]*owl.SubClassOf
 	AnnotationAssertion map[string]*AnnotationAssertion
+	NamedIndividual     map[string]*NamedIndividual
 
 	Prefixes map[string]*owl.Prefix
 
@@ -31,8 +32,8 @@ type Resource struct {
 
 type Relationship struct {
 	IRI     string
-	Typ     string
-	Value   string
+	Typ     string // Data type
+	Name    string // Name of the IRI
 	Comment string
 	From    string // IRI
 }
@@ -50,6 +51,12 @@ type AnnotationAssertion struct {
 	IRI     string
 	Name    string
 	Comment []string
+}
+
+type NamedIndividual struct {
+	IRI  string
+	Name string
+	Type string
 }
 
 // FindAllDataProperties adds all object properties for the given entity and the parents
@@ -84,6 +91,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 		Resources:           map[string]*Resource{},
 		SubClasses:          map[string]*owl.SubClassOf{},
 		AnnotationAssertion: map[string]*AnnotationAssertion{},
+		NamedIndividual:     map[string]*NamedIndividual{},
 		RootResourceName:    rootIRI,
 	}
 
@@ -109,29 +117,56 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 
 		// Prepare ontology data properties
 		if c.DataProperty.IRI != "" {
-			preparedOntology.AnnotationAssertion[c.DataProperty.IRI] = &AnnotationAssertion{
+			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.DataProperty)] = &AnnotationAssertion{
 				IRI:  c.DataProperty.IRI,
 				Name: util.CleanString(GetNameFromIri(c.DataProperty.IRI)),
 			}
 		} else if c.DataProperty.AbbreviatedIRI != "" {
-			preparedOntology.AnnotationAssertion[c.DataProperty.AbbreviatedIRI] = &AnnotationAssertion{
+			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.DataProperty)] = &AnnotationAssertion{
 				IRI:  c.DataProperty.AbbreviatedIRI,
-				Name: util.CleanString(GetDataPropertyAbbreviatedIriName(c.DataProperty.AbbreviatedIRI)),
+				Name: util.CleanString(GetDataPropertyNameWithoutPrefix(c.DataProperty.AbbreviatedIRI)),
+			}
+		}
+
+		// Prepare ontology object properties
+		if c.ObjectProperty.IRI != "" {
+			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.ObjectProperty)] = &AnnotationAssertion{
+				IRI:  c.ObjectProperty.IRI,
+				Name: util.CleanString(GetNameFromIri(c.ObjectProperty.IRI)),
+			}
+		} else if c.ObjectProperty.AbbreviatedIRI != "" {
+			preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, c.ObjectProperty)] = &AnnotationAssertion{
+				IRI:  c.ObjectProperty.AbbreviatedIRI,
+				Name: util.CleanString(GetDataPropertyNameWithoutPrefix(c.ObjectProperty.AbbreviatedIRI)),
+			}
+		}
+
+		// Prepare ontology named individuals
+		if c.NamedIndividual.IRI != "" {
+			preparedOntology.NamedIndividual[c.NamedIndividual.IRI] = &NamedIndividual{
+				IRI:  c.NamedIndividual.IRI,
+				Name: util.CleanString(GetNameFromIri(c.NamedIndividual.IRI)),
+			}
+		} else if c.NamedIndividual.AbbreviatedIRI != "" {
+			preparedOntology.NamedIndividual[c.NamedIndividual.AbbreviatedIRI] = &NamedIndividual{
+				IRI:  c.NamedIndividual.AbbreviatedIRI,
+				Name: util.CleanString(GetDataPropertyNameWithoutPrefix(c.NamedIndividual.AbbreviatedIRI)),
 			}
 		}
 	}
 
-	// Prepare name and comment
+	// Prepare name, comment and types from rdfs labels
 	for _, aa := range src.AnnotationAssertion {
 		// Prepare name from "rdfs:label"
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:label" {
 			if _, ok := preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)]; ok {
 				preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)].Name = util.CleanString(aa.Literal)
-			} else if _, ok := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI]; ok {
-				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Name = util.CleanString(aa.Literal)
+			} else if _, ok := preparedOntology.AnnotationAssertion[aa.IRI]; ok {
+				preparedOntology.AnnotationAssertion[aa.IRI].Name = util.CleanString(aa.Literal)
 			}
 		}
 
+		// Prepare comment from "rdfs:comment"
 		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:comment" { // Prepare comment from "rdfs:comment"
 			if _, ok := preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)]; ok {
 				c := preparedOntology.Resources[NormalizedIRI(preparedOntology, aa)].Comment
@@ -145,6 +180,13 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 				c := preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment
 				c = append(c, aa.Literal)
 				preparedOntology.AnnotationAssertion[aa.AbbreviatedIRI].Comment = c
+			}
+		}
+
+		// Prepare data type for named individuals from "rdfs:seeAlso"
+		if aa.AnnotationProperty.AbbreviatedIRI == "rdfs:seeAlso" {
+			if _, ok := preparedOntology.NamedIndividual[NormalizedIRI(preparedOntology, aa)]; ok {
+				preparedOntology.NamedIndividual[NormalizedIRI(preparedOntology, aa)].Type = aa.Literal
 			}
 		}
 	}
@@ -208,7 +250,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
 					IRI:     NormalizedIRI(preparedOntology, &v.DataProperty.Entity),
 					Typ:     util.GetProtoType(v.Datatype.AbbreviatedIRI),
-					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
+					Name:    preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, &v.DataProperty.Entity)].Name,
 					From:    fromIri,
 					Comment: comment,
 				})
@@ -232,7 +274,7 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[NormalizedIRI(preparedOntology, &sc.Class[0].Entity)].Relationship, &Relationship{
 					IRI:     relationshipIri,
 					Typ:     util.GetProtoType(v.Literal),
-					Value:   preparedOntology.GetDataPropertyIRIName(v.DataProperty),
+					Name:    preparedOntology.AnnotationAssertion[NormalizedIRI(preparedOntology, &v.DataProperty.Entity)].Name,
 					From:    fromIri,
 					Comment: comment,
 				})
@@ -271,8 +313,8 @@ func Prepare(src *owl.Ontology, rootIRI string) *OntologyPrepared {
 
 				preparedOntology.Resources[fromIri].Relationship = append(preparedOntology.Resources[fromIri].Relationship, &Relationship{
 					IRI:     relationshipIri,
-					Typ:     util.GetProtoType(typeIri),
-					Value:   preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
+					Typ:     util.GetProtoType(preparedOntology.NamedIndividual[typeIri].Type),
+					Name:    preparedOntology.GetObjectPropertyIRIName(v.ObjectProperty),
 					From:    fromIri,
 					Comment: comment,
 				})
@@ -290,7 +332,7 @@ func (ont *OntologyPrepared) GetDataPropertyIRIName(prop owl.DataProperty) strin
 		if val, ok := ont.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
 			return val.Name
 		} else {
-			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+			return GetDataPropertyNameWithoutPrefix(prop.AbbreviatedIRI)
 		}
 	} else if prop.IRI != "" {
 		if val, ok := ont.Resources[prop.IRI]; ok {
@@ -311,7 +353,7 @@ func (ont *OntologyPrepared) GetObjectPropertyIRIName(prop owl.ObjectProperty) s
 		if val, ok := ont.AnnotationAssertion[prop.AbbreviatedIRI]; ok {
 			return val.Name
 		} else {
-			return GetDataPropertyAbbreviatedIriName(prop.AbbreviatedIRI)
+			return GetDataPropertyNameWithoutPrefix(prop.AbbreviatedIRI)
 		}
 	} else if prop.IRI != "" {
 		if val, ok := ont.Resources[prop.IRI]; ok {

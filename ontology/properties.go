@@ -36,8 +36,8 @@ func GetNameFromIri(s string) string {
 	return split[len(split)-1]
 }
 
-// GetDataPropertyAbbreviatedIriName returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
-func GetDataPropertyAbbreviatedIriName(s string) string {
+// GetDataPropertyNameWithoutPrefix returns the abbreviatedIRI name, e.g. "prop:enabled" returns "enabled"
+func GetDataPropertyNameWithoutPrefix(s string) string {
 	if s == "" {
 		return ""
 	}

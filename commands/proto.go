@@ -227,7 +227,10 @@ func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 
 	// Create output for the object properties
 	for _, o := range objectProperties {
+		// Get all resource types for given  object
 		resourceTypeList := cmd.getResourceTypeList(cmd.preparedOntology.Resources[rmk])
+		// add object property name to resource type list, we need that for the field number otherwise we get duplicate field numbers
+		resourceTypeList = append(resourceTypeList, o.ObjectPropertyName)
 
 		// Get field number
 		resourceTypeList = append(resourceTypeList, o.Name)

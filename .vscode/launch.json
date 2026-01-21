@@ -19,22 +19,6 @@
                 "--output-path=example/example.proto",
                 "--full-semantic-mode=false", "--deterministic-field-numbers=true"
             ]
-        },
-        {
-            "name": "Launch owl2proto example - testing",
-            "type": "go",
-            "request": "launch",
-            "mode": "auto",
-            "program": "${workspaceFolder}/cmd/owl2proto",
-            "cwd": "${workspaceFolder}",
-            "args": [
-                "generate-proto",
-                "--root-resource-name=https://ontology.cybersecuritycertcluster.eu/classes/Resource",
-                "example/ontology-merged.owx",
-                "--header-file=example/csc_hub_header.proto",
-                "--output-path=example/example.proto",
-                "--full-semantic-mode=false", "--deterministic-field-numbers=true"
-            ]
         }
     ]
 }

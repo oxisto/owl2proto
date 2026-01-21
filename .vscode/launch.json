@@ -17,7 +17,7 @@
                 "example/example.owx",
                 "--header-file=example/example_header.proto",
                 "--output-path=example/example.proto",
-                "--full-semantic-mode=false", "--deterministic-field-numbers=true"
+                "--full-semantic-mode=true", "--deterministic-field-numbers=true"
             ]
         }
     ]

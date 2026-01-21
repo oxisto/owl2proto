@@ -1,13 +1,39 @@
 // Auto-generated code by owl2proto (https://github.com/oxisto/owl2proto)
 
+// Copyright 2025 Cybersecurity Certification Hub
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//  $$$$$$\   $$$$$$\   $$$$$$\        $$\   $$\           $$\
+// $$  __$$\ $$  __$$\ $$  __$$\       $$ |  $$ |          $$ |
+// $$ /  \__|$$ /  \__|$$ /  \__|      $$ |  $$ |$$\   $$\ $$$$$$$\
+// $$ |      \$$$$$$\  $$ |            $$$$$$$$ |$$ |  $$ |$$  __$$\
+// $$ |       \____$$\ $$ |            $$  __$$ |$$ |  $$ |$$ |  $$ |
+// $$ |  $$\ $$\   $$ |$$ |  $$\       $$ |  $$ |$$ |  $$ |$$ |  $$ |
+// \$$$$$$  |\$$$$$$  |\$$$$$$  |      $$ |  $$ |\$$$$$$  |$$$$$$$  |
+//  \______/  \______/  \______/       \__|  \__| \______/ \_______/
+//
+
 syntax = "proto3";
 
-package example.v1;
+package confirmate.ontology.v1;
 
 import "buf/validate/validate.proto";
 import "google/protobuf/descriptor.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/oxisto/owl2proto/example";
+option go_package = "confirmate.io/core/api/ontology";
 
 extend google.protobuf.MessageOptions {
 	repeated string resource_type_names = 60000;
@@ -480,7 +506,6 @@ message CipherOperation {
 
 	oneof type {
 		Decryption decryption = 13899;
-		EncryptionOperation encryption_operation = 3659;
 	}
 }
 
@@ -514,7 +539,7 @@ message Infrastructure {
 		ContainerOrchestration container_orchestration = 3211;
 		ContainerRegistry container_registry = 8326;
 		Certificate certificate = 8542;
-		SelectorKey selector_key = 8030;
+		Key key = 5122;
 		Secret secret = 16127;
 		Identity identity = 14693;
 		RoleAssignment role_assignment = 2361;
@@ -703,7 +728,6 @@ message ConfigurationGroupSource {
 }
 
 // ConfigurationOperation is an abstract class in our ontology, it cannot be instantiated but acts as an "interface".
-// A common abstract class for configuration operations, such as reading options or a whole file.
 message ConfigurationOperation {
 
 	oneof type {
@@ -734,8 +758,8 @@ message ConfigurationOption {
 	string raw = 8644;
 	optional string configuration_group_id = 6079;
 	DataLocation data_location = 17197;
+	optional string key_id = 12044;
 	optional string parent_id = 6223;
-	optional string selector_key_id = 13888;
 	optional string value_id = 2572;
 }
 
@@ -893,11 +917,14 @@ message Context {
 message Core {
 
 	oneof type {
+		Evidence evidence = 18196;
 		CloudSDK cloud_sdk = 14752;
 		HttpClientLibrary http_client_library = 8816;
 		HttpServer http_server = 7177;
 		Logger logger = 7437;
 		ResourceType resource_type = 5565;
+		TargetOfEvaluation target_of_evaluation = 3801;
+		Tool tool = 10672;
 	}
 }
 
@@ -928,7 +955,7 @@ message Credential {
 
 	oneof type {
 		Certificate certificate = 8542;
-		SelectorKey selector_key = 8030;
+		Key key = 5122;
 		Secret secret = 16127;
 	}
 }
@@ -947,7 +974,6 @@ message CryptographicHash {
 message CryptographicOperation {
 
 	oneof type {
-		EncryptionOperation encryption_operation = 3659;
 		CryptographicHash cryptographic_hash = 7725;
 	}
 }
@@ -1015,7 +1041,6 @@ message Data {
 		ServiceMetadataDocument service_metadata_document = 272;
 		File file = 9522;
 		FileHandle file_handle = 16939;
-		SelectorKey selector_key = 8030;
 		MachineLearningDataset machine_learning_dataset = 2040;
 		MachineLearningModel machine_learning_model = 15393;
 		Policy policy = 495;
@@ -1317,6 +1342,13 @@ message Error {
 	string message = 3497;
 }
 
+// Evidence is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message Evidence {
+	option (resource_type_names) = "Evidence";
+	option (resource_type_names) = "Core";
+
+}
+
 // ExitBoundaryOperation is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
 // Represents an exit operation that is part of a [Boundary]. This operation is used to define the point at which data leaves the boundary.
 message ExitBoundaryOperation {
@@ -1563,7 +1595,6 @@ message Functionality {
 		ValidateJwt validate_jwt = 7164;
 		BlockStorageOperation block_storage_operation = 14855;
 		Decryption decryption = 13899;
-		EncryptionOperation encryption_operation = 3659;
 		LoadConfiguration load_configuration = 9258;
 		ProvideConfiguration provide_configuration = 902;
 		ProvideConfigurationGroup provide_configuration_group = 12223;
@@ -1572,7 +1603,6 @@ message Functionality {
 		ReadConfigurationOption read_configuration_option = 15245;
 		RegisterConfigurationGroup register_configuration_group = 10178;
 		RegisterConfigurationOption register_configuration_option = 13175;
-		EncryptionOperation encryption_operation = 3659;
 		CryptographicHash cryptographic_hash = 7725;
 		DatabaseConnect database_connect = 10798;
 		DatabaseQuery database_query = 7698;
@@ -1941,8 +1971,7 @@ message InputValidationOperation {
 
 	CodeRegion code_region = 12844;
 	Input input = 458;
-	Input input = 18958;
-	Output output = 15204;
+	Output output = 1757;
 }
 
 // InstallUpdateOperation is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
@@ -1952,7 +1981,6 @@ message InstallUpdateOperation {
 	option (resource_type_names) = "Functionality";
 
 	AutomaticUpdates automatic_updates = 7281;
-	AutomaticUpdates automatic_updates = 12530;
 	CodeRegion code_region = 13679;
 }
 
@@ -2037,26 +2065,36 @@ message TokenBasedAuthentication {
 	}
 }
 
-// SelectorKey is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+// Key is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
 // A key used for encryption algorithms.
 // The node that represents the "key" of this option. For example, in an INI file, this would be the [FieldDeclaration] node that represents the key.
-message SelectorKey {
-	option (resource_type_names) = "SelectorKey";
-	option (resource_type_names) = "Data";
+message Key {
+	option (resource_type_names) = "Key";
+	option (resource_type_names) = "Credential";
+	option (resource_type_names) = "Infrastructure";
 	option (resource_type_names) = "Resource";
 
-	string algorithm = 5297;
-	google.protobuf.Timestamp creation_time = 1023;
-	string description = 521;
-	string id = 18231 [ (buf.validate.field).required = true ];
+	string algorithm = 1413;
+	google.protobuf.Timestamp creation_time = 4922;
+	string description = 17406;
+	bool enabled = 12499;
+	google.protobuf.Timestamp expiration_date = 15098;
+	string id = 15294 [ (buf.validate.field).required = true ];
+	bool internet_accessible_endpoint = 434;
+	bool is_managed = 16202;
 	// Key size refers to the length of a key used in an enryption.
-	int32 key_size = 11651;
-	map<string, string> labels = 223;
-	string name = 14505 [ (buf.validate.field).required = true ];
+	int32 key_size = 16391;
+	map<string, string> labels = 4273;
+	string name = 18961 [ (buf.validate.field).required = true ];
+	google.protobuf.Timestamp not_before_date = 235;
 	// The raw field contains the raw information that is used to fill in the fields of the ontology.
-	string raw = 15639;
-	DataLocation data_location = 2145;
-	optional string parent_id = 4081;
+	string raw = 11846;
+	GeoLocation geo_location = 215;
+	optional string infrastructure_id = 5694;
+	repeated Logging loggings  = 13175;
+	repeated Redundancy redundancies  = 7868;
+	optional string parent_id = 95;
+	UsageStatistics usage_statistics = 7188;
 }
 
 // KeyDerivationFunction is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
@@ -2343,7 +2381,6 @@ message LogOutput {
 	string value = 16550;
 	CodeRegion code_region = 3291;
 	Logging logging = 1240;
-	Logging logging = 11229;
 }
 
 // LogWrite is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
@@ -2572,7 +2609,7 @@ message MessageAuthenticationCode {
 
 	string type = 16668;
 	Input input = 14423;
-	optional string selector_key_id = 15532;
+	optional string key_id = 3220;
 }
 
 // MessagingHub is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
@@ -2879,7 +2916,6 @@ message Operation {
 		ValidateJwt validate_jwt = 7164;
 		BlockStorageOperation block_storage_operation = 14855;
 		Decryption decryption = 13899;
-		EncryptionOperation encryption_operation = 3659;
 		LoadConfiguration load_configuration = 9258;
 		ProvideConfiguration provide_configuration = 902;
 		ProvideConfigurationGroup provide_configuration_group = 12223;
@@ -2888,7 +2924,6 @@ message Operation {
 		ReadConfigurationOption read_configuration_option = 15245;
 		RegisterConfigurationGroup register_configuration_group = 10178;
 		RegisterConfigurationOption register_configuration_option = 13175;
-		EncryptionOperation encryption_operation = 3659;
 		CryptographicHash cryptographic_hash = 7725;
 		DatabaseConnect database_connect = 10798;
 		DatabaseQuery database_query = 7698;
@@ -3107,7 +3142,6 @@ message ProvideConfiguration {
 	option (resource_type_names) = "Functionality";
 
 	CodeRegion code_region = 6654;
-	optional string configuration_id = 18326;
 	optional string configuration_id = 9286;
 	optional string configuration_source_id = 11294;
 }
@@ -3387,7 +3421,7 @@ message Resource {
 		ContainerOrchestration container_orchestration = 3211;
 		ContainerRegistry container_registry = 8326;
 		Certificate certificate = 8542;
-		SelectorKey selector_key = 8030;
+		Key key = 5122;
 		Secret secret = 16127;
 		Identity identity = 14693;
 		RoleAssignment role_assignment = 2361;
@@ -3433,7 +3467,6 @@ message Resource {
 		ServiceMetadataDocument service_metadata_document = 272;
 		File file = 9522;
 		FileHandle file_handle = 16939;
-		SelectorKey selector_key = 8030;
 		MachineLearningDataset machine_learning_dataset = 2040;
 		MachineLearningModel machine_learning_model = 15393;
 		Policy policy = 495;
@@ -3633,11 +3666,11 @@ message SecurityAdvisoryService {
 	Authenticity authenticity = 16717;
 	repeated string compute_ids  = 18065;
 	GeoLocation geo_location = 11088;
+	repeated string key_ids  = 7181;
 	repeated Logging loggings  = 28;
 	repeated Redundancy redundancies  = 14683;
 	optional string parent_id = 11251;
 	repeated SecurityAdvisoryFeed security_advisory_feeds  = 4972;
-	repeated string selector_key_ids  = 5451;
 	optional string service_metadata_document_id = 3851;
 	TransportEncryption transport_encryption = 17775;
 	UsageStatistics usage_statistics = 14285;
@@ -3833,6 +3866,13 @@ message SymmetricCipher {
 	Padding padding = 2670;
 }
 
+// TargetOfEvaluation is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message TargetOfEvaluation {
+	option (resource_type_names) = "TargetOfEvaluation";
+	option (resource_type_names) = "Core";
+
+}
+
 // Time is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
 message Time {
 	option (resource_type_names) = "Time";
@@ -3856,6 +3896,13 @@ message Token {
 	string raw = 16748;
 	DataLocation data_location = 13703;
 	optional string parent_id = 10701;
+}
+
+// Tool is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
+message Tool {
+	option (resource_type_names) = "Tool";
+	option (resource_type_names) = "Core";
+
 }
 
 // Training is an abstract class in our ontology, it cannot be instantiated but acts as an "interface".

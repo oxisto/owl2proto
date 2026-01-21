@@ -65,12 +65,14 @@ func (ont *OntologyPrepared) GetObjectDetail(s string, resource *Resource) (rep,
 		return "string", "", rName
 	case "parent":
 		return "", "optional string", "parent_id"
-	case "leftPrincipal":
-		return "", rName, s
-	case "rightPrincipal":
-		return "", rName, s
-	default:
+	// case "leftPrincipal":
+	// 	return "", rName, s
+	// case "rightPrincipal":
+	// 	return "", rName, s
+	case "operatesOn":
 		rep = ""
+	default:
+		return "", rName, s
 	}
 
 	// If the object is a kind of the rootResourceName, the type is string and "_id" is added to the name to show that an ID is stored in the string.

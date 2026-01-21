@@ -458,7 +458,7 @@ message Certificate {
 	// The raw field contains the raw information that is used to fill in the fields of the ontology.
 	string raw = 7199;
 	GeoLocation geo_location = 4443;
-	optional string infrastructure_id = 13381;
+	Infrastructure used_by_multiple = 13381;
 	repeated Logging loggings  = 3178;
 	repeated Redundancy redundancies  = 15810;
 	optional string parent_id = 9548;
@@ -685,7 +685,7 @@ message ConfigurationDocument {
 	DataLocation data_location = 1817;
 	repeated DocumentSignature document_signatures  = 14626;
 	optional string parent_id = 11413;
-	SchemaValidation schema_validation = 1274;
+	SchemaValidation validated_by = 1274;
 	repeated SecurityFeature security_features  = 11996;
 }
 
@@ -989,7 +989,7 @@ message CustomerKeyEncryption {
 	string algorithm = 12685;
 	bool enabled = 14976;
 	string key_url = 13999;
-	Cipher cipher = 13151;
+	Cipher based_on = 13151;
 	optional string secret_id = 4394;
 }
 
@@ -1194,8 +1194,8 @@ message DiskEncryption {
 	string algorithm = 2867;
 	bool enabled = 9285;
 	string key_url = 6086;
-	optional string block_storage_id = 17123;
-	Cipher cipher = 6881;
+	BlockStorage target = 17123;
+	Cipher based_on = 6881;
 	optional string secret_id = 10114;
 }
 
@@ -1883,7 +1883,7 @@ message HybridCipher {
 	string cipher_name = 4930;
 	// Key size refers to the length of a key used in an enryption.
 	int32 key_size = 5462;
-	AsymmetricCipher asymmetric_cipher = 10476;
+	AsymmetricCipher key_exchange = 10476;
 	KeyDerivationFunction key_derivation_function = 16735;
 	MessageAuthenticationCode message_authentication_code = 14986;
 	Padding padding = 18342;
@@ -2090,7 +2090,7 @@ message Key {
 	// The raw field contains the raw information that is used to fill in the fields of the ontology.
 	string raw = 11846;
 	GeoLocation geo_location = 215;
-	optional string infrastructure_id = 5694;
+	Infrastructure used_by_multiple = 5694;
 	repeated Logging loggings  = 13175;
 	repeated Redundancy redundancies  = 7868;
 	optional string parent_id = 95;
@@ -2207,7 +2207,7 @@ message LibraryEntryPoint {
 	option (resource_type_names) = "EntryPoint";
 	option (resource_type_names) = "Functionality";
 
-	optional string operating_system_architecture_id = 16870;
+	OperatingSystemArchitecture target = 16870;
 }
 
 // LoadBalancer is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
@@ -2345,7 +2345,7 @@ message LogDocument {
 	DataLocation data_location = 12350;
 	repeated DocumentSignature document_signatures  = 8195;
 	optional string parent_id = 4022;
-	SchemaValidation schema_validation = 1781;
+	SchemaValidation validated_by = 1781;
 	repeated SecurityFeature security_features  = 6558;
 }
 
@@ -2541,7 +2541,7 @@ message Main {
 	option (resource_type_names) = "EntryPoint";
 	option (resource_type_names) = "Functionality";
 
-	optional string operating_system_architecture_id = 7220;
+	OperatingSystemArchitecture target = 7220;
 }
 
 // MalwareProtection is an entity class in our ontology. It can be instantiated and contains all of its properties as well of its implemented interfaces.
@@ -2568,7 +2568,7 @@ message ManagedKeyEncryption {
 	string algorithm = 4822;
 	bool enabled = 13201;
 	string key_url = 16982;
-	Cipher cipher = 9630;
+	Cipher based_on = 9630;
 	optional string secret_id = 13805;
 }
 
@@ -3084,7 +3084,7 @@ message PolicyDocument {
 	DataLocation data_location = 11474;
 	repeated DocumentSignature document_signatures  = 7191;
 	optional string parent_id = 18208;
-	SchemaValidation schema_validation = 5620;
+	SchemaValidation validated_by = 5620;
 	repeated SecurityFeature security_features  = 13896;
 }
 
@@ -3121,7 +3121,7 @@ message ProtectedAsset {
 	option (resource_type_names) = "Functionality";
 
 	repeated string policy_ids  = 13769;
-	Resource resource = 16075;
+	Resource protects = 16075;
 }
 
 // ProtectedAssetOperation is an abstract class in our ontology, it cannot be instantiated but acts as an "interface".
@@ -3402,7 +3402,7 @@ message ReportDocument {
 	DataLocation data_location = 18583;
 	repeated DocumentSignature document_signatures  = 367;
 	optional string parent_id = 16048;
-	SchemaValidation schema_validation = 9750;
+	SchemaValidation validated_by = 9750;
 	repeated SecurityFeature security_features  = 10419;
 }
 
@@ -3594,9 +3594,9 @@ message Secret {
 	google.protobuf.Timestamp not_before_date = 13335;
 	// The raw field contains the raw information that is used to fill in the fields of the ontology.
 	string raw = 5998;
-	Cipher cipher = 7866;
+	Cipher based_on = 7866;
 	GeoLocation geo_location = 4152;
-	optional string infrastructure_id = 3559;
+	Infrastructure used_by_multiple = 3559;
 	repeated Logging loggings  = 16085;
 	repeated Redundancy redundancies  = 14119;
 	optional string parent_id = 13608;
@@ -3631,7 +3631,7 @@ message SecurityAdvisoryDocument {
 	DataLocation data_location = 12507;
 	repeated DocumentSignature document_signatures  = 16888;
 	optional string parent_id = 4792;
-	SchemaValidation schema_validation = 10910;
+	SchemaValidation validated_by = 10910;
 	repeated SecurityFeature security_features  = 1557;
 	repeated Vulnerability vulnerabilities  = 16368;
 }
@@ -3759,7 +3759,7 @@ message ServiceMetadataDocument {
 	DataLocation data_location = 14106;
 	repeated DocumentSignature document_signatures  = 4448;
 	optional string parent_id = 8317;
-	SchemaValidation schema_validation = 5832;
+	SchemaValidation validated_by = 5832;
 	repeated SecurityFeature security_features  = 9489;
 }
 
@@ -3926,7 +3926,7 @@ message TransportEncryption {
 	bool enforced = 9699;
 	string protocol = 6987;
 	float protocol_version = 11009;
-	Cipher cipher = 17349;
+	Cipher based_on = 17349;
 	repeated CipherSuite cipher_suites  = 5672;
 	optional string secret_id = 9451;
 }

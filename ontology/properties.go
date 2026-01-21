@@ -65,10 +65,6 @@ func (ont *OntologyPrepared) GetObjectDetail(s string, resource *Resource) (rep,
 		return "string", "", rName
 	case "parent":
 		return "", "optional string", "parent_id"
-	// case "leftPrincipal":
-	// 	return "", rName, s
-	// case "rightPrincipal":
-	// 	return "", rName, s
 	case "operatesOn":
 		rep = ""
 	default:

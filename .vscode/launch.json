@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch owl2proto with example",
+            "name": "Launch owl2proto - repo example",
             "type": "go",
             "request": "launch",
             "mode": "auto",
@@ -14,9 +14,10 @@
             "args": [
                 "generate-proto",
                 "--root-resource-name=ex:Resource",
-                "example/cloud.owx",
+                "example/example.owx",
                 "--header-file=example/example_header.proto",
-                "--output-path=example/example.proto"
+                "--output-path=example/example.proto",
+                "--full-semantic-mode=true", "--deterministic-field-numbers=true"
             ]
         }
     ]

@@ -12,6 +12,10 @@ option go_package = "github.com/oxisto/owl2proto/example";
 option (owl.meta) = {
   prefixes: [
     {
+      prefix: "xsd"
+      iri: "http://www.w3.org/2001/XMLSchema#"
+    },
+    {
       prefix: "rdfs"
       iri: "http://www.w3.org/2000/01/rdf-schema#"
     },
@@ -30,10 +34,6 @@ option (owl.meta) = {
     {
       prefix: "xml"
       iri: "http://www.w3.org/XML/1998/namespace"
-    },
-    {
-      prefix: "xsd"
-      iri: "http://www.w3.org/2001/XMLSchema#"
     }
   ]
 };
@@ -74,7 +74,7 @@ message Container {
     (owl.property).parent = "owl:topDataProperty",
     (owl.property).class_iri = "ex:Resource"
   ];
-  GeoLocation geo_location = 9969 [
+  GeoLocation geo_location = 11931 [
     (owl.property).iri = "ex:has",
     (owl.property).parent = "owl:topObjectProperty",
     (owl.property).class_iri = "ex:Compute"
@@ -116,12 +116,12 @@ message VirtualMachine {
     (owl.property).parent = "owl:topDataProperty",
     (owl.property).class_iri = "ex:Resource"
   ];
-  repeated string block_storage_ids = 6443 [
+  repeated string block_storage_ids = 1108 [
     (owl.property).iri = "ex:hasMultiple",
     (owl.property).parent = "owl:topObjectProperty",
     (owl.property).class_iri = "ex:VirtualMachine"
   ];
-  GeoLocation geo_location = 12691 [
+  GeoLocation geo_location = 15941 [
     (owl.property).iri = "ex:has",
     (owl.property).parent = "owl:topObjectProperty",
     (owl.property).class_iri = "ex:Compute"

@@ -31,9 +31,9 @@ func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:String", "xsd:string", "string":
+	case "xsd:String", "xsd:string", "string", "cpgNode":
 		return "string"
-	case "xsd:listString", "xsd:java.util.ArrayList<String>":
+	case "xsd:listString", "xsd:java.util.ArrayList<String>", "listCpgNode":
 		return "repeated string"
 	case "xsd:integer", "xsd:int":
 		return "int32"

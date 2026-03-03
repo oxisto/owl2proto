@@ -41,6 +41,8 @@ func GetProtoType(s string) string {
 		return "uint32"
 	case "xsd:float":
 		return "float"
+	case "xsd:double":
+		return "double"
 	case "xsd:java.time.Duration":
 		return "google.protobuf.Duration"
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":

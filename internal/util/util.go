@@ -31,9 +31,9 @@ func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
 		return "bool"
-	case "xsd:String", "xsd:string", "string", "cpgNode":
+	case "xsd:String", "xsd:string", "string", "dt:cpgNode":
 		return "string"
-	case "xsd:listString", "xsd:java.util.ArrayList<String>", "listCpgNode":
+	case "xsd:listString", "xsd:java.util.ArrayList<String>", "dt:listCpgNode":
 		return "repeated string"
 	case "xsd:integer", "xsd:int":
 		return "int32"
@@ -41,6 +41,8 @@ func GetProtoType(s string) string {
 		return "uint32"
 	case "xsd:float":
 		return "float"
+	case "xsd:double":
+		return "double"
 	case "xsd:java.time.Duration":
 		return "google.protobuf.Duration"
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":

@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/cespare/xxhash/v2"
 )
@@ -30,23 +32,23 @@ func ToPlural(s string) string {
 func GetProtoType(s string) string {
 	switch s {
 	case "xsd:boolean":
-		return "bool"
+		return "optional bool"
 	case "xsd:String", "xsd:string", "string", "dt:cpgNode":
-		return "string"
+		return "optional string"
 	case "xsd:listString", "xsd:java.util.ArrayList<String>", "dt:listCpgNode":
 		return "repeated string"
 	case "xsd:integer", "xsd:int":
-		return "int32"
+		return "optional int32"
 	case "xsd:Short":
-		return "uint32"
+		return "optional uint32"
 	case "xsd:float":
-		return "float"
+		return "optional float"
 	case "xsd:double":
-		return "double"
+		return "optional double"
 	case "xsd:java.time.Duration":
-		return "google.protobuf.Duration"
+		return "optional google.protobuf.Duration"
 	case "xsd:dateTime", "xsd:java.time.ZonedDateTime":
-		return "google.protobuf.Timestamp"
+		return "optional google.protobuf.Timestamp"
 	case "xsd:java.util.ArrayList<Short>":
 		// Note, there is no uint16 in protobuf, therefore we need to resort to uint32.
 		return "repeated uint32"
@@ -144,4 +146,9 @@ func WriteFile(outputFile, s string) error {
 	}
 
 	return nil
+}
+
+func IsUpperFirst(s string) bool {
+	r, _ := utf8.DecodeRuneInString(s)
+	return unicode.IsUpper(r)
 }

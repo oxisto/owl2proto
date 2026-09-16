@@ -75,7 +75,7 @@ func (ont *OntologyPrepared) GetObjectDetail(s string, resource *Resource) (rep,
 	if isResourceAboveX(resource, ont, ont.RootResourceName) {
 		// if the property is repeated, than use "ids"
 		if rep == "" {
-			return rep, "optional string", rName + "_id"
+			return rep, "string", rName + "_id"
 		} else {
 			return rep, "string", rName + "_ids"
 		}

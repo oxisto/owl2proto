@@ -239,9 +239,9 @@ func (cmd *GenerateProtoCmd) addObjectProperties(output, rmk string) string {
 		optsOutput = cmd.emitObjectPropertyOptions(o)
 
 		if o.Name != "" && o.ObjectProperty != "" {
-			value, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.To])
-			if value != "" && typ != "" {
-				output += fmt.Sprintf("\n\t%s%s %s  = %d%s;", value, typ, util.ToSnakeCase(name), fieldNumber, optsOutput)
+			rep, typ, name := cmd.preparedOntology.GetObjectDetail(o.ObjectPropertyName, cmd.preparedOntology.Resources[o.To])
+			if rep != "" && typ != "" {
+				output += fmt.Sprintf("\n\t%s%s %s  = %d%s;", rep, typ, util.ToSnakeCase(name), fieldNumber, optsOutput)
 			} else if typ != "" && name != "" {
 				output += fmt.Sprintf("\n\t%s %s = %d%s;", typ, util.ToSnakeCase(name), fieldNumber, optsOutput)
 			}

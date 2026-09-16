@@ -222,14 +222,14 @@ func TestGetProtoType(t *testing.T) {
 			args: args{
 				s: "xsd:boolean",
 			},
-			want: "bool",
+			want: "optional bool",
 		},
 		{
 			name: "Happy path: string",
 			args: args{
 				s: "xsd:String",
 			},
-			want: "string",
+			want: "optional string",
 		},
 		{
 			name: "Happy path: listString",
@@ -243,35 +243,35 @@ func TestGetProtoType(t *testing.T) {
 			args: args{
 				s: "xsd:int",
 			},
-			want: "int32",
+			want: "optional int32",
 		},
 		{
 			name: "Happy path: Short",
 			args: args{
 				s: "xsd:Short",
 			},
-			want: "uint32",
+			want: "optional uint32",
 		},
 		{
 			name: "Happy path: float",
 			args: args{
 				s: "xsd:float",
 			},
-			want: "float",
+			want: "optional float",
 		},
 		{
 			name: "Happy path: xsd:java.time.Duration",
 			args: args{
 				s: "xsd:java.time.Duration",
 			},
-			want: "google.protobuf.Duration",
+			want: "optional google.protobuf.Duration",
 		},
 		{
 			name: "Happy path: xsd:dateTime",
 			args: args{
 				s: "xsd:dateTime",
 			},
-			want: "google.protobuf.Timestamp",
+			want: "optional google.protobuf.Timestamp",
 		},
 		{
 			name: "Happy path: xsd:java.util.ArrayList<Short>",
